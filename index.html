@@ -3,126 +3,285 @@
 
 <head>
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157138662-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-157138662-1');
+  </script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>One Page Wonder - Start Bootstrap Template</title>
+  <title>Peter Nistrup</title>
 
-  <!-- Bootstrap core CSS -->
+  <!-- Bootstrap Core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <!-- Custom Fonts -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link href="css/one-page-wonder.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="css/stylish-portfolio.min.css" rel="stylesheet">
 
 </head>
 
-<body>
+<body id="page-top">
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Start Bootstrap</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Sign Up</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Log In</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <a class="menu-toggle rounded" href="#">
+    <i class="fas fa-bars"></i>
+  </a>
+  <nav id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li class="sidebar-brand">
+        <a class="js-scroll-trigger" href="#page-top">TOP OF THE MORNING</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#page-top">Home</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#about">About</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#services">Skillz</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#portfolio">Articles</a>
+      </li>
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="#contact">Contact</a>
+      </li>
+    </ul>
   </nav>
 
-  <header class="masthead text-center text-white">
-    <div class="masthead-content">
-      <div class="container">
-        <h1 class="masthead-heading mb-0">One Page Wonder</h1>
-        <h2 class="masthead-subheading mb-0">Will Rock Your Socks Off</h2>
-        <a href="#" class="btn btn-primary btn-xl rounded-pill mt-5">Learn More</a>
-      </div>
+  <!-- Header -->
+  <header class="masthead d-flex">
+    <div class="container">
+      <h1 class="mb-1 text-light">Peter Nistrup</h1>
+      <h3 class="mb-3 text-light">Data Science Consultant</h3>
+      <a class="btn btn-xl btn-light js-scroll-trigger" href="#about">Find Out More</a>
     </div>
-    <div class="bg-circle-1 bg-circle"></div>
-    <div class="bg-circle-2 bg-circle"></div>
-    <div class="bg-circle-3 bg-circle"></div>
-    <div class="bg-circle-4 bg-circle"></div>
+    <div class="overlay"></div>
   </header>
 
-  <section>
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 order-lg-2">
-          <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/01.jpg" alt="">
-          </div>
-        </div>
-        <div class="col-lg-6 order-lg-1">
-          <div class="p-5">
-            <h2 class="display-4">For those about to rock...</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6">
-          <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/02.jpg" alt="">
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="p-5">
-            <h2 class="display-4">We salute you!</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-          </div>
+  <!-- About -->
+  <section class="content-section bg-light" id="about">
+    <div class="container text-center">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h2 class="mb-5">About me</h2>
+          <p class="lead mb-5 text-left">
+            ➤ 25, full time Consultant, full time Masters Student.<br>
+            ✍️ Published author & writer on "<b>Towards Data Science</b>", "<b>Better Programming</b>" and "<b>The Startup</b>"<br>
+            ☛ Take a look at my articles on Medium (~2k followers, ~350k reads): <a href = "https://medium.com/@peter.nistrup">https://medium.com/@peter.nistrup</a><br><br>
+            
+            Cand. Merc. (mat.) - Masters of Science (M.Sc) in Business Administration and Mathematical Business Economics<br><br>
+            
+            Current focus:<br>
+            • Framework development.<br>
+            • Creating intuitive and visual solutions to complex problems.<br>
+            • Interactive visualizations of data migrations, data exploration & mappings.<br>
+            • Drag'n drop NLP document classification (Neural Networks) ie. auto-classification.<br>
+            • Project management.<br><br>
+            
+            After almost 9 years in the financial sector I'm now focusing on <b>Data Science</b>, <b>Data Analysis</b> and <b>Project Management</b> within the life science industry.<br><br>
+            
+            • A passion for Data Science, Machine Learning and Finance.<br>
+            • Highly ambitious.<br>
+            • Member of Mensa Denmark.
+          </p>
+          <a class="btn btn-dark btn-xl js-scroll-trigger" href="#services">What I Offer</a>
         </div>
       </div>
     </div>
   </section>
 
-  <section>
+  <!-- Services -->
+  <section class="content-section bg-primary text-white text-center" id="services">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 order-lg-2">
-          <div class="p-5">
-            <img class="img-fluid rounded-circle" src="img/03.jpg" alt="">
-          </div>
+      <div class="content-section-heading">
+        <h3 class="text-secondary mb-0">Skillz</h3>
+        <h2 class="mb-5">What I Offer</h2>
+      </div>
+      <div class="row">
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <span class="service-icon rounded-circle mx-auto mb-3">
+            <i class="fas fa-brain"></i>
+          </span>
+          <h4>
+            <strong>Big Brain</strong>
+          </h4>
+          <p class="text-faded mb-0">With an extremely high IQ of at least 70, I can perfom almost any task with variable output quality.</p>
         </div>
-        <div class="col-lg-6 order-lg-1">
-          <div class="p-5">
-            <h2 class="display-4">Let there be rock!</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-          </div>
+        <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+          <span class="service-icon rounded-circle mx-auto mb-3">
+            <i class="fas fa-code"></i>
+          </span>
+          <h4>
+            <strong>Programming</strong>
+          </h4>
+          <p class="text-faded mb-0">Proficient programming skills enabling me to write a hello-world.py script in less than 30min.</p>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+          <span class="service-icon rounded-circle mx-auto mb-3">
+            <i class="fas fa-glasses"></i>
+          </span>
+          <h4>
+            <strong>20-20 Vision</strong>
+          </h4>
+          <p class="text-faded mb-0">My glasses enable to see problems from far away and plan mitigating actions accordingly.</p>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <span class="service-icon rounded-circle mx-auto mb-3">
+            <i class="fas fa-users"></i>
+          </span>
+          <h4>
+            <strong>Professional</strong>
+          </h4>
+          <p class="text-faded mb-0">Actually quite professional and driven individual.</p>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- Callout -->
+  <section class="callout">
+    <div class="container text-center">
+      <h2 class="mx-auto mb-5">Connect with me on <i>LinkedIn</i> and <i>Twitter</i>!</h2>
+      <a class="btn btn-primary btn-xl" href="https://www.linkedin.com/in/peter-nistrup/">LinkedIn  <i class="fab fa-linkedin"></i></a>
+      <a class="btn btn-primary btn-xl" href="https://twitter.com/PeterNistrup">Twitter  <i class="fab fa-twitter-square"></i></a>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="content-section" id="portfolio">
+    <div class="container">
+      <div class="content-section-heading text-center">
+        <h3 class="text-secondary mb-0">My writing</h3>
+        <h2 class="mb-5">Recently published articles</h2>
+      </div>
+      <div class="row no-gutters">
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="https://towardsdatascience.com/exploring-your-data-with-just-1-line-of-python-4b35ce21a82d">
+            <span class="caption">
+              <span class="caption-content">
+                <h2>Towards Data Science</h2>
+                <p class="mb-0">Exploring your data with just 1 line of Python</p>
+              </span>
+            </span>
+            <img class="img-fluid" src="img/article-1.jpg" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="https://towardsdatascience.com/python-tricks-101-what-every-new-programmer-should-know-c512a9787022">
+            <span class="caption">
+              <span class="caption-content">
+                <h2>Towards Data Science</h2>
+                <p class="mb-0">Python tricks 101, what every new programmer should know</p>
+              </span>
+            </span>
+            <img class="img-fluid" src="img/article-2.jpg" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="https://medium.com/better-programming/easiest-way-to-use-the-bitmex-api-with-python-fbf66dc38633">
+            <span class="caption">
+              <span class="caption-content">
+                <h2>Better Programming</h2>
+                <p class="mb-0">Retrieving Full Historical Data for Every Cryptocurrency on Binance & BitMex Using the Python API</p>
+              </span>
+            </span>
+            <img class="img-fluid" src="img/article-3.jpg" alt="">
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <a class="portfolio-item" href="https://towardsdatascience.com/7-things-to-quickly-improve-your-data-analysis-in-python-3d434243da7">
+            <span class="caption">
+              <span class="caption-content">
+                <h2>Towards Data Science</h2>
+                <p class="mb-0">7 things to quickly improve your Data Analysis in Python</p>
+              </span>
+            </span>
+            <img class="img-fluid" src="img/article-4.jpg" alt="">
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="content-section bg-primary text-white">
+    <div class="container text-center mb-4">
+      <h2 class="mb-4">The buttons below are impossible to resist...</h2>
+      <a href="https://medium.com/@peter.nistrup" class="btn btn-xl btn-light mr-4">Read my articles on Medium  <i class="fab fa-medium"></i></a>
+      <a href="https://twitter.com/PeterNistrup" class="btn btn-xl btn-light mr-4">Follow me on Twitter  <i class="fab fa-twitter-square"></i></a>
+    </div>
+    <div class="container text-center">
+        <a href="https://www.linkedin.com/in/peter-nistrup/" class="btn btn-xl btn-light mr-4">Connect with me on LinkedIn  <i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/nistrup" class="btn btn-xl btn-light mr-4">Look at my stuff on GitHub  <i class="fab fa-github-square"></i></a>
+      </div>
+  </section>
+
+  <!-- Map -->
+  <section id="contact" class="map">
+    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2244.059929165667!2d12.49790831622498!3d55.77483099775976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46524e69f20acd15%3A0xdd46e546dede71d5!2sBASE%20life%20science!5e0!3m2!1sen!2sdk!4v1580206290910!5m2!1sen!2sdk"></iframe>
+    <br />
+    <small>
+      <a href="https://goo.gl/maps/C3sGGKnEsHpTFiPZ9"></a>
+    </small>
   </section>
 
   <!-- Footer -->
-  <footer class="py-5 bg-black">
+  <footer class="footer text-center">
     <div class="container">
-      <p class="m-0 text-center text-white small">Copyright &copy; Your Website 2019</p>
+      <ul class="list-inline mb-5">
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="https://medium.com/@peter.nistrup">
+            <i class="fab fa-medium"></i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="https://twitter.com/PeterNistrup">
+            <i class="fab fa-twitter-square"></i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="https://www.linkedin.com/in/peter-nistrup/">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="social-link rounded-circle text-white mr-3" href="https://github.com/nistrup">
+            <i class="fab fa-github-square"></i>
+          </a>
+        </li>
+      </ul>
+      <p class="text-muted small mb-0">Copyright &copy; Peter Nistrup 2020</p>
     </div>
-    <!-- /.container -->
   </footer>
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Plugin JavaScript -->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="js/stylish-portfolio.min.js"></script>
 
 </body>
 
