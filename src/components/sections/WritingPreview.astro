@@ -1,0 +1,117 @@
+---
+interface WritingItem {
+  title: string;
+  date: string;
+  href: string;
+}
+
+interface Props {
+  posts: WritingItem[];
+  viewAllHref?: string;
+}
+
+const { posts, viewAllHref } = Astro.props;
+---
+
+<div class="writing-preview">
+  <div class="writing-preview__header reveal">
+    <h2 class="writing-preview__title">Recent Writing</h2>
+    {viewAllHref && (
+      <a href={viewAllHref} class="writing-preview__view-all">
+        View all &rarr;
+      </a>
+    )}
+  </div>
+
+  <ul class="writing-preview__list reveal">
+    {posts.map((post) => (
+      <li class="writing-preview__item">
+        <a href={post.href} class="writing-preview__link">
+          <span class="writing-preview__post-title">{post.title}</span>
+          <span class="writing-preview__date">{post.date}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .writing-preview__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-component);
+  }
+
+  .writing-preview__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+  }
+
+  .writing-preview__view-all {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .writing-preview__view-all:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .writing-preview__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .writing-preview__item {
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .writing-preview__item:last-child {
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .writing-preview__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .writing-preview__link:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .writing-preview__post-title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    background-image: linear-gradient(var(--color-accent-dark), var(--color-accent-dark));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .writing-preview__link:hover .writing-preview__post-title {
+    background-size: 100% 1px;
+  }
+
+  .writing-preview__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .writing-preview__link {
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+  }
+</style>

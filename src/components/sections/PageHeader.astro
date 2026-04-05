@@ -1,0 +1,104 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  tags?: string[];
+  links?: { label: string; href: string }[];
+}
+
+const { title, description, tags = [], links = [] } = Astro.props;
+---
+
+<section class="page-header zone-dark">
+  <div class="page-header__inner container">
+    <h1 class="page-header__title">{title}</h1>
+    {description && (
+      <p class="page-header__description">{description}</p>
+    )}
+    {tags.length > 0 && (
+      <ul class="page-header__tags">
+        {tags.map((tag) => (
+          <li class="page-header__tag">{tag}</li>
+        ))}
+      </ul>
+    )}
+    {links.length > 0 && (
+      <ul class="page-header__links">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="page-header__link"
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {link.label} &rarr;
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .page-header {
+    padding-block: var(--space-section-lg) var(--space-section);
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--weight-normal);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .page-header__description {
+    margin-top: var(--space-4);
+    font-size: var(--text-lg);
+    color: var(--color-text-muted-dark);
+    line-height: var(--leading-normal);
+    max-width: var(--width-content);
+  }
+
+  .page-header__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .page-header__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wide);
+    background-color: var(--color-accent-subtle);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+  }
+
+  .page-header__links {
+    display: flex;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .page-header__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .page-header__link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  @media (max-width: 768px) {
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+  }
+</style>
