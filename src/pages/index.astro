@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionWrapper from '../components/global/SectionWrapper.astro';
+import Hero from '../components/sections/Hero.astro';
+import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
+import StatementBlock from '../components/sections/StatementBlock.astro';
+import WritingPreview from '../components/sections/WritingPreview.astro';
+import AboutPreview from '../components/sections/AboutPreview.astro';
+import ContactCTA from '../components/sections/ContactCTA.astro';
+
+const base = import.meta.env.BASE_URL;
+
+// Featured projects (featured: true, sorted by date)
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3)
+  .map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    tags: p.data.tags,
+    href: `${base}projects/${p.id}`,
+    image: p.data.image,
+  }));
+
+// Recent writing (non-draft, featured first then by date)
+const allPosts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const recentPosts = allPosts.slice(0, 3).map((p) => ({
+  title: p.data.title,
+  date: p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
+  href: `${base}writing/${p.id}`,
+}));
+
+const heroLinks = [
+  { label: 'GitHub', href: 'https://github.com/cbroker1' },
+  { label: 'LinkedIn', href: '#' },
+  { label: 'Resume', href: '#' },
+  { label: 'Email', href: 'mailto:hello@example.com' },
+];
+
+const contactLinks = [
+  { label: 'Email', href: 'mailto:hello@example.com' },
+  { label: 'GitHub', href: 'https://github.com/cbroker1' },
+  { label: 'LinkedIn', href: '#' },
+];
+---
+
+<BaseLayout title="CB — Projects, Writing, Experiments">
+  <!-- Section 1: Hero (dark, full viewport) -->
+  <Hero
+    name="Carl Broker"
+    tagline="Building software, AI systems, and tools."
+    links={heroLinks}
+  />
+
+  <!-- Section 2: Featured Projects (dark) -->
+  <SectionWrapper variant="dark" width="wide">
+    <FeaturedProjects
+      projects={featuredProjects}
+      viewAllHref={`${base}projects`}
+    />
+  </SectionWrapper>
+
+  <!-- Section 3: Statement Block (dark-to-light transition) -->
+  <StatementBlock
+    statement="I build software, AI systems, and tools — then write about what I learn along the way."
+  />
+
+  <!-- Section 4: Recent Writing (light) -->
+  <SectionWrapper variant="light" width="container">
+    <WritingPreview
+      posts={recentPosts}
+      viewAllHref={`${base}writing`}
+    />
+  </SectionWrapper>
+
+  <!-- Section 5: About Preview (light) -->
+  <SectionWrapper variant="light" width="container" padding="large">
+    <AboutPreview
+      text="I build AI systems that are meant to be used, not just demoed. My work sits at the intersection of agentic AI, retrieval systems, LLM platforms, and production engineering."
+      linkHref={`${base}about`}
+    />
+  </SectionWrapper>
+
+  <!-- Section 6: Contact CTA (dark) -->
+  <SectionWrapper variant="dark" width="container" padding="large">
+    <ContactCTA links={contactLinks} />
+  </SectionWrapper>
+</BaseLayout>

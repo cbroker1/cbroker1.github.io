@@ -1,0 +1,38 @@
+---
+interface Props {
+  text: string;
+  linkHref: string;
+  linkLabel?: string;
+}
+
+const { text, linkHref, linkLabel = 'More about me' } = Astro.props;
+---
+
+<div class="about-preview reveal">
+  <p class="about-preview__text">{text}</p>
+  <a href={linkHref} class="about-preview__link">
+    {linkLabel} &rarr;
+  </a>
+</div>
+
+<style>
+  .about-preview__text {
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    max-width: var(--width-content);
+  }
+
+  .about-preview__link {
+    display: inline-block;
+    margin-top: var(--space-6);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .about-preview__link:hover {
+    color: var(--color-accent);
+  }
+</style>
