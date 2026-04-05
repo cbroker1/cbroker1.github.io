@@ -1,0 +1,128 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+  links?: { label: string; href: string }[];
+}
+
+const { name, tagline, links = [] } = Astro.props;
+---
+
+<section class="hero zone-dark">
+  <div class="hero__content">
+    <h1 class="hero__name">{name}</h1>
+    <p class="hero__tagline">{tagline}</p>
+    {links.length > 0 && (
+      <ul class="hero__links">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="hero__link"
+              target={link.href.startsWith('http') || link.href.startsWith('mailto') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-inline: var(--padding-container);
+  }
+
+  .hero__content {
+    text-align: center;
+    max-width: var(--width-container);
+  }
+
+  /* Entrance animation */
+  .hero__name {
+    font-size: var(--text-6xl);
+    font-weight: var(--weight-normal);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: hero-fade-in var(--duration-slow) var(--ease-out-expo) 200ms forwards;
+  }
+
+  .hero__tagline {
+    margin-top: var(--space-4);
+    font-size: var(--text-xl);
+    color: var(--color-text-muted-dark);
+    line-height: var(--leading-snug);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: hero-fade-in var(--duration-slow) var(--ease-out-expo) 400ms forwards;
+  }
+
+  .hero__links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+    opacity: 0;
+    animation: hero-fade-in var(--duration-slow) var(--ease-out-expo) 600ms forwards;
+  }
+
+  .hero__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
+    position: relative;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-accent);
+    transition: width var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .hero__link:hover {
+    color: var(--color-accent);
+  }
+
+  .hero__link:hover::after {
+    width: 100%;
+  }
+
+  @keyframes hero-fade-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero__name {
+      font-size: var(--text-4xl);
+    }
+
+    .hero__tagline {
+      font-size: var(--text-lg);
+    }
+
+    .hero__links {
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+  }
+</style>

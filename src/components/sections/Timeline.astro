@@ -1,0 +1,183 @@
+---
+interface TimelineEntry {
+  years: string;
+  role: string;
+  company?: string;
+  description: string;
+  highlights: string[];
+  technologies: string[];
+}
+
+interface Props {
+  entries: TimelineEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="timeline">
+  {entries.map((entry, i) => (
+    <div class="timeline__entry reveal">
+      <div class="timeline__marker">
+        <span class="timeline__years">{entry.years}</span>
+        <div class="timeline__dot"></div>
+      </div>
+
+      <div class="timeline__content">
+        <h3 class="timeline__role">{entry.role}</h3>
+        {entry.company && (
+          <p class="timeline__company">{entry.company}</p>
+        )}
+        <p class="timeline__description">{entry.description}</p>
+
+        <ul class="timeline__highlights">
+          {entry.highlights.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+
+        <ul class="timeline__technologies">
+          {entry.technologies.map((tech) => (
+            <li class="timeline__tag">{tech}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  /* Vertical line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 119px;
+    top: var(--space-2);
+    bottom: var(--space-2);
+    width: 1px;
+    background-color: var(--color-border-light);
+  }
+
+  .timeline__entry {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-8);
+    position: relative;
+  }
+
+  /* Left column: years + dot */
+  .timeline__marker {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 2px;
+    position: relative;
+  }
+
+  .timeline__years {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+
+  .timeline__dot {
+    position: absolute;
+    right: -28px;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    border: 2px solid var(--color-bg-light);
+    z-index: 1;
+  }
+
+  /* Right column: content */
+  .timeline__content {
+    padding-bottom: var(--space-4);
+  }
+
+  .timeline__role {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-snug);
+  }
+
+  .timeline__company {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    margin-top: var(--space-1);
+  }
+
+  .timeline__description {
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-text-on-light);
+  }
+
+  .timeline__highlights {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: disc;
+    padding-left: var(--space-6);
+  }
+
+  .timeline__highlights li {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-light);
+  }
+
+  .timeline__technologies {
+    margin-top: var(--space-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .timeline__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent-dark);
+    letter-spacing: var(--tracking-wide);
+    background-color: var(--color-accent-subtle);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 640px) {
+    .timeline::before {
+      left: 3px;
+    }
+
+    .timeline__entry {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+      padding-left: var(--space-8);
+    }
+
+    .timeline__marker {
+      align-items: flex-start;
+    }
+
+    .timeline__dot {
+      left: calc(-1 * var(--space-8) + -1px);
+      right: auto;
+    }
+  }
+</style>
