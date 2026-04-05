@@ -1,0 +1,58 @@
+---
+interface Props {
+  variant?: 'dark' | 'light' | 'transition';
+  width?: 'content' | 'container' | 'wide' | 'full';
+  padding?: 'default' | 'large' | 'none';
+  as?: 'section' | 'div';
+  class?: string;
+}
+
+const {
+  variant = 'light',
+  width = 'container',
+  padding = 'default',
+  as: Tag = 'section',
+  class: className = '',
+} = Astro.props;
+
+const zoneClass = variant === 'transition' ? '' : `zone-${variant}`;
+
+const containerClass =
+  width === 'full' ? '' :
+  width === 'content' ? 'container container--content' :
+  width === 'wide' ? 'container container--wide' :
+  'container';
+
+const paddingClass =
+  padding === 'none' ? 'section--no-padding' :
+  padding === 'large' ? 'section--lg-padding' :
+  'section--default-padding';
+---
+
+<Tag class:list={['section-wrapper', zoneClass, paddingClass, className]}>
+  {width === 'full' ? (
+    <slot />
+  ) : (
+    <div class={containerClass}>
+      <slot />
+    </div>
+  )}
+</Tag>
+
+<style>
+  .section-wrapper {
+    width: 100%;
+  }
+
+  .section--default-padding {
+    padding-block: var(--space-section);
+  }
+
+  .section--lg-padding {
+    padding-block: var(--space-section-lg);
+  }
+
+  .section--no-padding {
+    padding-block: 0;
+  }
+</style>
