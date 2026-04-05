@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(npm run:*)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Read(//home/cbroker/Documents/2026/cbroker1.github.io/**)",
+      "Bash(find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +)",
+      "Bash(cp -a /home/cbroker/Documents/2026/website/. /home/cbroker/Documents/2026/cbroker1.github.io/)",
+      "Bash(rm -rf /home/cbroker/Documents/2026/cbroker1.github.io/node_modules /home/cbroker/Documents/2026/cbroker1.github.io/dist /home/cbroker/Documents/2026/cbroker1.github.io/.astro /home/cbroker/Documents/2026/cbroker1.github.io/references /home/cbroker/Documents/2026/cbroker1.github.io/.git-from-website)",
+      "Bash(rsync:*)"
+    ]
+  }
+}
