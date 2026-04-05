@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/sections/PageHeader.astro';
+import SectionWrapper from '../../components/global/SectionWrapper.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const posts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+}
+---
+
+<BaseLayout title="Writing" description="Posts and essays.">
+  <PageHeader title="Writing" description="Posts and essays on software, AI, and building things." />
+
+  <SectionWrapper variant="light" width="container">
+    <ul class="writing-list reveal">
+      {posts.map((post) => (
+        <li class="writing-list__item">
+          <a href={`${base}writing/${post.id}`} class="writing-list__link">
+            <div class="writing-list__content">
+              <span class="writing-list__title">{post.data.title}</span>
+              <span class="writing-list__description">{post.data.description}</span>
+            </div>
+            <span class="writing-list__date">{formatDate(post.data.date)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </SectionWrapper>
+</BaseLayout>
+
+<style>
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .writing-list__item {
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .writing-list__item:last-child {
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .writing-list__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .writing-list__link:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .writing-list__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .writing-list__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    background-image: linear-gradient(var(--color-accent-dark), var(--color-accent-dark));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .writing-list__link:hover .writing-list__title {
+    background-size: 100% 1px;
+  }
+
+  .writing-list__description {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+  }
+
+  .writing-list__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .writing-list__link {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+</style>

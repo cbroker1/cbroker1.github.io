@@ -1,0 +1,189 @@
+---
+const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL;
+
+const navLinks = [
+  { label: 'Projects', href: `${base}projects` },
+  { label: 'Writing', href: `${base}writing` },
+  { label: 'Experience', href: `${base}experience` },
+  { label: 'About', href: `${base}about` },
+  { label: 'Contact', href: `${base}contact` },
+];
+
+function isActive(href: string): boolean {
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <nav class="site-header__nav container--wide">
+    <a href={base} class="site-header__logo nav-link">
+      CB
+    </a>
+
+    <ul class="site-header__links">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['nav-link', { 'nav-link--active': isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <button
+      class="site-header__mobile-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <ul class="mobile-menu__links">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['nav-link', { 'nav-link--active': isActive(link.href) }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-dark);
+  }
+
+  .site-header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    margin-inline: auto;
+    padding-inline: var(--padding-container);
+    max-width: var(--width-wide);
+  }
+
+  .site-header__logo {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-on-dark);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .site-header__links {
+    display: flex;
+    gap: var(--space-8);
+  }
+
+  .nav-link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+    position: relative;
+  }
+
+  .site-header__links .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-accent);
+    transition: width var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .site-header__links .nav-link:hover::after,
+  .site-header__links .nav-link--active::after {
+    width: 100%;
+  }
+
+  .nav-link:hover,
+  .nav-link--active {
+    color: var(--color-text-on-dark);
+  }
+
+  /* Mobile toggle */
+  .site-header__mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    padding: var(--space-2);
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--color-text-on-dark);
+    transition: transform var(--duration-normal) var(--ease-out);
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    background-color: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 0 var(--padding-container);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--duration-normal) var(--ease-out-expo),
+                padding var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .mobile-menu.is-open {
+    max-height: 400px;
+    padding: var(--space-6) var(--padding-container) var(--space-8);
+  }
+
+  .mobile-menu__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .mobile-menu__links .nav-link {
+    font-size: var(--text-lg);
+  }
+
+  @media (max-width: 768px) {
+    .site-header__links {
+      display: none;
+    }
+
+    .site-header__mobile-toggle {
+      display: flex;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.site-header__mobile-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+</script>
