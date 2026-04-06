@@ -1,0 +1,1 @@
+import{W as c,bC as a,an as r,aV as i}from"./DtTLlHSe.js";const u=(...o)=>c(()=>{const t=a();let e;const s=(...p)=>{e&&e.stop(),e=r(),e.run(()=>{o[0](...p)})};t.add(s,o[1],o[2],!0),i(()=>{e.stop(),t.remove(s)})});export{u};
