@@ -1,0 +1,1 @@
+import{ap as n,W as r,j as u,E as c,an as f}from"./DtTLlHSe.js";const d=e=>{const a=n();r(()=>{const t=f();if(a.animate){e();return}const s=u(!1);c(()=>a.animate,o=>{o&&!s.value&&t.run(()=>{e(),s.value=!0})})})};export{d as u};

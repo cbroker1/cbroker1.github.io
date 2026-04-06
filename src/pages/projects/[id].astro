@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/sections/PageHeader.astro';
+import SectionWrapper from '../../components/global/SectionWrapper.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { id: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const links: { label: string; href: string }[] = [];
+if (project.data.demo) {
+  links.push({ label: 'Live Demo', href: project.data.demo });
+}
+if (project.data.github) {
+  links.push({ label: 'Source Code', href: project.data.github });
+}
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <PageHeader
+    title={project.data.title}
+    description={project.data.description}
+    tags={project.data.tags}
+    links={links}
+  />
+
+  <SectionWrapper variant="light" width="content">
+    <article class="prose">
+      <Content />
+    </article>
+  </SectionWrapper>
+</BaseLayout>

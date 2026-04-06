@@ -1,0 +1,59 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionWrapper from '../components/global/SectionWrapper.astro';
+
+const base = import.meta.env.BASE_URL;
+const aboutEntry = await getEntry('about', 'about');
+const { Content } = await render(aboutEntry);
+---
+
+<BaseLayout title={aboutEntry.data.title} description={aboutEntry.data.description}>
+  <SectionWrapper variant="light" width="content">
+    <header class="about-header">
+      <h1 class="about-header__title">{aboutEntry.data.title}</h1>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <div class="about-footer">
+      <a href={`${base}experience`} class="about-footer__link">
+        View experience timeline &rarr;
+      </a>
+    </div>
+  </SectionWrapper>
+</BaseLayout>
+
+<style>
+  .about-header {
+    padding-top: var(--space-section-lg);
+    margin-bottom: var(--space-component);
+  }
+
+  .about-header__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .about-footer {
+    margin-top: var(--space-12);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .about-footer__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .about-footer__link:hover {
+    color: var(--color-accent);
+  }
+</style>

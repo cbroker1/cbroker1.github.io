@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionWrapper from '../components/global/SectionWrapper.astro';
+---
+
+<BaseLayout title="Contact" description="Get in touch.">
+  <SectionWrapper variant="light" width="content">
+    <header class="contact-header">
+      <h1 class="contact-header__title">Contact</h1>
+      <p class="contact-header__description">
+        Interested in working together, have a question, or just want to say hello?
+      </p>
+    </header>
+
+    <ul class="contact-links">
+      <li class="contact-links__item">
+        <span class="contact-links__label">Email</span>
+        <a href="mailto:hello@example.com" class="contact-links__value">
+          hello@example.com
+        </a>
+      </li>
+      <li class="contact-links__item">
+        <span class="contact-links__label">GitHub</span>
+        <a href="https://github.com/cbroker1" class="contact-links__value" target="_blank" rel="noopener noreferrer">
+          github.com/cbroker1
+        </a>
+      </li>
+      <li class="contact-links__item">
+        <span class="contact-links__label">LinkedIn</span>
+        <a href="#" class="contact-links__value" target="_blank" rel="noopener noreferrer">
+          linkedin.com/in/…
+        </a>
+      </li>
+    </ul>
+  </SectionWrapper>
+</BaseLayout>
+
+<style>
+  .contact-header {
+    padding-top: var(--space-section-lg);
+    margin-bottom: var(--space-component);
+  }
+
+  .contact-header__title {
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .contact-header__description {
+    margin-top: var(--space-4);
+    font-size: var(--text-lg);
+    color: var(--color-text-muted-light);
+    line-height: var(--leading-normal);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact-links__item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .contact-links__item:last-child {
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .contact-links__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    min-width: 100px;
+  }
+
+  .contact-links__value {
+    font-size: var(--text-base);
+    color: var(--color-accent-dark);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-links__value:hover {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 640px) {
+    .contact-links__item {
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+  }
+</style>

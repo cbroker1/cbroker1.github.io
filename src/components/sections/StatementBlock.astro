@@ -1,0 +1,45 @@
+---
+interface Props {
+  statement: string;
+}
+
+const { statement } = Astro.props;
+---
+
+<section class="statement-block">
+  <div class="statement-block__inner container container--content">
+    <p class="statement-block__text reveal">{statement}</p>
+  </div>
+</section>
+
+<style>
+  .statement-block {
+    padding-block: var(--space-40);
+    background: linear-gradient(
+      to bottom,
+      var(--color-bg-dark) 0%,
+      var(--color-bg-dark) 15%,
+      var(--color-bg-light) 85%,
+      var(--color-bg-light) 100%
+    );
+  }
+
+  .statement-block__text {
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-normal);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-tight);
+    text-align: center;
+    color: var(--color-text-on-light);
+  }
+
+  @media (max-width: 768px) {
+    .statement-block {
+      padding-block: var(--space-32);
+    }
+
+    .statement-block__text {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

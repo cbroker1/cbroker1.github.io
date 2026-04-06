@@ -1,0 +1,143 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+  image?: string;
+  variant?: 'dark' | 'light';
+}
+
+const { title, description, tags, href, image, variant = 'dark' } = Astro.props;
+---
+
+<a href={href} class:list={['project-card', `project-card--${variant}`, 'reveal']}>
+  {image && (
+    <div class="project-card__image">
+      <img src={image} alt={title} loading="lazy" />
+    </div>
+  )}
+  <div class="project-card__body">
+    <h3 class="project-card__title">{title}</h3>
+    <p class="project-card__description">{description}</p>
+    <ul class="project-card__tags">
+      {tags.map((tag) => (
+        <li class="project-card__tag">{tag}</li>
+      ))}
+    </ul>
+  </div>
+</a>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      transform var(--duration-normal) var(--ease-out-expo),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+  }
+
+  /* Dark variant */
+  .project-card--dark {
+    background-color: var(--color-surface-dark);
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-text-on-dark);
+  }
+
+  .project-card--dark:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .project-card--dark .project-card__description {
+    color: var(--color-text-muted-dark);
+  }
+
+  .project-card--dark .project-card__image {
+    background-color: var(--color-border-dark);
+  }
+
+  /* Light variant */
+  .project-card--light {
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-on-light);
+  }
+
+  .project-card--light:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .project-card--light .project-card__description {
+    color: var(--color-text-muted-light);
+  }
+
+  .project-card--light .project-card__image {
+    background-color: var(--color-border-light);
+  }
+
+  .project-card--light .project-card__tag {
+    color: var(--color-accent-dark);
+    background-color: var(--color-accent-subtle);
+  }
+
+  .project-card__image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .project-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .project-card:hover .project-card__image img {
+    transform: scale(1.04);
+  }
+
+  .project-card__body {
+    padding: var(--space-card-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .project-card__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  .project-card__description {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-3);
+  }
+
+  .project-card__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wide);
+    background-color: var(--color-accent-subtle);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+  }
+</style>
