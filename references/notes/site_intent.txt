@@ -1,0 +1,20 @@
+Site Purpose:
+Personal website showing projects, AI work, experiments, and writing.
+
+Audience:
+Recruiters, clients, engineers, and people who want to know what I do.
+
+Goals:
+Show the things I build, demonstrate technical ability, show projects and writing, and serve as a professional and personal website.
+
+Tone:
+Technical, thoughtful, independent, builder mindset.
+
+Style:
+Clean, modern, probably dark theme, subtle animations, not corporate, not a generic portfolio template.
+
+Emphasis:
+Projects first, writing second, resume third.
+
+Site should feel like:
+Engineering lab + projects + writing + personal site.

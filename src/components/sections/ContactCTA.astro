@@ -1,0 +1,84 @@
+---
+interface ContactLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  heading?: string;
+  links: ContactLink[];
+}
+
+const { heading = "Let's connect.", links } = Astro.props;
+---
+
+<div class="contact-cta reveal">
+  <h2 class="contact-cta__heading">{heading}</h2>
+  <ul class="contact-cta__links">
+    {links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          class="contact-cta__link"
+          target={link.href.startsWith('http') || link.href.startsWith('mailto') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .contact-cta {
+    text-align: center;
+  }
+
+  .contact-cta__heading {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-normal);
+  }
+
+  .contact-cta__links {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  .contact-cta__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+    position: relative;
+  }
+
+  .contact-cta__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-accent);
+    transition: width var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .contact-cta__link:hover {
+    color: var(--color-accent);
+  }
+
+  .contact-cta__link:hover::after {
+    width: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .contact-cta__links {
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+  }
+</style>

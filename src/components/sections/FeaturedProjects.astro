@@ -1,0 +1,167 @@
+---
+interface ProjectItem {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+  image?: string;
+}
+
+interface Props {
+  projects: ProjectItem[];
+  viewAllHref?: string;
+}
+
+const { projects, viewAllHref } = Astro.props;
+---
+
+<div class="featured-projects">
+  <div class="featured-projects__header reveal">
+    <h2 class="featured-projects__title">Featured Projects</h2>
+    {viewAllHref && (
+      <a href={viewAllHref} class="featured-projects__view-all">
+        View all &rarr;
+      </a>
+    )}
+  </div>
+
+  <div class="featured-projects__grid reveal-stagger">
+    {projects.map((project) => (
+      <a href={project.href} class="project-card reveal">
+        {project.image && (
+          <div class="project-card__image">
+            <img src={project.image} alt={project.title} loading="lazy" />
+          </div>
+        )}
+        <div class="project-card__body">
+          <h3 class="project-card__title">{project.title}</h3>
+          <p class="project-card__description">{project.description}</p>
+          <ul class="project-card__tags">
+            {project.tags.map((tag) => (
+              <li class="project-card__tag">{tag}</li>
+            ))}
+          </ul>
+        </div>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .featured-projects__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-component);
+  }
+
+  .featured-projects__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+  }
+
+  .featured-projects__view-all {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .featured-projects__view-all:hover {
+    color: var(--color-accent);
+  }
+
+  .featured-projects__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-grid-gap);
+  }
+
+  /* Card */
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface-dark);
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    overflow: hidden;
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      transform var(--duration-normal) var(--ease-out-expo),
+      box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .project-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .project-card__image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background-color: var(--color-border-dark);
+  }
+
+  .project-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .project-card:hover .project-card__image img {
+    transform: scale(1.04);
+  }
+
+  .project-card__body {
+    padding: var(--space-card-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
+  .project-card__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-normal);
+  }
+
+  .project-card__description {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    line-height: var(--leading-normal);
+  }
+
+  .project-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-3);
+  }
+
+  .project-card__tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    letter-spacing: var(--tracking-wide);
+    background-color: var(--color-accent-subtle);
+    padding: var(--space-1) var(--space-2);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 1024px) {
+    .featured-projects__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .featured-projects__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

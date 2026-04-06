@@ -1,0 +1,114 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const siteLinks = [
+  { label: 'Projects', href: `${base}projects` },
+  { label: 'Writing', href: `${base}writing` },
+  { label: 'Experience', href: `${base}experience` },
+  { label: 'About', href: `${base}about` },
+  { label: 'Contact', href: `${base}contact` },
+];
+
+const externalLinks = [
+  { label: 'GitHub', href: 'https://github.com/cbroker1' },
+  { label: 'LinkedIn', href: '#' },
+  { label: 'Email', href: 'mailto:hello@example.com' },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer zone-dark">
+  <div class="site-footer__inner container--wide">
+    <div class="site-footer__brand">
+      <a href={base} class="site-footer__logo nav-link">CB</a>
+    </div>
+
+    <div class="site-footer__col">
+      <ul class="site-footer__links">
+        {siteLinks.map((link) => (
+          <li>
+            <a href={link.href} class="nav-link">{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="site-footer__col">
+      <ul class="site-footer__links">
+        {externalLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="nav-link"
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom container--wide">
+    <span class="site-footer__copyright">
+      &copy; {year}
+    </span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-16);
+    border-top: 1px solid var(--color-border-dark);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--space-8);
+    margin-inline: auto;
+    padding-inline: var(--padding-container);
+    max-width: var(--width-wide);
+  }
+
+  .site-footer__brand {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .site-footer__logo {
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .site-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .site-footer__bottom {
+    margin-top: var(--space-12);
+    padding-inline: var(--padding-container);
+    max-width: var(--width-wide);
+    margin-inline: auto;
+  }
+
+  .site-footer__copyright {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted-dark);
+  }
+
+  @media (max-width: 768px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>
