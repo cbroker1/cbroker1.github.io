@@ -1,6 +1,5 @@
 ---
 import SiteHeader from '../components/global/SiteHeader.astro';
-import SiteFooter from '../components/global/SiteFooter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -35,7 +34,6 @@ const base = import.meta.env.BASE_URL;
     <main>
       <slot />
     </main>
-    <SiteFooter />
     <script>
       const observer = new IntersectionObserver(
         (entries) => {

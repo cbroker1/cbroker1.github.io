@@ -1,23 +1,17 @@
 ---
-const currentPath = Astro.url.pathname;
-const base = import.meta.env.BASE_URL;
-
 const navLinks = [
-  { label: 'Projects', href: `${base}projects` },
-  { label: 'Writing', href: `${base}writing` },
-  { label: 'Experience', href: `${base}experience` },
-  { label: 'About', href: `${base}about` },
-  { label: 'Contact', href: `${base}contact` },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Writing', href: '#writing' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
 ];
 
-function isActive(href: string): boolean {
-  return currentPath.startsWith(href);
-}
 ---
 
 <header class="site-header">
   <nav class="site-header__nav container--wide">
-    <a href={base} class="site-header__logo nav-link">
+    <a href="#" class="site-header__logo nav-link">
       CB
     </a>
 
@@ -26,7 +20,7 @@ function isActive(href: string): boolean {
         <li>
           <a
             href={link.href}
-            class:list={['nav-link', { 'nav-link--active': isActive(link.href) }]}
+            class="nav-link"
           >
             {link.label}
           </a>
@@ -50,7 +44,7 @@ function isActive(href: string): boolean {
         <li>
           <a
             href={link.href}
-            class:list={['nav-link', { 'nav-link--active': isActive(link.href) }]}
+            class="nav-link"
           >
             {link.label}
           </a>
@@ -75,7 +69,7 @@ function isActive(href: string): boolean {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 40px;
     margin-inline: auto;
     padding-inline: var(--padding-container);
     max-width: var(--width-wide);
@@ -185,5 +179,13 @@ function isActive(href: string): boolean {
   toggle?.addEventListener('click', () => {
     const isOpen = menu?.classList.toggle('is-open');
     toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // Close mobile menu when an anchor link is clicked
+  menu?.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
   });
 </script>

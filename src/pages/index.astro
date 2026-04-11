@@ -1,22 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionWrapper from '../components/global/SectionWrapper.astro';
 import Hero from '../components/sections/Hero.astro';
-import FeaturedProjects from '../components/sections/FeaturedProjects.astro';
 import StatementBlock from '../components/sections/StatementBlock.astro';
-import WritingPreview from '../components/sections/WritingPreview.astro';
-import AboutPreview from '../components/sections/AboutPreview.astro';
-import ContactCTA from '../components/sections/ContactCTA.astro';
+import ProjectCard from '../components/cards/ProjectCard.astro';
+import Timeline from '../components/sections/Timeline.astro';
 
 const base = import.meta.env.BASE_URL;
 
-// Featured projects (featured: true, sorted by date)
-const allProjects = await getCollection('projects');
-const featuredProjects = allProjects
-  .filter((p) => p.data.featured)
+// All projects sorted by date
+const allProjects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3)
   .map((p) => ({
     title: p.data.title,
     description: p.data.description,
@@ -25,68 +20,268 @@ const featuredProjects = allProjects
     image: p.data.image,
   }));
 
-// Recent writing (non-draft, featured first then by date)
+// All writing posts (non-draft, sorted by date)
 const allPosts = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const recentPosts = allPosts.slice(0, 3).map((p) => ({
-  title: p.data.title,
-  date: p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
-  href: `${base}writing/${p.id}`,
-}));
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    date: p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' }),
+    href: `${base}writing/${p.id}`,
+  }));
 
-const heroLinks = [
-  { label: 'GitHub', href: 'https://github.com/cbroker1' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'Resume', href: '#' },
-  { label: 'Email', href: 'mailto:hello@example.com' },
-];
+// Experience data
+const experienceEntry = await getEntry('experience', 'experience');
+
+// About content
+const aboutEntry = await getEntry('about', 'about');
+const { Content: AboutContent } = await render(aboutEntry);
 
 const contactLinks = [
-  { label: 'Email', href: 'mailto:hello@example.com' },
   { label: 'GitHub', href: 'https://github.com/cbroker1' },
-  { label: 'LinkedIn', href: '#' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/carl-broker-70211646/' },
+  { label: 'Resume', href: '/resume/resume_revised_pdf.pdf' },
 ];
 ---
 
 <BaseLayout title="CB — Projects, Writing, Experiments">
-  <!-- Section 1: Hero (dark, full viewport) -->
-  <Hero
-    name="Carl Broker"
-    tagline="Building software, AI systems, and tools."
-    links={heroLinks}
-  />
+  <!-- Section 1: Hero (video only, full viewport) -->
+  <Hero />
 
-  <!-- Section 2: Featured Projects (dark) -->
-  <SectionWrapper variant="dark" width="wide">
-    <FeaturedProjects
-      projects={featuredProjects}
-      viewAllHref={`${base}projects`}
-    />
+  <!-- Section 2: Experience (light) -->
+  <SectionWrapper variant="light" width="container" padding="none" class="experience-section">
+    <div id="experience" class="anchor-offset"></div>
+    <div class="section-header reveal">
+      <h2 class="section-header__title">Experience</h2>
+    </div>
+    <Timeline entries={experienceEntry.data.entries} />
   </SectionWrapper>
 
-  <!-- Section 3: Statement Block (dark-to-light transition) -->
+  <!-- Section 3: Projects (dark) -->
+  <SectionWrapper variant="dark" width="wide">
+    <div id="projects" class="anchor-offset"></div>
+    <div class="section-header reveal">
+      <h2 class="section-header__title">Projects</h2>
+    </div>
+    <div class="project-grid reveal-stagger">
+      {allProjects.map((project) => (
+        <ProjectCard
+          title={project.title}
+          description={project.description}
+          tags={project.tags}
+          href={project.href}
+          image={project.image}
+          variant="dark"
+        />
+      ))}
+    </div>
+  </SectionWrapper>
+
+  <!-- Section 4: Statement Block (dark-to-light transition) -->
   <StatementBlock
     statement="I build software, AI systems, and tools — then write about what I learn along the way."
   />
 
-  <!-- Section 4: Recent Writing (light) -->
+  <!-- Section 5: Writing (light) -->
   <SectionWrapper variant="light" width="container">
-    <WritingPreview
-      posts={recentPosts}
-      viewAllHref={`${base}writing`}
-    />
+    <div id="writing" class="anchor-offset"></div>
+    <div class="section-header reveal">
+      <h2 class="section-header__title">Writing</h2>
+    </div>
+    <ul class="writing-list reveal">
+      {allPosts.map((post) => (
+        <li class="writing-list__item">
+          <a href={post.href} class="writing-list__link">
+            <div class="writing-list__content">
+              <span class="writing-list__title">{post.title}</span>
+              {post.description && (
+                <span class="writing-list__description">{post.description}</span>
+              )}
+            </div>
+            <span class="writing-list__date">{post.date}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
   </SectionWrapper>
 
-  <!-- Section 5: About Preview (light) -->
-  <SectionWrapper variant="light" width="container" padding="large">
-    <AboutPreview
-      text="I build AI systems that are meant to be used, not just demoed. My work sits at the intersection of agentic AI, retrieval systems, LLM platforms, and production engineering."
-      linkHref={`${base}about`}
-    />
+  <!-- Section 6: About (light) -->
+  <SectionWrapper variant="light" width="content" padding="large">
+    <div id="about" class="anchor-offset"></div>
+    <div class="section-header reveal">
+      <h2 class="section-header__title">About</h2>
+    </div>
+    <div class="prose reveal">
+      <AboutContent />
+    </div>
   </SectionWrapper>
 
-  <!-- Section 6: Contact CTA (dark) -->
+  <!-- Section 7: Contact (dark) -->
   <SectionWrapper variant="dark" width="container" padding="large">
-    <ContactCTA links={contactLinks} />
+    <div id="contact" class="anchor-offset"></div>
+    <div class="contact-section reveal">
+      <h2 class="contact-section__heading">Let's connect.</h2>
+      <ul class="contact-row">
+        {contactLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="contact-row__link"
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </SectionWrapper>
 </BaseLayout>
+
+<style>
+  /* Anchor offset to account for sticky header */
+  .anchor-offset {
+    position: relative;
+    top: -80px;
+    display: block;
+    visibility: hidden;
+    height: 0;
+  }
+
+  :global(.experience-section) {
+    padding-top: var(--space-8) !important;
+    padding-bottom: var(--space-24) !important;
+  }
+
+  :global(.experience-section) .section-header {
+    margin-bottom: var(--space-6);
+    margin-left: -32px;
+  }
+
+  /* Shared section header */
+  .section-header {
+    margin-bottom: var(--space-component);
+  }
+
+  .section-header__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Project grid */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-grid-gap);
+  }
+
+  @media (max-width: 1024px) {
+    .project-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Writing list */
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .writing-list__item {
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .writing-list__item:last-child {
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .writing-list__link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding-block: var(--space-6);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .writing-list__link:hover {
+    color: var(--color-accent-dark);
+  }
+
+  .writing-list__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .writing-list__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-medium);
+    background-image: linear-gradient(var(--color-accent-dark), var(--color-accent-dark));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .writing-list__link:hover .writing-list__title {
+    background-size: 100% 1px;
+  }
+
+  .writing-list__description {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+  }
+
+  .writing-list__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .writing-list__link {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+  }
+
+  /* Contact section */
+  .contact-section {
+    text-align: center;
+  }
+
+  .contact-section__heading {
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-normal);
+    margin-bottom: var(--space-8);
+  }
+
+  .contact-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-8);
+  }
+
+  .contact-row__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .contact-row__link:hover {
+    color: var(--color-text-on-dark);
+  }
+
+</style>
