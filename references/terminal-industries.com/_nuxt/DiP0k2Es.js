@@ -1,0 +1,1 @@
+import{p as r}from"./DtTLlHSe.js";import{a as s}from"./CA_soGrT.js";async function a(e){const{public:{storyblokVersion:o}}=r();return await s(e,{version:o,resolve_relations:["FormReference.form","LinksList.sections","CaseStudyReference.case_study","ROICalculatorReference.calculator"]})}export{a as u};

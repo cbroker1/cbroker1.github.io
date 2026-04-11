@@ -1,12 +1,10 @@
 ---
-const base = import.meta.env.BASE_URL;
-
 const siteLinks = [
-  { label: 'Projects', href: `${base}projects` },
-  { label: 'Writing', href: `${base}writing` },
-  { label: 'Experience', href: `${base}experience` },
-  { label: 'About', href: `${base}about` },
-  { label: 'Contact', href: `${base}contact` },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Writing', href: '#writing' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 const externalLinks = [
@@ -20,7 +18,7 @@ const year = new Date().getFullYear();
 <footer class="site-footer zone-dark">
   <div class="site-footer__inner container--wide">
     <div class="site-footer__brand">
-      <a href={base} class="site-footer__logo nav-link">CB</a>
+      <a href="#" class="site-footer__logo nav-link">CB</a>
     </div>
 
     <div class="site-footer__col">
