@@ -1,0 +1,1 @@
+import{I as a,o as e,a as r,F as s,n as c,e as i,P as u,r as b}from"./DtTLlHSe.js";const p={__name:"StoryblokPage",props:{blok:{type:Object,required:!0}},setup(t){return(k,m)=>{const n=b("StoryblokComponent"),l=u("editable");return a((e(),r("div",null,[(e(!0),r(s,null,c(t.blok.body,o=>(e(),i(n,{key:o._uid,blok:o},null,8,["blok"]))),128))])),[[l,t.blok]])}}};export{p as default};

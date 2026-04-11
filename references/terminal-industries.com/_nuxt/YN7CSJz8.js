@@ -1,0 +1,1 @@
+import{_ as a,o as t,a as n,a5 as o}from"./DtTLlHSe.js";const r={};function s(e,c){return t(),n("main",null,[o(e.$slots,"default",{},void 0,!0)])}const _=a(r,[["render",s],["__scopeId","data-v-26ed1394"]]);export{_ as default};
