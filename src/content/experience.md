@@ -3,7 +3,7 @@ title: "Experience"
 description: "Career timeline"
 entries:
   - years: "2024 – Present"
-    role: "Agentic AI Engineer"
+    role: "Advisory AI Engineer"
     company: "IBM"
     description: "Building enterprise AI systems, multi-agent architectures, and retrieval pipelines — from prototype to production."
     highlights:
@@ -11,7 +11,7 @@ entries:
       - "Built RAG systems with chunking, embeddings, vector retrieval, and grounded generation"
       - "Developed Python tool-calling frameworks for enterprise APIs and workflows"
       - "Built evaluation and testing pipelines for agent quality and workflow success"
-      - "Supported production deployment of enterprise AI systems and published agents to IBM Agent Catalog"
+      - "Authored production deployment of enterprise AI systems and published agents to IBM Agent Catalog"
     technologies:
       - "watsonx"
       - "Orchestrate ADK"
@@ -43,7 +43,7 @@ entries:
 
   - years: "2020 – 2022"
     role: "Applied Research Scientist"
-    company: "General Dynamics (EPA)"
+    company: "General Dynamics (Environmental Protection Agency)"
     description: "Research and engineering work focused on OCR, NLP, and document intelligence in high-performance computing environments."
     highlights:
       - "Deployed OCR systems across document databases"
@@ -78,13 +78,13 @@ entries:
 
   - years: "2012 – 2016"
     role: "Research"
-    company: "Johns Hopkins, NIDA, University of Minnesota"
+    company: "Johns Hopkins, National Institute of Health, University of Minnesota"
     description: "Neuroscience, psychology, and clinical research grounded in data, signals, and behavior."
     highlights:
       - "Worked on neuroscience and psychology research projects"
       - "Analyzed electrophysiological and behavioral data"
       - "Helped launch clinical research workflows and research operations"
-      - "Contributed to published research"
+      - "Authored published research"
     technologies:
       - "statistics"
       - "PCA"
