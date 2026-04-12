@@ -78,7 +78,7 @@ entries:
 
   - years: "2012 – 2016"
     role: "Research"
-    company: "Johns Hopkins, National Institute of Health, University of Minnesota"
+    company: "Johns Hopkins, National Institutes of Health, University of Minnesota"
     description: "Neuroscience, psychology, and clinical research grounded in data, signals, and behavior."
     highlights:
       - "Worked on neuroscience and psychology research projects"
