@@ -22,9 +22,9 @@ I enjoy the engineering side of AI just as much as the strategy side: choosing t
 
 ## Education
 
-* **Johns Hopkins University** — Master's Degree
-* **James Cook University, Australia**
-* **The College of St. Scholastica**
+* **Johns Hopkins University** — (M.S.) 
+* **The College of St. Scholastica** (B.S. Pt1)
+* **James Cook University, Australia** (Pt2)
 
 ## Interests
 
