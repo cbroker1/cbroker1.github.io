@@ -38,7 +38,9 @@
   .hero__info {
     position: absolute;
     bottom: var(--space-8);
-    left: var(--padding-container);
+    /* Align with the timeline dot in the Experience section below:
+       centered 1080px container + container padding + 154px dot offset. */
+    left: calc(max(0px, (100% - var(--width-container)) / 2) + var(--padding-container) + 154px);
     z-index: 1;
   }
 
