@@ -38,7 +38,9 @@
   .hero__info {
     position: absolute;
     bottom: var(--space-8);
-    left: var(--padding-container);
+    /* Align with the Experience section header: centered 1080px container +
+       container padding − section-header's -32px negative margin. */
+    left: calc(max(0px, (100% - var(--width-container)) / 2) + var(--padding-container) - var(--space-8));
     z-index: 1;
   }
 
