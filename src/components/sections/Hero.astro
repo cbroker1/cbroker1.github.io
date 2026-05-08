@@ -22,8 +22,8 @@
 <style>
   .hero {
     position: relative;
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
   }
 
@@ -35,17 +35,19 @@
     object-fit: cover;
   }
 
+  /* Info block: vertically centered, shifted to the right side
+     to avoid overlapping the video subject. */
   .hero__info {
     position: absolute;
-    bottom: var(--space-8);
-    /* Align with the timeline dot in the Experience section below:
-       centered 1080px container + container padding + 154px dot offset. */
-    left: calc(max(0px, (100% - var(--width-container)) / 2) + var(--padding-container) + 154px);
+    top: 50%;
+    transform: translateY(-50%);
+    right: max(var(--padding-container), calc((100% - var(--width-wide)) / 2 + var(--padding-container)));
     z-index: 1;
+    text-align: right;
   }
 
   .hero__name {
-    font-size: var(--text-2xl);
+    font-size: var(--text-3xl);
     font-weight: var(--weight-semibold);
     color: #1a1a1a;
     line-height: var(--leading-tight);
@@ -58,5 +60,18 @@
     color: #1a1a1a;
     letter-spacing: var(--tracking-wide);
     margin-top: var(--space-1);
+  }
+
+  @media (max-width: 768px) {
+    .hero__info {
+      top: auto;
+      bottom: var(--space-12);
+      right: var(--padding-container);
+      transform: none;
+    }
+
+    .hero__name {
+      font-size: var(--text-2xl);
+    }
   }
 </style>

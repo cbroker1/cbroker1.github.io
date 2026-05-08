@@ -1,17 +1,19 @@
 ---
-const navLinks = [
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Writing', href: '#writing' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-];
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : `${base}/`;
 
+const navLinks = [
+  { label: 'Experience', href: `${home}#experience` },
+  { label: 'Projects', href: `${home}#projects` },
+  { label: 'Writing', href: `${home}#writing` },
+  { label: 'About', href: `${home}#about` },
+  { label: 'Contact', href: `${home}#contact` },
+];
 ---
 
 <header class="site-header">
   <nav class="site-header__nav container--wide">
-    <a href="#" class="site-header__logo nav-link">
+    <a href={home} class="site-header__logo nav-link">
       CB
     </a>
 
@@ -181,8 +183,8 @@ const navLinks = [
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Close mobile menu when an anchor link is clicked
-  menu?.querySelectorAll('a[href^="#"]').forEach((link) => {
+  // Close mobile menu when any nav link is clicked
+  menu?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
       menu.classList.remove('is-open');
       toggle?.setAttribute('aria-expanded', 'false');
