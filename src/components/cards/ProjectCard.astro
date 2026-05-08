@@ -9,14 +9,26 @@ interface Props {
 }
 
 const { title, description, tags, href, image, variant = 'dark' } = Astro.props;
+
+// Initials shown in the placeholder block when no image is supplied.
+const initials = title
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((word) => word[0]!.toUpperCase())
+  .join('');
 ---
 
 <a href={href} class:list={['project-card', `project-card--${variant}`, 'reveal']}>
-  {image && (
-    <div class="project-card__image">
+  <div class="project-card__image">
+    {image ? (
       <img src={image} alt={title} loading="lazy" />
-    </div>
-  )}
+    ) : (
+      <div class="project-card__placeholder" aria-hidden="true">
+        <span class="project-card__placeholder-mark">{initials}</span>
+      </div>
+    )}
+  </div>
   <div class="project-card__body">
     <h3 class="project-card__title">{title}</h3>
     <p class="project-card__description">{description}</p>
@@ -102,6 +114,36 @@ const { title, description, tags, href, image, variant = 'dark' } = Astro.props;
 
   .project-card:hover .project-card__image img {
     transform: scale(1.04);
+  }
+
+  .project-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(163, 184, 108, 0.10), transparent 60%),
+      linear-gradient(135deg, rgba(163, 184, 108, 0.06), rgba(163, 184, 108, 0.02));
+  }
+
+  .project-card--light .project-card__placeholder {
+    background:
+      radial-gradient(circle at 30% 20%, rgba(122, 143, 74, 0.08), transparent 60%),
+      linear-gradient(135deg, rgba(122, 143, 74, 0.05), rgba(122, 143, 74, 0.01));
+  }
+
+  .project-card__placeholder-mark {
+    font-family: var(--font-mono);
+    font-size: var(--text-3xl);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-accent);
+    opacity: 0.6;
+  }
+
+  .project-card--light .project-card__placeholder-mark {
+    color: var(--color-accent-dark);
+    opacity: 0.7;
   }
 
   .project-card__body {
