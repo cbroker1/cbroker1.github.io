@@ -3,8 +3,6 @@ title: "AI Yard Optimizer"
 description: "Computer vision system for real-time yard management and vehicle tracking."
 date: 2026-03-01
 tags: ["AI", "Computer Vision", "Python"]
-image: "/images/projects/ai-yard-optimizer.png"
-github: "https://github.com/cbroker1/ai-yard-optimizer"
 featured: true
 status: "complete"
 ---

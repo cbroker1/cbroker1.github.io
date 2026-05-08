@@ -3,8 +3,6 @@ title: "Terminal Dashboard"
 description: "Real-time operations dashboard for monitoring logistics workflows."
 date: 2026-01-15
 tags: ["TypeScript", "React", "WebSockets"]
-github: "https://github.com/cbroker1/terminal-dashboard"
-demo: "https://dashboard-demo.example.com"
 featured: true
 status: "complete"
 ---

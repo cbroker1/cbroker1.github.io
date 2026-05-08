@@ -4,9 +4,10 @@ interface Props {
   description?: string;
   tags?: string[];
   links?: { label: string; href: string }[];
+  linksPlaceholder?: string;
 }
 
-const { title, description, tags = [], links = [] } = Astro.props;
+const { title, description, tags = [], links = [], linksPlaceholder } = Astro.props;
 ---
 
 <section class="page-header zone-dark">
@@ -22,7 +23,7 @@ const { title, description, tags = [], links = [] } = Astro.props;
         ))}
       </ul>
     )}
-    {links.length > 0 && (
+    {links.length > 0 ? (
       <ul class="page-header__links">
         {links.map((link) => (
           <li>
@@ -37,7 +38,9 @@ const { title, description, tags = [], links = [] } = Astro.props;
           </li>
         ))}
       </ul>
-    )}
+    ) : linksPlaceholder ? (
+      <p class="page-header__links-placeholder">{linksPlaceholder}</p>
+    ) : null}
   </div>
 </section>
 
@@ -94,6 +97,14 @@ const { title, description, tags = [], links = [] } = Astro.props;
 
   .page-header__link:hover {
     color: var(--color-accent-hover);
+  }
+
+  .page-header__links-placeholder {
+    margin-top: var(--space-6);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-dark);
+    letter-spacing: var(--tracking-wide);
   }
 
   @media (max-width: 768px) {
