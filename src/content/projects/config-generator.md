@@ -3,7 +3,6 @@ title: "Config Generator"
 description: "CLI tool for generating and validating infrastructure configuration files."
 date: 2025-11-20
 tags: ["Go", "CLI", "DevOps"]
-github: "https://github.com/cbroker1/config-generator"
 featured: false
 status: "complete"
 ---

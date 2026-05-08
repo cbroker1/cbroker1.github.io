@@ -10,18 +10,15 @@ const { statement } = Astro.props;
   <div class="statement-block__inner container container--content">
     <p class="statement-block__text reveal">{statement}</p>
   </div>
+  <div class="statement-block__fade" aria-hidden="true"></div>
 </section>
 
 <style>
   .statement-block {
+    position: relative;
     padding-block: var(--space-40);
-    background: linear-gradient(
-      to bottom,
-      var(--color-bg-dark) 0%,
-      var(--color-bg-dark) 15%,
-      var(--color-bg-light) 85%,
-      var(--color-bg-light) 100%
-    );
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-on-dark);
   }
 
   .statement-block__text {
@@ -30,7 +27,23 @@ const { statement } = Astro.props;
     line-height: var(--leading-snug);
     letter-spacing: var(--tracking-tight);
     text-align: center;
-    color: var(--color-text-on-light);
+    color: var(--color-text-on-dark);
+  }
+
+  /* Concentrated transition band at the bottom edge, so the dark→light
+     handoff feels intentional rather than smeared across the section. */
+  .statement-block__fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 96px;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      var(--color-bg-light) 100%
+    );
+    pointer-events: none;
   }
 
   @media (max-width: 768px) {
