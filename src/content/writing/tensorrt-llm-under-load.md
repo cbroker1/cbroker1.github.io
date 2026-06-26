@@ -1,6 +1,6 @@
 ---
-title: "TensorRT-LLM Under Load on an RTX A6000: Concurrency, TTFT, and the Benchmark Trap"
-description: "A TensorRT-LLM concurrency benchmark on an RTX A6000 showing why synthetic prompt size can mislead, why TTFT is a cleaner signal than total latency, and how this points toward Dynamo."
+title: "TensorRT-LLM on an RTX A6000: Part 2 — Concurrency, TTFT, and the Benchmark Trap"
+description: "Pushing TensorRT-LLM under load on an RTX A6000: why synthetic prompt size misleads, why TTFT is a cleaner signal, and what it shows about Dynamo."
 date: 2026-06-16
 tags:
   - NVIDIA
@@ -14,21 +14,19 @@ featured: false
 draft: false
 ---
 
-This is Part 2 of a series on serving LLMs with TensorRT-LLM on an RTX A6000.
-
-[Part 1](/writing/nvidia-tensorrt-llm-a6000/) covered Docker GPU passthrough, container startup, a TinyLlama smoke test, serving Qwen2.5-7B-Instruct through TensorRT-LLM's OpenAI-compatible endpoint, and the first latency and streaming TTFT benchmarks. It ended by pointing toward what happens when more than one request hits the server at a time.
+This is a follow-up to [Benchmarking TensorRT-LLM on an RTX A6000](/writing/nvidia-tensorrt-llm-a6000/), which covered Docker GPU passthrough, container startup, a TinyLlama smoke test, serving Qwen2.5-7B-Instruct through TensorRT-LLM's OpenAI-compatible endpoint, and the first latency and streaming TTFT benchmarks. That article ended by pointing toward what happens when more than one request hits the server at a time.
 
 This article picks up from there.
 
-## Why I ran Part 2
+## Why I ran this follow-up
 
-Part 1 proved I could serve a model on a single RTX A6000 and measure its latency. The obvious next question was: what happens when I put actual load on it?
+The first article proved I could serve a model on a single RTX A6000 and measure its latency. The obvious next question was: what happens when I put actual load on it?
 
 I wanted to see how TensorRT-LLM behaved when multiple requests were in flight and the input prompt size varied. I expected a clean, intuitive graph: larger prompts take longer to process, and higher concurrency increases latency. Simple enough.
 
 I got a better lesson.
 
-## What I changed from Part 1
+## What changed from the first article
 
 The serving stack stayed the same:
 
@@ -146,7 +144,7 @@ This benchmark makes the prefill/decode distinction concrete.
 
 In this test, TTFT showed input-side pressure more cleanly than total latency. Total latency mixed prefill and decode, making it hard to tell which phase was driving the numbers. TTFT isolated the prefill signal.
 
-The KV cache plays a role here too. As TensorRT-LLM processes larger prompts, it allocates more KV cache entries. Under concurrency, these allocations compound. When the GPU runs low on KV cache headroom, the scheduler has to make tradeoffs -- which is why the larger prompts separate more clearly at high concurrency. Part 1 introduced KV cache conceptually; this benchmark shows it in action.
+The KV cache plays a role here too. As TensorRT-LLM processes larger prompts, it allocates more KV cache entries. Under concurrency, these allocations compound. When the GPU runs low on KV cache headroom, the scheduler has to make tradeoffs — which is why the larger prompts separate more clearly at high concurrency. The first article introduced KV cache conceptually; this benchmark shows it in action.
 
 ## What this does NOT prove
 
@@ -161,7 +159,7 @@ It's important to be honest about the limitations of this benchmark:
 
 ## Why this still points toward Dynamo
 
-Part 1 ended by noting that single-GPU serving is just the starting point. This benchmark makes that more concrete.
+The first article ended by noting that single-GPU serving is just the starting point. This benchmark makes that more concrete.
 
 Once you introduce concurrency, input-token pressure, TTFT variance, decode length, and KV cache management, the limitations of a single-server setup become apparent:
 
