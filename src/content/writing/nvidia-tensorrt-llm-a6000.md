@@ -1,6 +1,6 @@
 ---
-title: "Benchmarking TensorRT-LLM on an RTX A6000"
-description: "A single-GPU TensorRT-LLM serving benchmark using Qwen2.5-7B-Instruct on an RTX A6000, with notes on KV cache, prefill/decode, Dynamo, and parallelism strategies."
+title: "TensorRT-LLM on an RTX A6000: Part 1 — GPU Passthrough, KV Cache, and Single-GPU Serving"
+description: "Serving Qwen2.5-7B-Instruct with NVIDIA TensorRT-LLM on a single RTX A6000 — Docker GPU passthrough, KV cache, prefill/decode, Dynamo, and parallelism strategies."
 date: 2026-05-30
 tags:
   - NVIDIA
@@ -12,7 +12,7 @@ featured: true
 draft: false
 ---
 
-# Benchmarking TensorRT-LLM on an RTX A6000: LLM Serving, KV Cache, and the Road to Dynamo
+# TensorRT-LLM on an RTX A6000: Part 1 — GPU Passthrough, KV Cache, and Single-GPU Serving
 
 ## Why I Built This
 
