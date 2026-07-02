@@ -12,8 +12,6 @@ featured: true
 draft: false
 ---
 
-# TensorRT-LLM on an RTX A6000: Part 1 — GPU Passthrough, KV Cache, and Single-GPU Serving
-
 ## Why I Built This
 
 I recently met with an NVIDIA AI Solution Architect who recommended that I learn four areas: TensorRT, TensorRT-LLM, Dynamo, and parallelism strategies. Rather than only reading documentation, I wanted to build a small hands-on project that I could explain clearly in an interview.

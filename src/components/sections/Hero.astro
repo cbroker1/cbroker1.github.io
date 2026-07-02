@@ -1,4 +1,6 @@
 ---
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : `${base}/`;
 ---
 
 <section class="hero">
@@ -14,10 +16,40 @@
   </video>
   <div class="hero__info">
     <h1 class="hero__name">Carl Broker</h1>
-    <p class="hero__detail">Agentic AI Engineer, IBM</p>
+    <p class="hero__detail">Advisory AI Engineer, IBM</p>
     <p class="hero__detail">Duluth, Minnesota</p>
+    <p class="hero__tagline">
+      I build AI systems that are meant to be used, not just demoed.
+    </p>
+    <ul class="hero__links">
+      <li>
+        <a href="#projects" class="hero__link">See the work &darr;</a>
+      </li>
+      <li>
+        <a
+          href={`${home}resume/resume_revised_pdf.pdf`}
+          class="hero__link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Resume &nearr;
+        </a>
+      </li>
+    </ul>
   </div>
+  <a class="hero__scroll" href="#experience" aria-label="Scroll to experience">
+    <span class="hero__scroll-arrow" aria-hidden="true">&darr;</span>
+  </a>
 </section>
+
+<script>
+  // Respect reduced-motion: hold the video on its first frame.
+  const video = document.querySelector<HTMLVideoElement>('.hero__video');
+  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+  }
+</script>
 
 <style>
   .hero {
@@ -25,6 +57,9 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
+    /* Fallback close to the video's tone so the dark text stays
+       readable if the video fails to load. */
+    background-color: var(--color-bg-light);
   }
 
   .hero__video {
@@ -62,6 +97,121 @@
     margin-top: var(--space-1);
   }
 
+  .hero__tagline {
+    margin-top: var(--space-6);
+    margin-left: auto;
+    max-width: 30ch;
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: rgba(26, 26, 26, 0.75);
+  }
+
+  .hero__links {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+
+  .hero__link {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: var(--tracking-wide);
+    color: #1a1a1a;
+    padding-bottom: 3px;
+    background-image: linear-gradient(var(--color-accent-dark), var(--color-accent-dark));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    transition:
+      background-size var(--duration-normal) var(--ease-out-expo),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__link:hover {
+    color: var(--color-accent-dark);
+    background-size: 100% 2px;
+  }
+
+  /* Scroll cue */
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-8);
+    transform: translateX(-50%);
+    z-index: 1;
+    padding: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-lg);
+    color: rgba(26, 26, 26, 0.55);
+    opacity: 0;
+    animation: hero-fade 0.9s var(--ease-out) 1.4s forwards;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__scroll:hover {
+    color: #1a1a1a;
+  }
+
+  .hero__scroll-arrow {
+    display: block;
+    animation: hero-bob 2.4s ease-in-out 2.4s infinite;
+  }
+
+  /* Entrance: staggered rise, matching the site's reveal language */
+  .hero__name,
+  .hero__detail,
+  .hero__tagline,
+  .hero__links {
+    opacity: 0;
+    animation: hero-rise 0.9s var(--ease-out-expo) forwards;
+  }
+
+  .hero__name { animation-delay: 0.15s; }
+  .hero__detail:nth-of-type(1) { animation-delay: 0.3s; }
+  .hero__detail:nth-of-type(2) { animation-delay: 0.4s; }
+  .hero__tagline { animation-delay: 0.55s; }
+  .hero__links { animation-delay: 0.7s; }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-fade {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes hero-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__name,
+    .hero__detail,
+    .hero__tagline,
+    .hero__links,
+    .hero__scroll,
+    .hero__scroll-arrow {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .hero__scroll {
+      transform: translateX(-50%);
+    }
+  }
+
   @media (max-width: 768px) {
     .hero__info {
       top: auto;
@@ -72,6 +222,21 @@
 
     .hero__name {
       font-size: var(--text-2xl);
+    }
+
+    .hero__tagline {
+      margin-top: var(--space-4);
+      max-width: 26ch;
+      font-size: var(--text-sm);
+    }
+
+    .hero__links {
+      margin-top: var(--space-4);
+    }
+
+    /* The info block sits at the bottom on mobile — the cue would collide. */
+    .hero__scroll {
+      display: none;
     }
   }
 </style>

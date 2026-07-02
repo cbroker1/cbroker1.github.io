@@ -1,15 +1,19 @@
 ---
+const base = import.meta.env.BASE_URL;
+const home = base.endsWith('/') ? base : `${base}/`;
+
 const siteLinks = [
-  { label: 'Projects', href: '#projects' },
-  { label: 'Writing', href: '#writing' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Experience', href: `${home}#experience` },
+  { label: 'Projects', href: `${home}#projects` },
+  { label: 'Writing', href: `${home}#writing` },
+  { label: 'About', href: `${home}#about` },
+  { label: 'Contact', href: `${home}#contact` },
 ];
 
 const externalLinks = [
   { label: 'GitHub', href: 'https://github.com/cbroker1' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/carl-broker-70211646/' },
+  { label: 'Resume', href: `${home}resume/resume_revised_pdf.pdf` },
 ];
 
 const year = new Date().getFullYear();
@@ -18,7 +22,10 @@ const year = new Date().getFullYear();
 <footer class="site-footer zone-dark">
   <div class="site-footer__inner container--wide">
     <div class="site-footer__brand">
-      <a href="#" class="site-footer__logo nav-link">CB</a>
+      <a href={home} class="site-footer__logo nav-link">CB</a>
+      <p class="site-footer__tagline">
+        AI systems that are meant to be used, not just demoed.
+      </p>
     </div>
 
     <div class="site-footer__col">
@@ -51,7 +58,7 @@ const year = new Date().getFullYear();
 
   <div class="site-footer__bottom container--wide">
     <span class="site-footer__copyright">
-      &copy; {year}
+      &copy; {year} Carl Broker &middot; Duluth, Minnesota
     </span>
   </div>
 </footer>
@@ -73,7 +80,16 @@ const year = new Date().getFullYear();
 
   .site-footer__brand {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .site-footer__tagline {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-dark);
+    max-width: 28ch;
   }
 
   .site-footer__logo {
