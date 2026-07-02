@@ -40,11 +40,14 @@ const { Content: AboutContent } = await render(aboutEntry);
 const contactLinks = [
   { label: 'GitHub', href: 'https://github.com/cbroker1' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/carl-broker-70211646/' },
-  { label: 'Resume', href: '/resume/resume_revised_pdf.pdf' },
+  { label: 'Resume', href: `${base}resume/resume_revised_pdf.pdf` },
 ];
 ---
 
-<BaseLayout title="CB — Projects, Writing, Experiments">
+<BaseLayout
+  title="Carl Broker — Advisory AI Engineer"
+  description="Carl Broker is an Advisory AI Engineer at IBM building multi-agent systems, retrieval pipelines, and production LLM workflows. Projects, writing, and experiments."
+>
   <!-- Section 1: Hero (video only, full viewport) -->
   <Hero />
 
@@ -53,6 +56,9 @@ const contactLinks = [
     <div id="experience" class="anchor-offset"></div>
     <div class="section-header reveal">
       <h2 class="section-header__title">Experience</h2>
+      <p class="section-header__subtitle">
+        From neuroscience research to enterprise AI engineering.
+      </p>
     </div>
     <Timeline entries={experienceEntry.data.entries} />
   </SectionWrapper>
@@ -62,6 +68,9 @@ const contactLinks = [
     <div id="projects" class="anchor-offset"></div>
     <div class="section-header reveal">
       <h2 class="section-header__title">Projects</h2>
+      <p class="section-header__subtitle section-header__subtitle--on-dark">
+        AI systems, software, experiments, and tools.
+      </p>
     </div>
     <div class="project-grid reveal-stagger">
       {allProjects.map((project) => (
@@ -87,6 +96,9 @@ const contactLinks = [
     <div id="writing" class="anchor-offset"></div>
     <div class="section-header reveal">
       <h2 class="section-header__title">Writing</h2>
+      <p class="section-header__subtitle">
+        Build logs, benchmarks, and lessons from real systems.
+      </p>
     </div>
     <ul class="writing-list reveal">
       {allPosts.map((post) => (
@@ -121,6 +133,10 @@ const contactLinks = [
     <div id="contact" class="anchor-offset"></div>
     <div class="contact-section reveal">
       <h2 class="contact-section__heading">Let's connect.</h2>
+      <p class="contact-section__pitch">
+        If you're building something that needs an AI engineer who cares
+        whether the system actually works — get in touch.
+      </p>
       <ul class="contact-row">
         {contactLinks.map((link) => (
           <li>
@@ -168,6 +184,17 @@ const contactLinks = [
   .section-header__title {
     font-size: var(--text-2xl);
     font-weight: var(--weight-semibold);
+  }
+
+  .section-header__subtitle {
+    margin-top: var(--space-2);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-light);
+  }
+
+  .section-header__subtitle--on-dark {
+    color: var(--color-text-muted-dark);
   }
 
   /* Project grid */
@@ -264,7 +291,16 @@ const contactLinks = [
   .contact-section__heading {
     font-size: var(--text-3xl);
     font-weight: var(--weight-normal);
+    margin-bottom: var(--space-4);
+  }
+
+  .contact-section__pitch {
+    max-width: 52ch;
+    margin-inline: auto;
     margin-bottom: var(--space-8);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-dark);
   }
 
   .contact-row {

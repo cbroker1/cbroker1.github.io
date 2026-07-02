@@ -10,7 +10,7 @@ live version is the better way in:
 
 ## About me
 
-I'm an **Agentic AI Engineer at IBM**, based in Duluth, Minnesota. My work sits
+I'm an **Advisory AI Engineer at IBM**, based in Duluth, Minnesota. My work sits
 at the intersection of agentic AI, retrieval systems, LLM platforms, and
 production engineering — designing systems where models, tools, and data work
 together to solve real problems.
@@ -81,7 +81,7 @@ Project and writing entries live in `src/content/projects/` and
 
 ### Deployment
 
-Static build deployed to GitHub Pages from `main` via GitHub Actions.
+Static build deployed to GitHub Pages from `master` via GitHub Actions.
 
 ---
 
