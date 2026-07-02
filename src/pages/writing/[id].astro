@@ -14,6 +14,19 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
+const base = import.meta.env.BASE_URL;
+
+// Estimated reading time from the raw markdown body (~220 wpm).
+const wordCount = post.body ? post.body.split(/\s+/).filter(Boolean).length : 0;
+const readingTime = Math.max(1, Math.round(wordCount / 220));
+
+// Older/newer navigation across all published posts.
+const allPosts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const postIndex = allPosts.findIndex((p) => p.id === post.id);
+const newerPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
+const olderPost = postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
+
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
@@ -23,10 +36,13 @@ function formatDate(date: Date): string {
 }
 ---
 
-<BaseLayout title={post.data.title} description={post.data.description}>
+<BaseLayout title={post.data.title} description={post.data.description} ogType="article">
   <SectionWrapper variant="light" width="content">
     <header class="post-header">
-      <p class="post-header__date">{formatDate(post.data.date)}</p>
+      <a href={`${base}writing`} class="post-header__back">&larr; All writing</a>
+      <p class="post-header__date">
+        {formatDate(post.data.date)} &middot; {readingTime} min read
+      </p>
       <h1 class="post-header__title">{post.data.title}</h1>
       {post.data.tags.length > 0 && (
         <ul class="post-header__tags">
@@ -40,6 +56,27 @@ function formatDate(date: Date): string {
     <article class="prose">
       <Content />
     </article>
+
+    {(olderPost || newerPost) && (
+      <nav class="post-nav" aria-label="More writing">
+        <div class="post-nav__cell">
+          {olderPost && (
+            <a href={`${base}writing/${olderPost.id}`} class="post-nav__link">
+              <span class="post-nav__label">&larr; Older</span>
+              <span class="post-nav__title">{olderPost.data.title}</span>
+            </a>
+          )}
+        </div>
+        <div class="post-nav__cell post-nav__cell--right">
+          {newerPost && (
+            <a href={`${base}writing/${newerPost.id}`} class="post-nav__link">
+              <span class="post-nav__label">Newer &rarr;</span>
+              <span class="post-nav__title">{newerPost.data.title}</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )}
   </SectionWrapper>
 </BaseLayout>
 
@@ -47,6 +84,20 @@ function formatDate(date: Date): string {
   .post-header {
     padding-top: var(--space-section-lg);
     margin-bottom: var(--space-component);
+  }
+
+  .post-header__back {
+    display: inline-block;
+    margin-bottom: var(--space-8);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .post-header__back:hover {
+    color: var(--color-accent-dark);
   }
 
   .post-header__date {
@@ -81,9 +132,65 @@ function formatDate(date: Date): string {
     border-radius: 4px;
   }
 
+  /* Older/newer navigation */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .post-nav__cell--right {
+    text-align: right;
+  }
+
+  .post-nav__link {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .post-nav__cell--right .post-nav__link {
+    align-items: flex-end;
+  }
+
+  .post-nav__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted-light);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .post-nav__title {
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-snug);
+    color: var(--color-text-on-light);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .post-nav__link:hover .post-nav__title {
+    color: var(--color-accent-dark);
+  }
+
   @media (max-width: 768px) {
     .post-header__title {
       font-size: var(--text-3xl);
+    }
+
+    .post-nav {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .post-nav__cell--right {
+      text-align: left;
+    }
+
+    .post-nav__cell--right .post-nav__link {
+      align-items: flex-start;
     }
   }
 </style>
