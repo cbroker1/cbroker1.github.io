@@ -1,14 +1,21 @@
 ---
 import SiteHeader from '../components/global/SiteHeader.astro';
+import SiteFooter from '../components/global/SiteFooter.astro';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
+  ogType?: 'website' | 'article';
 }
 
-const { title, description = 'Projects, writing, and experiments.' } = Astro.props;
+const {
+  title,
+  description = 'Projects, writing, and experiments.',
+  ogType = 'website',
+} = Astro.props;
 const base = import.meta.env.BASE_URL;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -17,7 +24,20 @@ const base = import.meta.env.BASE_URL;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="author" content="Carl Broker" />
+    <meta name="theme-color" content="#0a0a0a" />
+    {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+
+    <!-- Social sharing -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:site_name" content="Carl Broker" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
 
     <!-- Fonts: Inter + Geist Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -30,10 +50,20 @@ const base = import.meta.env.BASE_URL;
     <title>{title}</title>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <SiteHeader />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
+    <SiteFooter />
+    <noscript>
+      <style>
+        .reveal {
+          opacity: 1;
+          transform: none;
+        }
+      </style>
+    </noscript>
     <script>
       const observer = new IntersectionObserver(
         (entries) => {
