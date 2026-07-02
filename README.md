@@ -81,7 +81,7 @@ Project and writing entries live in `src/content/projects/` and
 
 ### Deployment
 
-Static build deployed to GitHub Pages from `main` via GitHub Actions.
+Static build deployed to GitHub Pages from `master` via GitHub Actions.
 
 ---
 
