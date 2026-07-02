@@ -136,6 +136,14 @@ const navLinks = [
     transition: transform var(--duration-normal) var(--ease-out);
   }
 
+  .site-header__mobile-toggle[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+
+  .site-header__mobile-toggle[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+
   /* Mobile menu */
   .mobile-menu {
     background-color: rgba(10, 10, 10, 0.95);
