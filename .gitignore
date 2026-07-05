@@ -1,5 +1,11 @@
 # build output
 dist/
+
+# local-only working files (raw notebook extracts pending sanitization review)
+.local/
+
+# Claude Code per-machine settings (session permission grants)
+.claude/settings.local.json
 # generated types
 .astro/
 
