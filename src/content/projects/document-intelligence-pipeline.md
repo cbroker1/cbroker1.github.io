@@ -16,6 +16,7 @@ tags:
   - Batch Inference
   - Human-in-the-Loop AI
 image: "/images/document-intelligence-pipeline/card-cover.svg"
+github: "https://github.com/cbroker1/document-intelligence-pipeline"
 featured: true
 status: "complete"
 sourceNote: "Case study only — original source is not public due to confidentiality. Sanitized demo code may be published later if recoverable from old archives."
@@ -303,3 +304,5 @@ Measured conservatively — reading a quarter-million documents at even a few mi
 ## Confidentiality Note
 
 This case study is intentionally generalized to avoid disclosing sensitive operational details, document contents, category names, internal workflows, or agency-specific systems. Figures are recreated from the original analyses with synthetic, shape-representative data and generic labels; code snippets are representative pseudocode rather than production source. The focus is on the architecture, methods, constraints, and applied machine learning lessons rather than the underlying records themselves.
+
+Faithful, sanitized versions of the project notebooks — same structure and methods, with outputs stripped and all identifiers generalized — are published in the companion repository: [github.com/cbroker1/document-intelligence-pipeline](https://github.com/cbroker1/document-intelligence-pipeline).
