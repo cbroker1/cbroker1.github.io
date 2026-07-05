@@ -14,6 +14,9 @@ const projects = defineCollection({
     demo: z.string().url().optional(),
     featured: z.boolean().default(false),
     status: z.enum(['complete', 'in-progress', 'archived']).default('complete'),
+    // Shown in the project header when there are no demo/source links,
+    // e.g. confidentiality notes for work that cannot be published.
+    sourceNote: z.string().optional(),
   }),
 });
 
