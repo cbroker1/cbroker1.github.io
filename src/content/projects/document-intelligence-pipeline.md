@@ -1,5 +1,5 @@
 ---
-title: "Large-Scale Document Intelligence Pipeline"
+title: "Enterprise-Scale Document Intelligence Pipeline"
 description: "End-to-end local OCR, NLP, and machine learning system for classifying 250,000+ scanned unclassified records."
 date: 2026-07-04
 tags:
