@@ -1,5 +1,9 @@
 # build output
 dist/
+
+# local-only working files (raw notebook extracts pending sanitization review)
+.local/
+
 # generated types
 .astro/
 
