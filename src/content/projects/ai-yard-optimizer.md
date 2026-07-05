@@ -11,7 +11,7 @@ tags:
   - Alert Classification
   - Machine Learning
   - Multi-Model Training
-image: "/images/ai-yard-optimizer/card-cover.svg"
+image: "/images/optuna-xgboost/card-cover.png"
 featured: true
 status: "complete"
 sourceNote: "This article depicts the general process and approach. Specific system names, alert types, and proprietary data structures are generalized; the methodology, architecture, and technical decisions are real."
