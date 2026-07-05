@@ -11,8 +11,8 @@ const projects = (await getCollection('projects'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 ---
 
-<BaseLayout title="Projects" description="Things I've built.">
-  <PageHeader title="Projects" description="Things I've built — AI systems, software, experiments, and tools." />
+<BaseLayout title="Selected Work" description="Things I've built.">
+  <PageHeader title="Selected Work" description="Selected projects — AI systems, software, experiments, and tools." />
 
   <SectionWrapper variant="light" width="wide">
     <div class="project-grid reveal-stagger">
