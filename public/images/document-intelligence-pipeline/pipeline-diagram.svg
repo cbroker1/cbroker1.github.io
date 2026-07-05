@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 736" width="680" height="736" role="img" aria-label="Flow diagram: scanned records through local OCR and an OCR quality signal into ten Logistic Regression and ten RoBERTa classifiers, then batch inference, a scored review queue, and human review">
+<rect x="0.50" y="0.50" width="679.00" height="735.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">End-to-end pipeline</text>
+<rect x="150.00" y="76.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="101.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">250,000+ scanned records</text>
+<text x="340.00" y="119.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">typewritten → modern · wildly mixed scan quality</text>
+<line x1="340.00" y1="132.00" x2="340.00" y2="159.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 335.50 158.00 L 340.00 165.00 L 344.50 158.00" fill="#b9b8b2"/>
+<rect x="150.00" y="166.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="191.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Local OCR — Tesseract</text>
+<text x="340.00" y="209.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">first 5 pages per document · month+ of compute</text>
+<line x1="340.00" y1="222.00" x2="340.00" y2="249.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 335.50 248.00 L 340.00 255.00 L 344.50 248.00" fill="#b9b8b2"/>
+<rect x="150.00" y="256.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="281.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">OCR quality signal</text>
+<text x="340.00" y="299.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">mean word confidence per document</text>
+<line x1="340.00" y1="312.00" x2="340.00" y2="332.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="332.00" x2="500.00" y2="332.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="332.00" x2="180.00" y2="339.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="500.00" y1="332.00" x2="500.00" y2="339.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 175.5 338 L 180.0 345 L 184.5 338" fill="#b9b8b2"/>
+<path d="M 495.5 338 L 500.0 345 L 504.5 338" fill="#b9b8b2"/>
+<rect x="32.00" y="346.00" width="296.00" height="66.00" fill="rgba(163,184,108,0.14)" rx="8" stroke="#7b9440" stroke-width="1.2"/>
+<text x="180.00" y="376.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">10× Logistic Regression</text>
+<text x="180.00" y="394.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1–3-gram counts · scikit-learn</text>
+<rect x="352.00" y="346.00" width="296.00" height="66.00" fill="rgba(163,184,108,0.14)" rx="8" stroke="#7b9440" stroke-width="1.2"/>
+<text x="500.00" y="376.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">10× RoBERTa</text>
+<text x="500.00" y="394.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">fine-tuned · PyTorch · local GPU</text>
+<line x1="180.00" y1="412.00" x2="180.00" y2="426.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="500.00" y1="412.00" x2="500.00" y2="426.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="426.00" x2="500.00" y2="426.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="340.00" y1="426.00" x2="340.00" y2="447.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 335.50 446.00 L 340.00 453.00 L 344.50 446.00" fill="#b9b8b2"/>
+<rect x="150.00" y="454.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="479.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Full-corpus batch inference</text>
+<text x="340.00" y="497.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">20 probability scores per document</text>
+<line x1="340.00" y1="510.00" x2="340.00" y2="537.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 335.50 536.00 L 340.00 543.00 L 344.50 536.00" fill="#b9b8b2"/>
+<rect x="150.00" y="544.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="569.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Scored review queue</text>
+<text x="340.00" y="587.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">flags · probabilities · OCR quality · links</text>
+<line x1="340.00" y1="600.00" x2="340.00" y2="627.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 335.50 626.00 L 340.00 633.00 L 344.50 626.00" fill="#b9b8b2"/>
+<rect x="150.00" y="634.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="659.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Human review</text>
+<text x="340.00" y="677.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">administrators make the final call</text>
+</svg>
