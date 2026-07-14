@@ -28,3 +28,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# design references (kept locally, not published)
+references/
