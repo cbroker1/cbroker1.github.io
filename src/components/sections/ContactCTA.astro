@@ -20,7 +20,7 @@ const { heading = "Let's connect.", links } = Astro.props;
         <a
           href={link.href}
           class="contact-cta__link"
-          target={link.href.startsWith('http') || link.href.startsWith('mailto') ? '_blank' : undefined}
+          target={link.href.startsWith('http') ? '_blank' : undefined}
           rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
         >
           {link.label}
