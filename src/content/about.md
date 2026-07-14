@@ -22,10 +22,17 @@ I enjoy the engineering side of AI just as much as the strategy side: choosing t
 
 ## Education
 
-* **Johns Hopkins University** (M.S.) 
-* **The College of St. Scholastica** (B.S. Pt1)
-* **James Cook University, Australia** (Pt2)
+* **Johns Hopkins University** — M.S. in Government Analytics, 2022
+* **National Institutes of Health** — Post-Bacc. IRTA Research Fellowship, 2014
+* **The College of St. Scholastica** — B.S. in Psychology, 2011
 
 ## Interests
 
 Outside of work, I'm into mountain biking, flying my paramotor, scuba diving, and building side projects that usually start as "just for fun" and turn into something much bigger.
+
+<div class="interests-collage">
+  <img class="interests-collage__tall" src="/images/interests/bike.webp" alt="A mud-flecked mountain bike leaned against the rocks on an overlook, with the town and lake far below" loading="lazy" width="900" height="1200" />
+  <img class="interests-collage__wide" src="/images/interests/gpus.webp" alt="A DIY open-frame rig stacked with GPUs, cooling fans, and bundled cables" loading="lazy" width="1000" height="750" />
+  <img src="/images/interests/paramotor.webp" alt="Launching a paramotor from an open field, the wing arcing overhead against the sun" loading="lazy" width="997" height="1000" />
+  <img src="/images/interests/scuba.webp" alt="Two divers in drysuits and dive gear on a dock before a cold-water dive" loading="lazy" width="747" height="1000" />
+</div>
