@@ -19,12 +19,12 @@ image: "/images/document-intelligence-pipeline/card-cover.svg"
 github: "https://github.com/cbroker1/document-intelligence-pipeline"
 featured: true
 status: "complete"
-sourceNote: "Case study only — original source is not public due to confidentiality. Sanitized demo code may be published later if recoverable from old archives."
+sourceNote: "Case study only. The original source is not public due to confidentiality. Sanitized demo code may be published later if recoverable from old archives."
 ---
 
 ## Overview
 
-In a previous federal data science role, I built an end-to-end document intelligence pipeline for a repository of 250,000+ scanned unclassified records. The system combined local OCR, OCR quality measurement, classical NLP with Logistic Regression, RoBERTa transfer learning, full-corpus batch inference, and a ranked human-in-the-loop review workflow — all running on local hardware, with no cloud services involved.
+In a previous federal data science role, I built an end-to-end document intelligence pipeline for a repository of 250,000+ scanned unclassified records. The system combined local OCR, OCR quality measurement, classical NLP with Logistic Regression, RoBERTa transfer learning, full-corpus batch inference, and a ranked human-in-the-loop review workflow. Everything ran on local hardware, with no cloud services involved.
 
 Every document was scored by 20 classifiers: 10 scikit-learn n-gram Logistic Regression models and 10 fine-tuned RoBERTa models, one of each per business-defined category. The output was a scored, sortable review queue that let administrators start with the documents most likely to matter, instead of reading through a quarter-million records front to back. The workflow then ran on a monthly cadence as new documents kept arriving.
 
@@ -34,11 +34,11 @@ This page is a sanitized case study. Category names, internal systems, and docum
 
 ## The Problem
 
-The repository held 250,000+ scanned records accumulated over decades — everything from typewritten pages digitized long ago to modern computer-generated PDFs. Scan quality, layout, and text legibility varied wildly. Many files carried semi-structured type codes in their filenames; a large share had nothing but an opaque record number.
+The repository held 250,000+ scanned records accumulated over decades, ranging from typewritten pages digitized long ago to modern computer-generated PDFs. Scan quality, layout, and text legibility varied wildly. Many files carried semi-structured type codes in their filenames; a large share had nothing but an opaque record number.
 
-The business needed each record classified into one of 10 business-defined document categories. A fully manual pass would have consumed an enormous amount of administrator time — the kind of project that quietly never finishes. The actual requirement wasn't "classify everything perfectly." It was: **help the reviewers find the documents that belong in each category, in priority order, without reading everything.**
+The business needed each record classified into one of 10 business-defined document categories. A fully manual pass would have consumed an enormous amount of administrator time. It was the kind of project that quietly never finishes. The actual requirement wasn't "classify everything perfectly." It was: **help the reviewers find the documents that belong in each category, in priority order, without reading everything.**
 
-That reframing — from automation to ranked triage — shaped every technical decision that followed.
+That reframing, from automation to ranked triage, shaped every technical decision that followed.
 
 ---
 
@@ -56,40 +56,41 @@ That reframing — from automation to ranked triage — shaped every technical d
 
 The pipeline started by OCR'ing the first five pages of every document locally with Tesseract. Five pages was a deliberate scope decision: opening pages carry most of a document's identifying language, and OCR'ing full documents across the corpus would have multiplied an already month-long compute job.
 
-Before committing to the full run, I benchmarked DPI settings against three costs: recognition quality, processing time per page, and output size. Higher render resolution helped degraded scans but inflated processing time and disk usage across a quarter-million documents — this was a classic throughput-versus-quality tradeoff, and it had to be settled with measurements, not instinct. Even with tuned settings, OCR extraction and experimentation consumed **over a month of local batch compute**.
+Before committing to the full run, I reviewed the open-source OCR options available at the time and selected Tesseract for its practical combination of accuracy, local execution, and zero licensing cost. I also hired an OCR specialist to review the PDF-to-image-to-OCR workflow and challenge the design before full-scale processing. I then benchmarked DPI settings against recognition quality and processing time per page. Higher render resolution helped degraded scans but increased runtime across a quarter-million documents. It was a classic throughput-versus-quality tradeoff that had to be settled with measurements, not instinct. Even with tuned settings, OCR extraction and experimentation consumed **over a month of local batch compute**.
 
-Because scan quality varied so much, I didn't treat OCR as a black box. Tesseract reports a confidence value for every recognized word, so I aggregated those into a document-level OCR confidence score and kept it as a first-class field in the dataset. Documents whose OCR pass failed outright were tracked with a sentinel value and re-queued instead of silently dropped.
+Because scan quality varied so much, I didn't treat OCR as a black box. Tesseract reports a confidence value for every recognized word, so I averaged the leading page's word-level confidences and used that as a document-level quality proxy. I kept that score as a first-class field in the dataset. Documents whose OCR pass failed outright were tracked with a sentinel value and re-queued instead of silently dropped.
 
 ```python
-# Representative pseudocode — sanitized for public sharing.
+# Representative pseudocode, sanitized for public sharing.
 # Tesseract emits a confidence value per recognized word;
 # averaging them per document gives a usable quality signal.
 
 def document_ocr_confidence(word_results):
     confidences = [w.conf for w in word_results if w.conf != -1]
     if not confidences:
-        return None  # nothing usable — flag for re-OCR
+        return None  # Nothing usable; flag for re-OCR.
     return sum(confidences) / len(confidences)
 
 for document in document_batch:
-    words = run_local_ocr(document.path, max_pages=5, dpi=selected_dpi)
+    pages = run_local_ocr(document.path, max_pages=5, dpi=selected_dpi)
+    leading_page_words = pages[0].words if pages else []
     ocr_scores.append({
         "document_id": document.safe_id,
-        "ocr_confidence": document_ocr_confidence(words),
+        "ocr_confidence": document_ocr_confidence(leading_page_words),
     })
 ```
 
 ![Histogram of document-level OCR confidence across the corpus, with a long tail of degraded scans and a sharp peak of clean modern documents](/images/document-intelligence-pipeline/ocr-confidence-distribution.svg)
 
-*OCR confidence across the corpus. Most documents OCR'd well, with clean modern scans forming a sharp peak — but the long tail of degraded and typewritten scans is exactly the subset where downstream model scores needed more skepticism. Figure recreated with representative synthetic data.*
+*OCR confidence across the corpus. Most documents OCR'd well, with clean modern scans forming a sharp peak. However, the long tail of degraded and typewritten scans is exactly the subset where downstream model scores needed more skepticism. Figure recreated with representative synthetic data.*
 
-That distribution became a data quality lens for the whole project. A model score on a 94%-confidence document and the same score on a 55%-confidence document do not mean the same thing — the second one is a prediction made on partially garbled text. Slicing OCR quality by predicted category later confirmed the intuition: categories dominated by older typewritten material sat visibly lower.
+That distribution became a data quality lens for the whole project. A model score on a 94%-confidence document and the same score on a 55%-confidence document do not mean the same thing. The second one is a prediction made on partially garbled text. Slicing OCR quality by predicted category later confirmed the intuition: categories dominated by older typewritten material sat visibly lower.
 
 ![Small-multiple histograms showing OCR confidence distributions for three predicted categories, with progressively heavier low-quality tails](/images/document-intelligence-pipeline/ocr-quality-by-category.svg)
 
 *OCR quality sliced by predicted category. Some document types are mostly modern and OCR cleanly; others skew old and degraded. Figure recreated with representative synthetic data and generic category labels.*
 
-One more wrinkle from the messy-data file: many PDFs already contained an embedded text layer from whenever they were first digitized. Rather than pick a winner, I kept both text streams — the legacy layer and my fresh Tesseract output — normalized the whitespace, and fed models the combination, so weak text in one stream could be rescued by the other.
+One more wrinkle from the messy-data file: many PDFs already contained an embedded text layer from whenever they were first digitized. Rather than pick a winner, I kept both text streams, the legacy layer and my fresh Tesseract output, normalized the whitespace, and fed models the combination, so weak text in one stream could be rescued by the other.
 
 ---
 
@@ -97,7 +98,7 @@ One more wrinkle from the messy-data file: many PDFs already contained an embedd
 
 With text extracted, the first modeling pass was deliberately classical supervised text classification: **10 binary scikit-learn Logistic Regression classifiers, one per business category**, over 1–3-gram count vectors with English stop words removed.
 
-The training labels were the interesting engineering problem. No labeled dataset existed, so I mined the filename conventions — decades of humans encoding document types into filenames, complete with typos and drift — into weak labels, wrote normalization rules for the misspelled variants, and cross-referenced one category against a metadata database the review team maintained. Documents whose filenames were bare record numbers carried no usable signal; they became the unlabeled deployment set the models would later score. For each category I also trained two labeling variants — a broad one (type code appears anywhere in the filename) and a strict one (filename types the document as exactly that code) — and compared them to understand how label noise moved the results.
+The training labels were the interesting engineering problem. No labeled dataset existed, so I mined the filename conventions into weak labels. These conventions reflected decades of humans encoding document types into filenames, complete with typos and drift, wrote normalization rules for the misspelled variants, and cross-referenced one category against a metadata database the review team maintained. Documents whose filenames were bare record numbers carried no usable signal; they became the unlabeled deployment set the models would later score. For each category I also trained two labeling variants: a broad one, where the type code appears anywhere in the filename, and a strict one, where the filename identifies exactly that code. I compared them to understand how label noise moved the results.
 
 Practical constraints showed up immediately:
 
@@ -105,8 +106,10 @@ Practical constraints showed up immediately:
 - **Class imbalance.** Every category was a minority against the rest of the corpus, handled with random oversampling of the minority class (imbalanced-learn), with the sampling strategy tuned per category.
 - **Per-category hyperparameters.** Regularization strength (`C`, L1 penalty, liblinear solver) was tuned per model with randomized search over a log-scale grid.
 
+To make those comparisons meaningful, I reused a fixed random split across candidate configurations, recorded the runs and rationale in notebooks, and kept the final test partition untouched until model selection was complete. Each category was treated as its own modeling problem: I compared feature ranges, labeling variants, sampling strategies, and candidate configurations until additional tuning no longer justified the compute time or changed the operational result.
+
 ```python
-# Representative training pass for one of the ten categories — sanitized.
+# Representative training pass for one of the ten categories, sanitized.
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -143,22 +146,22 @@ Evaluation used held-out splits with accuracy, precision, recall, F1, and ROC AU
 
 *ROC curve for the same representative classifier. Recreated from the original evaluation's AUC; class name generalized.*
 
-The metrics deserve honest framing: with labels derived from filename metadata, a strong classifier partly re-learns the filename convention from the document text. That was acceptable — the goal was to project that convention onto the hundreds of thousands of documents whose filenames said nothing. Interpretability was the other reason to start classical: when a Logistic Regression model fires, you can read the n-grams that drove it.
+The metrics deserve honest framing: with labels derived from filename metadata, a strong classifier partly re-learns the filename convention from the document text. That was acceptable because the goal was to project that convention onto the hundreds of thousands of documents whose filenames said nothing. Interpretability was the other reason to start classical: when a Logistic Regression model fires, you can read the n-grams that drove it.
 
 ---
 
 ## Phase 3: RoBERTa Transfer Learning
 
-The second modeling pass built **10 RoBERTa-based classifiers via transfer learning** — starting from a publicly available pre-trained RoBERTa-large checkpoint, replacing the head with a dropout + linear classification layer, and fine-tuning end-to-end with PyTorch on the same weak labels.
+The second modeling pass built **10 RoBERTa-based classifiers via transfer learning**, starting from a publicly available pre-trained RoBERTa checkpoint selected to fit the available hardware, replacing the head with a dropout + linear classification layer, and fine-tuning end-to-end with PyTorch on the same weak labels.
 
 Transformers made the hardware constraints personal:
 
-- **Sequence length.** RoBERTa's architecture caps input at 512 tokens, but on an 8 GB GPU the practical training length was 250 tokens with batch size 12 — found by trial and error against out-of-memory errors. That made *which* text reaches the model the highest-leverage choice, and it's why the extraction focused on the highest-value window of each document: the opening pages where identifying language lives.
-- **Training time.** A representative category's training pool was ~65,000 documents with an 80/20 class imbalance, split 90/5/5 into train/validation/test. Configurations that exceeded GPU memory had to fall back to CPU, where a single epoch took ~35 hours — the kind of number that forces you to plan experiments instead of casually re-running them.
-- **Optimization details.** AdamW at a low learning rate (1e-6) with weight decay, linear warmup scheduling, and gradient clipping — standard fine-tuning hygiene, tuned to the small-batch regime the hardware imposed.
+- **Sequence length and batch size.** RoBERTa's architecture caps input at 512 tokens, and I kept the sequence length at that maximum for every training run. When a configuration exceeded the 8 GB GPU's memory, I reduced the batch size rather than shortening the input window. Preserving the full 512-token context made the choice of source text especially important, which reinforced the decision to focus extraction on the opening pages where identifying language usually appeared.
+- **Training time.** A representative category's training pool was ~65,000 documents with an 80/20 class imbalance, split 90/5/5 into train/validation/test. Training remained GPU-based throughout. Out-of-memory errors were handled by shrinking the batch size until the configuration fit, rather than falling back to CPU. Even with that optimization, the workload made each experiment expensive enough that configurations had to be planned carefully rather than rerun casually.
+- **Optimization details.** AdamW at a low learning rate (1e-6) with weight decay, linear warmup scheduling, and gradient clipping. These settings were grounded in the literature and adapted to the small-batch regime the hardware imposed.
 
 ```python
-# Representative fine-tuning setup — sanitized.
+# Representative fine-tuning setup, sanitized.
 class CategoryClassifier(nn.Module):
     def __init__(self, n_classes):
         super().__init__()
@@ -172,7 +175,7 @@ class CategoryClassifier(nn.Module):
 
 encoding = tokenizer.encode_plus(
     document_text,
-    max_length=250,   # GPU-memory ceiling; the full 512-token window didn't fit
+    max_length=512,  # kept at RoBERTa's maximum context window
     truncation=True,
     padding="max_length",
     return_attention_mask=True,
@@ -180,13 +183,13 @@ encoding = tokenizer.encode_plus(
 )
 ```
 
-Fine-tuning reached ~96% validation accuracy on the representative category after the first epoch. The transformers read semantics rather than surface n-grams, which made them a genuinely different signal from the Logistic Regression models — and that disagreement between the two model families was itself useful review information. Where both fired, confidence was high; where they split, a human should look first.
+Fine-tuning reached ~96% validation accuracy on the representative category after the first epoch. The transformers read semantics rather than surface n-grams, which made them a genuinely different signal from the Logistic Regression models. That disagreement between the two model families was itself useful review information. Where both fired, confidence was high; where they split, a human should look first.
 
 ---
 
 ## Phase 4: Full-Corpus Scoring and Batch Inference
 
-Every document in the corpus was then scored across **all 20 classifiers** — batch inference across 250,000+ records, run locally. The Logistic Regression models were fast: roughly 200 documents per second per model, a full corpus pass in well under an hour per classifier. The output per document:
+Every document in the corpus was then scored across **all 20 classifiers** through local batch inference across 250,000+ records, run locally. The Logistic Regression models were fast: roughly 200 documents per second per model, a full corpus pass in well under an hour per classifier. The output per document:
 
 - a binary predicted flag per category,
 - a calibrated-ish probability score per category (raw `predict_proba` outputs),
@@ -199,7 +202,9 @@ Documents whose filenames already carried a type code were marked as *known from
 
 *Full-corpus probability scores for one classifier (log scale). The distribution is what you want to see in a triage system: decisive mass at both ends, few ambiguous middles. The right-hand cluster is the review queue. Figure recreated with representative synthetic data.*
 
-The delivery format was deliberately boring: a spreadsheet. Administrators already lived in spreadsheets, so the review queue was a sortable, filterable sheet where every row was a document — including a formula column that turned each document's location into a clickable link. No new tool to learn, no dashboard to maintain.
+I did not treat the default 0.5 cutoff as sacred. I inspected score distributions and false positives while moving down each ranked queue, compared thresholds such as 0.5 and 0.6, and watched for the point where the hit rate began to deteriorate. When one model family weakened, I compared the Logistic Regression signal, the RoBERTa signal, agreement between them, and the absence of stronger competing category predictions. Those experiments shaped the review order instead of forcing one universal threshold across all categories.
+
+The delivery format was deliberately boring: a spreadsheet. Administrators already lived in spreadsheets, so the review queue was a sortable, filterable sheet where every row was a document, including a formula column that turned each document's location into a clickable link. No new tool to learn, no dashboard to maintain.
 
 | document_id | ocr_confidence | category_a_probability | category_b_probability | review_priority |
 |---|---|---|---|---|
@@ -207,12 +212,12 @@ The delivery format was deliberately boring: a spreadsheet. Administrators alrea
 | DOC-104551 | 91.2 | 0.972 | 0.038 | 2 |
 | DOC-076318 | 88.5 | 0.941 | 0.007 | 3 |
 | DOC-129077 | 61.4 | 0.887 | 0.052 | 4 |
-| DOC-055930 | 94.1 | 0.312 | 0.296 | — |
+| DOC-055930 | 94.1 | 0.312 | 0.296 | N/A |
 
-*Illustrative mock-up of the review queue — synthetic IDs and values. Row four is the OCR-confidence signal earning its keep: a high model score on low-quality text gets flagged for more careful review rather than trusted outright.*
+*Illustrative mock-up of the review queue using synthetic IDs and values. Row four is the OCR-confidence signal earning its keep: a high model score on low-quality text gets flagged for more careful review rather than trusted outright.*
 
 ```python
-# Representative scoring loop — sanitized.
+# Representative scoring loop, sanitized.
 for document in document_batch:
     text, ocr_confidence = load_extracted_text(document.safe_id)
 
@@ -229,7 +234,7 @@ for document in document_batch:
     })
 ```
 
-With two model families per category plus an OCR quality signal, the queue behaved like an ensemble-style review signal — not a formal ensemble with learned weights, but multiple independent signals presented side by side so a human could weigh them.
+With two model families per category plus an OCR quality signal, the queue behaved like an ensemble-style review signal. It was not a formal ensemble with learned weights, but multiple independent signals presented side by side so a human could weigh them.
 
 ---
 
@@ -237,20 +242,24 @@ With two model families per category plus an OCR quality signal, the queue behav
 
 The system never made final determinations. Administrators did.
 
-What the models changed was the shape of the work. Instead of an undifferentiated pile of 250,000 records, reviewers got a queue sorted by confidence: start at the top, where nearly everything is a hit; stop when the hit rate falls off; treat low-OCR-confidence rows with extra care. The models reduced the search space; the humans supplied the judgment. Confidence-based triage also gave the review effort a natural budget knob — a probability threshold — instead of an all-or-nothing automation decision.
+The review process also created a practical production feedback loop. Administrators worked from the ranked batches, moved misclassified records into a designated location, and returned those cases for inspection, re-ingestion, and reprocessing. I reviewed false positives and missed documents, adjusted thresholds and routing logic where useful, and continued supplying new batches as the queue evolved. The error volume was low enough that this remained a manageable review process rather than a second manual classification project.
+
+What the models changed was the shape of the work. Instead of an undifferentiated pile of 250,000 records, reviewers got a queue sorted by confidence: start at the top, where nearly everything is a hit; stop when the hit rate falls off; treat low-OCR-confidence rows with extra care. The models reduced the search space; the humans supplied the judgment. Confidence-based triage also gave the review effort a natural budget control through a probability threshold instead of an all-or-nothing automation decision.
 
 I'd argue this was the single most important design decision in the project. A fully automated classifier at 99% accuracy still silently misfiles thousands of documents in a corpus this size, and nobody finds out until it matters. A ranking system at the same accuracy just puts a few oddballs slightly down-queue, where a human catches them. For decision support on messy real-world data, ranked review beat black-box automation on every axis that mattered here.
+
+I presented the findings and modeling rationale to the broader team, documented the category-specific decisions in notebooks, and created walkthrough videos explaining how the labeling rules, models, and review workflow fit together. That review mattered: the system continued because the administrators found the ranked batches useful in practice, not merely because the offline metrics looked good.
 
 ---
 
 ## Phase 6: Monthly Monitoring and Incremental Processing
 
-The repository was alive — new records kept arriving after the initial corpus was processed. So the pipeline became an operational workflow rather than a one-time experiment.
+The repository was active, and new records kept arriving after the initial corpus was processed. So the pipeline became an operational workflow rather than a one-time experiment.
 
-On a monthly cadence, I snapshotted the repository index, diffed it against the previous month, and pushed anything new through the same machinery: OCR (or re-OCR for documents whose original text layer was unusable), scoring across all 20 models, and insertion into the review pool. The re-OCR path rendered each page image at high resolution, ran Tesseract per page, and merged the results back into a searchable PDF — replacing dead scans with documents you could actually search, at roughly 40 seconds per document for full-length records.
+On a monthly cadence, I snapshotted the repository index, diffed it against the previous month, and pushed anything new through the same machinery: OCR (or re-OCR for documents whose original text layer was unusable), scoring across all 20 models, and insertion into the review pool. The re-OCR path rendered each page image at high resolution, ran Tesseract per page, and merged the results back into a searchable PDF, replacing dead scans with documents you could actually search, at roughly 40 seconds per document for full-length records.
 
 ```python
-# Representative monthly intake pass — sanitized.
+# Representative monthly intake pass, sanitized.
 current_snapshot = snapshot_repository_index()
 known_documents = load_previous_snapshot()
 
@@ -266,7 +275,7 @@ save_snapshot(current_snapshot)
 
 ![Loop diagram of the monthly cycle: repository snapshot, new document detection, OCR or re-OCR, model scoring, review pool update, repeating monthly](/images/document-intelligence-pipeline/monthly-monitoring-flow.svg)
 
-*The recurring monthly intake loop — incremental batch processing rather than a one-off analysis.*
+*The recurring monthly intake loop used incremental batch processing rather than a one-off analysis.*
 
 This is the unglamorous half of applied ML that rarely makes it into portfolios: recurring document intake, idempotent re-processing, corpus monitoring, and keeping a review pool current month after month.
 
@@ -281,11 +290,12 @@ This is the unglamorous half of applied ML that rarely makes it into portfolios:
 The pipeline converted a practically impossible manual review problem into a ranked triage workflow:
 
 - **250,000+ records** OCR'd, quality-scored, and classified locally under privacy constraints.
-- **20 trained classifiers** (10 Logistic Regression, 10 RoBERTa) with per-category evaluation — representative held-out results of 99%+ accuracy and ~0.999 ROC AUC.
+- **20 trained classifiers** (10 Logistic Regression, 10 RoBERTa) with per-category evaluation, with representative held-out results of 99%+ accuracy and ~0.999 ROC AUC.
 - **A review queue administrators actually used**, combining predicted flags, model probabilities, OCR confidence, and one-click access to each document.
+- **A production feedback loop** in which false classifications were inspected, re-ingested, and reprocessed.
 - **An operational monthly workflow**, not a notebook that ran once.
 
-Measured conservatively — reading a quarter-million documents at even a few minutes each — prioritized review of this corpus likely saved **tens of thousands of administrator hours** compared with a fully manual classification pass. The honest version of the claim: the manual version of this project would simply never have been completed.
+Measured conservatively, reading a quarter-million documents at even a few minutes each, prioritized review of this corpus likely saved **tens of thousands of administrator hours** compared with a fully manual classification pass. The honest version of the claim: the manual version of this project would simply never have been completed.
 
 ---
 
@@ -297,7 +307,8 @@ Measured conservatively — reading a quarter-million documents at even a few mi
 - **Probabilities beat labels.** Nearly all of the system's operational value came from ranking by model confidence, not from the binary flags. Triage is a more robust product than automation.
 - **Human-in-the-loop is a feature, not a compromise.** Keeping administrators as the decision-makers made a 99%-accurate system safe to deploy on a quarter-million records.
 - **A spreadsheet can be the right product.** The most sophisticated part of the stack delivered its value through the least sophisticated interface its users already trusted.
-- **Applied ML is workflow engineering.** Training models was maybe a fifth of the work. Extraction, quality measurement, labeling strategy, batch inference, review design, and monthly operations were the rest — and they're what made the models matter.
+- **Experimentation happens across the pipeline.** The final workflow emerged from repeated comparisons of OCR settings, feature representations, labeling rules, sampling strategies, model configurations, score thresholds, and hardware tradeoffs, rather than from one training run.
+- **Applied ML is workflow engineering.** Training models was maybe a fifth of the work. Extraction, quality measurement, labeling strategy, batch inference, review design, feedback handling, and monthly operations were the rest. Those components are what made the models matter.
 
 ---
 
@@ -305,4 +316,4 @@ Measured conservatively — reading a quarter-million documents at even a few mi
 
 This case study is intentionally generalized to avoid disclosing sensitive operational details, document contents, category names, internal workflows, or agency-specific systems. Figures are recreated from the original analyses with synthetic, shape-representative data and generic labels; code snippets are representative pseudocode rather than production source. The focus is on the architecture, methods, constraints, and applied machine learning lessons rather than the underlying records themselves.
 
-Faithful, sanitized versions of the project notebooks — same structure and methods, with outputs stripped and all identifiers generalized — are published in the companion repository: [github.com/cbroker1/document-intelligence-pipeline](https://github.com/cbroker1/document-intelligence-pipeline).
+Faithful, sanitized versions of the project notebooks, with the same structure and methods but stripped outputs and generalized identifiers, are published in the companion repository: [github.com/cbroker1/document-intelligence-pipeline](https://github.com/cbroker1/document-intelligence-pipeline).
