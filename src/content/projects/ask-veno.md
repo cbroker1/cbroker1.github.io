@@ -19,6 +19,8 @@ status: "complete"
 sourceNote: "Private personal project — source is not public. Everything described here runs locally: no cloud APIs, no paid services."
 ---
 
+![The Ask Veno dashboard in its S.T.A.L.K.E.R. GAMMA PDA theme: amber phosphor text on a dark CRT-style background with scanlines, circular pipeline-status dials, a scan-style search bar, and the video archive table listing ingested streams](/images/ask-veno/ui.png)
+
 ## Overview
 
 Ask Veno is a fully offline retrieval-augmented generation (RAG) system that turns a YouTube channel into a searchable knowledge base. It ingests an entire channel's livestream archive — audio download, Whisper transcription, chunking, embedding — and serves it through a single-file FastAPI dashboard styled as a S.T.A.L.K.E.R. GAMMA PDA: amber phosphor glow, CRT scanlines, and all.
@@ -180,8 +182,6 @@ The design brief was a S.T.A.L.K.E.R. GAMMA PDA, because the best RAG interface 
 - **Circular progress rings** — SVG stat dials showing pipeline completion at a glance
 - **Inline playback** — clicking a result card expands an embedded player at the exact timestamp the chunk came from
 - **A spinning ☢ loader** — because Ollama inference on CPU takes a few seconds, and the wait should be in character
-
-![The Ask Veno dashboard in its S.T.A.L.K.E.R. GAMMA PDA theme: amber phosphor text on a dark CRT-style background with scanlines, circular pipeline-status dials, a scan-style search bar, and the video archive table listing ingested streams](/images/ask-veno/ui.png)
 
 The dashboard also doubles as the pipeline's monitoring surface: the video archive table shows every ingested stream with its status, chunk count, duration, and upload date, driven by the same SQLite registry the queue processors use. There is exactly one source of truth about pipeline state, and both the CLI tools and the UI read it.
 
