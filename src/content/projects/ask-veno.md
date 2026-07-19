@@ -14,9 +14,10 @@ tags:
   - yt-dlp
   - SQLite
 image: "/images/ask-veno/ask-veno.png"
+github: "https://github.com/cbroker1/ask-veno"
 featured: true
 status: "complete"
-sourceNote: "Private personal project — source is not public. Everything described here runs locally: no cloud APIs, no paid services."
+sourceNote: "Personal project — source and screenshots on GitHub. Everything described here runs locally: no cloud APIs, no paid services."
 ---
 
 ![The Ask Veno dashboard in its S.T.A.L.K.E.R. GAMMA PDA theme: amber phosphor text on a dark CRT-style background with scanlines, circular pipeline-status dials, a scan-style search bar, and the video archive table listing ingested streams](/images/ask-veno/ui.png)
