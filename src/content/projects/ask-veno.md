@@ -1,10 +1,12 @@
 ---
-title: "Ask Veno: A Fully Local YouTube RAG Pipeline with a Retro-Terminal Dashboard"
-description: "Turning 257 YouTube livestreams into a searchable, source-anchored knowledge base — Whisper, ChromaDB, and Ollama running entirely on local hardware."
+title: "Ask Veno: A Fully Local Multi-Corpus RAG System with a Retro-Terminal Dashboard"
+description: "299 YouTube livestreams plus a 1,786-item game database behind one deterministic router — hybrid retrieval (exact lookup, BM25, dense, RRF), a measured evaluation harness, and Whisper/ChromaDB/Ollama running entirely on local hardware."
 date: 2026-07-08
 tags:
   - Python
   - RAG
+  - Hybrid Retrieval
+  - Evaluation
   - FastAPI
   - ChromaDB
   - Whisper
@@ -24,11 +26,11 @@ sourceNote: "Personal project — source and screenshots on GitHub. Everything d
 
 ## Overview
 
-Ask Veno is a fully offline retrieval-augmented generation (RAG) system that turns a YouTube channel into a searchable knowledge base. It ingests an entire channel's livestream archive — audio download, Whisper transcription, chunking, embedding — and serves it through a single-file FastAPI dashboard styled as a S.T.A.L.K.E.R. GAMMA PDA: amber phosphor glow, CRT scanlines, and all.
+Ask Veno is a fully offline retrieval-augmented generation (RAG) system built around **two distinct knowledge sources behind one interface**. The first is a YouTube channel's entire livestream archive — audio download, Whisper transcription, chunking, embedding. The second is the authoritative item database of the game those streams are about (S.T.A.L.K.E.R. GAMMA 0.9.5): 1,786 items canonicalized from an upstream open-data project into SQLite, with full provenance. Both are served through a FastAPI dashboard styled as an in-game PDA: amber phosphor glow, CRT scanlines, and all.
 
-Ask any question about the channel's content and the system retrieves the most relevant transcript chunks from a ChromaDB vector store, generates a direct answer with a local LLM via Ollama, and returns source-anchored video links with timestamps — click a result and the video opens inline at the exact moment the answer came from.
+Ask a question and a deterministic router decides which corpus should answer it. *"What is the magazine capacity of the AK-74?"* goes to the database and comes back with the exact canonical record. *"What happened when Veno entered Radar?"* goes to the stream archive and comes back with timestamped clips. *"What are the AK-74 stats and how does Veno use it?"* hits both — and the answer explicitly labels which facts came from the database and which from the streamer. Retrieval is hybrid at every layer: exact alias lookup first, then BM25 (SQLite FTS5) and dense vectors fused with Reciprocal Rank Fusion, with one controlled query-rewrite retry when evidence comes back weak.
 
-The whole thing runs on my own hardware. No cloud APIs, no paid services, no data leaving the machine: **yt-dlp → faster-whisper → ChromaDB → Ollama**, orchestrated by a SQLite state machine. The current index covers **257 videos and 21,959 transcript chunks**, processed end to end with zero anomalies.
+The whole thing runs on my own hardware. No cloud APIs, no paid services, no data leaving the machine — and nothing but local components at query time: **yt-dlp → faster-whisper → ChromaDB + SQLite FTS5 → Ollama**, orchestrated by SQLite state machines. The current index covers **299 videos / 28,692 transcript chunks** and **1,786 game items / 7,362 retrieval documents**, processed end to end with zero anomalies.
 
 ---
 
@@ -174,7 +176,7 @@ If Ollama isn't running, the dashboard degrades gracefully: retrieval still work
 
 ## Phase 5: The PDA Dashboard
 
-The interface is a **single-file FastAPI application** — routes, templates, and styling in one `web_app.py`. For a single-user tool, one file beats a frontend build pipeline: no bundler, no node_modules, nothing to deploy but `python web_app.py`.
+The interface started as a **single-file FastAPI application** — routes, templates, and styling in one `web_app.py`. For a single-user tool, one file beats a frontend build pipeline: no bundler, no node_modules, nothing to deploy but `python web_app.py`. (When the system later grew a second corpus, that file was refactored into small `app/`, `rag/`, `storage/`, and `presentation/` modules behind a compatibility entrypoint — with a characterization test suite written first, so the refactor provably changed nothing.)
 
 The design brief was a S.T.A.L.K.E.R. GAMMA PDA, because the best RAG interface for a corpus of Zone survival streams is one that feels like it survived the Zone:
 
@@ -188,11 +190,45 @@ The dashboard also doubles as the pipeline's monitoring surface: the video archi
 
 ---
 
+## Phase 6: A Second Corpus — the GAMMA 0.9.5 Item Database
+
+Transcripts tell you what the streamer *said*; they can't reliably tell you what the game's numbers *are*. So the system grew a second, authoritative corpus: the complete GAMMA 0.9.5 item database, synchronized from an upstream open-data project ([stalker-anomaly-gamma-db](https://github.com/simonwdev/stalker-anomaly-gamma-db), AGPL-3.0) via a sparse git checkout — never copied into the repo, always attributed, and **hard-pinned to version 0.9.5 in code**.
+
+The interesting work was canonicalization. The upstream export is 61 JSON files of game-engine reality: translation-key indirection, display-formatted stat strings (`"82%"`), relationship files that reference items by three different key schemes, and engine markup embedded in description text. A deterministic Python builder (no LLM anywhere in ingestion) joins all of it into a canonical SQLite database — **1,786 items, 6,880 aliases, 57,768 typed relations** (ammo compatibility, crafting, disassembly, trader stock, drops, upgrades) — every record keeping its raw source values and per-file provenance. A hard-gated audit fails the build on duplicate IDs, coverage loss, or unaccounted manifest files; ambiguities upstream actually contains (orphan references, missing translations) are counted and reported instead of silently guessed away.
+
+Each item is then rendered into deterministic natural-language **facets** — overview, stats, compatibility, crafting, disassembly, obtaining, upgrades — that get embedded into a **versioned Chroma collection** named by the upstream manifest hash. Rebuilds are staged and atomic: the new SQLite and collection are built and validated next to the live ones, then activated with a single `os.replace()`. A failed build can never leave a half-corpus serving traffic, and an unchanged upstream manifest turns the daily sync job into a sub-second no-op instead of a 27-minute re-embed.
+
+---
+
+## Phase 7: Hybrid Retrieval, Routing, and One Controlled Retry
+
+With two corpora, "embed the query and take the nearest neighbors" stops being good enough. The GAMMA side retrieves in layers, cheapest and most precise first:
+
+1. **Exact alias lookup** — query n-grams matched against normalized item names, internal IDs, and translated aliases ("AK-74" resolves to the AK-74N even though no alias matches exactly, via a digit-gated prefix rule that can never fire on ordinary words). Exact hits contribute *protected* canonical facets that later stages can't rank away.
+2. **BM25** over facet text (SQLite FTS5 — already in the stack, no new infrastructure) and **dense E5 vectors**, fused by rank with **Reciprocal Rank Fusion** — no fragile score normalization between incomparable scales.
+3. An optional cross-encoder reranker — more on that below.
+
+Corpus routing is **deterministic, not an LLM call**: explicit streamer intent, mechanic/stat vocabulary, item-category nouns, recommendation phrasing, and exact item resolution decide between the archive, the database, or both — in about a hundred lines of testable Python with a manual override in the UI. When initial evidence comes back weak (no hits, or a model-number-like term that resolved to nothing), the query is rewritten **once** by the local LLM under a strict JSON contract and retried **once** — the retry is kept only if it's measurably stronger, and every failure path falls back to the original query. No agent loop, no unbounded retries.
+
+The old transcript-only path still exists untouched: a regression suite pins `corpus=transcripts` to a recorded pre-expansion baseline — same chunk IDs, same order, same similarity values, byte for byte.
+
+---
+
+## Phase 8: An Evaluation Harness Instead of Vibes
+
+Every retrieval claim above is backed by a **64-question gold dataset grounded in the actual corpora** — GAMMA answers extracted from the built database (magazine sizes, weights, prices, crafting ingredients), transcript answers tied to specific verified chunks, plus routing edge cases, ambiguous item terms, and questions the system *should* refuse. A deterministic harness (no LLM judges) measures routing accuracy, recall/MRR, fact coverage in evidence, combined-corpus coverage, rewrite rate, and latency across five system variants — legacy dense, dense-only, BM25-only, hybrid, hybrid + reranker.
+
+It caught real bugs before any user did: possessive forms breaking intent detection, trailing punctuation breaking exact lookup, a prefix rule that matched "join" to an item called *Cannabis Joint*, and stats facets that didn't contain the item's weight. After fixes: **routing 64/64, item recall and evidence fact-coverage 1.0, and hybrid BM25+RRF beating pure dense retrieval on transcript search (video recall 0.625 vs 0.563, MRR 0.51 vs 0.36)** at a ~110 ms retrieval p50.
+
+The harness also killed a feature. The cross-encoder reranker — the fashionable thing to add — measured **zero quality improvement** on the gold set while adding ~220 ms per query, so it ships disabled behind a flag. Measuring first meant finding out the boring answer was the right one.
+
+---
+
 ## Outcome
 
-The system does the thing: ask a question about 257 livestreams — roughly hundreds of hours of unstructured talk — and get a direct answer with clickable, timestamped sources in a few seconds, entirely offline. The full corpus (21,959 chunks) processed with zero anomalies in the registry, and a daily job keeps the index current as new streams are published.
+The system does the thing: ask a question about 299 livestreams — hundreds of hours of unstructured talk — or about any of 1,786 game items, and get a direct, source-labeled answer in a few seconds, entirely offline. Stream answers carry clickable timestamps; database answers carry exact canonical values with provenance back to the upstream files; combined answers keep the two visibly separate so a streamer's opinion never masquerades as official game data. Daily jobs keep both corpora current — the YouTube pipeline ingests new streams, and the GAMMA job re-syncs upstream and rebuilds only when the data actually changed.
 
-The pipeline's resumability paid for itself many times over during the initial backfill. Downloads failed, authentication expired, the machine was needed for other work mid-run — and none of it mattered, because every interruption just meant running the pipeline again. The registry knew exactly what was done.
+The pipeline's resumability paid for itself many times over during the initial backfill. Downloads failed, authentication expired, the machine was needed for other work mid-run — and none of it mattered, because every interruption just meant running the pipeline again. The registry knew exactly what was done. The same discipline carried into the second corpus: staged builds, atomic activation, and a rollback collection retained after every rebuild.
 
 And honestly: the PDA theme is what makes it a tool I actually open. Utility gets a project used once; character gets it used daily.
 
@@ -207,16 +243,23 @@ And honestly: the PDA theme is what makes it a tool I actually open. Utility get
 - **E5 prefixes matter.** `passage:` at index time, `query:` at search time — an easy detail to miss, and retrieval quality visibly suffers without it.
 - **Timestamps are the product.** The direct answer is nice; the `&t=` deep-link into the source video is what makes the tool trustworthy. Carrying word-level timing from Whisper all the way through to chunk metadata was worth the plumbing.
 - **Spend the GPU where it counts.** Reserving CUDA for Whisper and running embeddings and inference on CPU was the right split — transcription is the only stage where GPU time changes the outcome from "days" to "hours."
+- **Exact lookup before vectors.** When a query names an entity your system has a canonical record for, semantic search is the *wrong* first tool. Resolving "AK-74 magazine capacity" to the item's actual database row — and protecting those facts through fusion and reranking — is what makes numeric answers exact instead of approximately retrieved.
+- **Rank fusion beats score normalization.** BM25 scores and cosine similarities live on incomparable scales; RRF sidesteps the whole problem by fusing on ranks. Twenty lines of code, fully testable, no tuning theater.
+- **Keep the LLM out of the control plane.** Routing is keyword-and-lookup Python, ingestion is deterministic, and the one place the LLM touches retrieval (query rewriting) is bounded to a single strictly-validated attempt with fallback. Every decision the system makes is reproducible.
+- **An evaluation harness is how features earn their place.** The gold set caught four real retrieval bugs and vetoed the reranker with a number, not an opinion. "Grounded in the actual corpus" is the part that matters — a gold set you can't verify is a vibe with extra steps.
+- **Atomic activation makes rebuilds boring.** Staging the new database and collection next to the live ones and swapping with `os.replace()` means a failed build is a log line, not an outage.
 
 ---
 
 ## Technical Stack
 
-- **FastAPI + Jinja** — single-file dashboard (PDA theme, inline playback, pipeline stats)
-- **ChromaDB** — persistent local vector store (21,959 chunks across 257 videos)
-- **intfloat/multilingual-e5-large** — embeddings, CPU
-- **Ollama (qwen3:0.6b)** — local answer generation, CPU
+- **FastAPI** — modular dashboard (PDA theme, corpus selector, dual evidence cards, inline playback, pipeline stats)
+- **ChromaDB** — persistent local vector store (28,692 transcript chunks across 299 videos + a versioned 7,362-facet GAMMA collection)
+- **SQLite** — canonical GAMMA 0.9.5 item database (items/aliases/relations with provenance), FTS5 BM25 indexes for both corpora, and the pipeline state registries
+- **intfloat/multilingual-e5-large** — embeddings for both corpora, CPU
+- **Ollama (qwen3:0.6b)** — local answer generation and bounded query rewriting, CPU
 - **faster-whisper (large-v3)** — batched GPU transcription with word timestamps
 - **yt-dlp** — channel discovery and audio extraction
-- **SQLite** — pipeline state registry driving every queue stage
+- **Deterministic retrieval core** — exact alias resolution, Reciprocal Rank Fusion, keyword/lookup routing, optional cross-encoder (measured, shipped disabled)
+- **Evaluation** — 64-question corpus-grounded gold set; routing, recall/MRR, fact-coverage, and latency across five system variants
 - **Hardware** — NVIDIA RTX A6000 (transcription), AMD Ryzen 9 9950X (everything else)
