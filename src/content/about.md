@@ -23,7 +23,7 @@ I enjoy the engineering side of AI just as much as the strategy side: choosing t
 ## Education
 
 * **Johns Hopkins University** — M.S. in Government Analytics, 2022
-* **National Institutes of Health** — Post-Bacc. IRTA Research Fellowship, 2014
+* **National Institutes of Health** — Post-Bacc. Intramural Research Training Award, Research Fellowship, 2014
 * **The College of St. Scholastica** — B.S. in Psychology, 2011
 
 ## Interests
