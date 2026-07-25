@@ -32,6 +32,8 @@ Ask a question and a deterministic router decides which corpus should answer it.
 
 The whole thing runs on my own hardware. No cloud APIs, no paid services, no data leaving the machine — and nothing but local components at query time: **yt-dlp → faster-whisper → ChromaDB + SQLite FTS5 → Ollama**, orchestrated by SQLite state machines. The current index covers **299 videos / 28,692 transcript chunks** and **1,786 game items / 7,362 retrieval documents**, processed end to end with zero anomalies.
 
+![Ask Veno service diagram: a user question enters a corpus router (auto, veno, gamma, or combined), which sends it to the Venoxium transcript corpus (Whisper into ChromaDB and BM25), the GAMMA 0.9.5 database (SQLite and ChromaDB), or both; both paths converge into hybrid retrieval (dense E5 embeddings plus BM25, fused with Reciprocal Rank Fusion), which feeds a local LLM (Ollama running qwen3:0.6b) that produces an answer with labeled, timestamped sources](/images/ask-veno/architecture.svg)
+
 ---
 
 ## The Problem
