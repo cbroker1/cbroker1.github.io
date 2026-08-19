@@ -60,9 +60,24 @@ const suggestions = [
         <h2 class="pa-panel__title" id="pa-title">Ask about Carl</h2>
         <p class="pa-panel__subtitle">Grounded in this site &middot; runs on your device</p>
       </div>
-      <button class="pa-panel__close" type="button" data-close aria-label="Close assistant">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
-      </button>
+      <div class="pa-panel__actions">
+        <button
+          class="pa-panel__action"
+          type="button"
+          data-reset
+          aria-label="Clear conversation"
+          title="Clear conversation"
+          hidden
+        >
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M13.2 8a5.2 5.2 0 1 1-1.53-3.68" />
+            <path d="M13.4 2.2v2.9h-2.9" />
+          </svg>
+        </button>
+        <button class="pa-panel__action" type="button" data-close aria-label="Close assistant">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+        </button>
+      </div>
     </header>
 
     <div class="pa-log" data-log role="log" aria-live="polite" aria-relevant="additions text">
@@ -293,28 +308,37 @@ const suggestions = [
     letter-spacing: 0.02em;
   }
 
-  .pa-panel__close {
+  .pa-panel__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: -2px -4px 0 0;
+  }
+
+  .pa-panel__action {
     display: grid;
     place-items: center;
     width: 28px;
     height: 28px;
-    margin: -2px -4px 0 0;
     border-radius: 6px;
     color: var(--color-text-muted-dark);
     transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
   }
 
-  .pa-panel__close:hover {
+  .pa-panel__action[hidden] { display: none; }
+
+  .pa-panel__action:hover {
     color: var(--color-text-on-dark);
     background-color: var(--color-surface-dark);
   }
 
-  .pa-panel__close svg {
+  .pa-panel__action svg {
     width: 13px;
     height: 13px;
     stroke: currentColor;
     stroke-width: 1.5;
     stroke-linecap: round;
+    stroke-linejoin: round;
     fill: none;
   }
 

@@ -47,6 +47,14 @@ export function mountAssistant(): void {
   const send = q<HTMLButtonElement>('[data-send]');
   const statusLine = q<HTMLElement>('[data-status]');
   const invite = q<HTMLElement>('[data-invite]');
+  const resetButton = q<HTMLButtonElement>('[data-reset]');
+
+  /**
+   * The empty-state block, captured before anything is appended to the log.
+   * Reset re-inserts a clone, so clearing the conversation genuinely returns the
+   * panel to how it looked on first open — chips included.
+   */
+  const introTemplate = q<HTMLElement>('.pa-intro').cloneNode(true) as HTMLElement;
   const corpusUrl = root.dataset.corpus ?? '/assistant/corpus.json';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -112,6 +120,13 @@ export function mountAssistant(): void {
 
   /* ---------------------------------------------------------------- panel */
 
+  /**
+   * Only a touch-primary device should be spared the autofocus — its keyboard
+   * would swallow the panel. Testing for `pointer: fine` instead would also skip
+   * focusing anywhere without a pointing device at all, which is the wrong call.
+   */
+  const isTouchPrimary = () => window.matchMedia('(pointer: coarse)').matches;
+
   const openPanel = () => {
     if (open) return;
     open = true;
@@ -121,7 +136,7 @@ export function mountAssistant(): void {
     launcher.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('is-open')));
     resizeInput(); // First real measurement: the field now has layout.
-    if (window.matchMedia('(pointer: fine)').matches) input.focus({ preventScroll: true });
+    if (!isTouchPrimary()) input.focus({ preventScroll: true });
 
     void getAssistant().then((instance) => {
       void instance.warmCorpus().catch(() => undefined);
@@ -269,7 +284,8 @@ export function mountAssistant(): void {
   };
 
   const startTurn = (question: string) => {
-    root.querySelector('.pa-intro')?.remove();
+    log.querySelector('.pa-intro')?.remove();
+    resetButton.hidden = false;
 
     const turn = document.createElement('div');
     turn.className = 'pa-turn';
@@ -305,6 +321,26 @@ export function mountAssistant(): void {
 
     return { answer, cursor, thinking };
   };
+
+  /** Returns the panel to its opening state, discarding the conversation. */
+  const resetConversation = () => {
+    inFlight?.abort();
+    inFlight = null;
+
+    log.textContent = '';
+    log.append(introTemplate.cloneNode(true));
+    resetButton.hidden = true;
+    log.scrollTop = 0;
+
+    statusLine.textContent = 'Conversation cleared.';
+    window.setTimeout(() => {
+      if (statusLine.textContent === 'Conversation cleared.') renderStatus();
+    }, 2500);
+
+    if (!isTouchPrimary()) input.focus({ preventScroll: true });
+  };
+
+  resetButton.addEventListener('click', resetConversation);
 
   /** Holds the answer back until the thinking beat has actually been seen. */
   const settle = (startedAt: number) => {
