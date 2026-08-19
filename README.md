@@ -60,13 +60,23 @@ npm run dev              # dev server at http://localhost:4321
 npm run build            # production build to ./dist
 npm run preview          # preview the production build locally
 
-npm run assistant:eval   # retrieval checks against recruiter-style questions
-npm run assistant:test   # controller, grounding gate, and corpus provenance
+npm run assistant:eval    # retrieval checks against recruiter-style questions
+npm run assistant:test    # controller, grounding gate, and corpus provenance
 npm run assistant:answers # print the assistant's deterministic output
 ```
 
-The three `assistant:*` scripts read `dist/assistant/corpus.json`, so run
-`npm run build` first. Requires Node `>=22.12.0`.
+Those three read `dist/assistant/corpus.json`, so run `npm run build` first.
+
+There is also a browser-level check that drives the real panel — opening it,
+asking a question, resetting, and closing — over the Chrome DevTools Protocol:
+
+```sh
+npm run preview                                                   # note the port
+google-chrome --headless=new --remote-debugging-port=9222 about:blank &
+npm run assistant:drive -- 4321                                   # that port
+```
+
+Requires Node `>=22.12.0`.
 
 ### Ask about Carl — the site assistant
 

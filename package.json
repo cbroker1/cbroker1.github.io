@@ -12,7 +12,8 @@
     "astro": "astro",
     "assistant:eval": "node --experimental-strip-types scripts/eval-assistant.mjs",
     "assistant:answers": "node --experimental-strip-types scripts/preview-answers.mjs",
-    "assistant:test": "node --experimental-strip-types scripts/test-controller.mjs"
+    "assistant:test": "node --experimental-strip-types scripts/test-controller.mjs",
+    "assistant:drive": "node scripts/drive-assistant.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
