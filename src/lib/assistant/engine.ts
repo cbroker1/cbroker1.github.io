@@ -44,8 +44,15 @@ export const MODEL = {
   disableThinking: true,
 };
 
-const RUNTIME_URL =
-  'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0/dist/transformers.web.min.js';
+/**
+ * jsDelivr's `+esm` build, not the raw `dist/` file.
+ *
+ * The published `dist/transformers.web.min.js` still contains a bare specifier
+ * (`import ... from 'onnxruntime-web/webgpu'`), which a browser cannot resolve
+ * without an import map — loading it throws before a single byte of model is
+ * fetched. The `+esm` build rewrites those specifiers to absolute CDN URLs.
+ */
+const RUNTIME_URL = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0/+esm';
 
 const GENERATION = {
   max_new_tokens: 200,
