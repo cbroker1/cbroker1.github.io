@@ -1,0 +1,648 @@
+---
+/**
+ * "Ask about Carl" — a retrieval-grounded assistant that runs entirely in the
+ * visitor's browser.
+ *
+ * The markup below is static: the launcher and the panel are server-rendered
+ * and cost nothing but bytes. All behaviour lives in `src/lib/assistant/ui.ts`,
+ * and everything expensive (corpus, retrieval, model) is dynamically imported
+ * only once a visitor shows intent.
+ */
+const base = import.meta.env.BASE_URL;
+const corpusUrl = `${base}assistant/corpus.json`.replace(/\/{2,}/g, '/');
+
+const suggestions = [
+  { label: 'AI systems', question: 'What kind of AI systems has Carl built?' },
+  { label: 'RAG work', question: 'Has Carl built RAG systems?' },
+  { label: 'Writing', question: 'What has Carl written about?' },
+  { label: 'His code', question: 'Where can I see his code?' },
+  { label: 'Background', question: "What is Carl's background?" },
+];
+---
+
+<div class="pa" data-assistant data-corpus={corpusUrl} hidden>
+  <div class="pa-invite" data-invite hidden>
+    <button class="pa-invite__body" type="button" data-invite-open>Have a question?</button>
+    <button class="pa-invite__dismiss" type="button" data-invite-dismiss aria-label="Dismiss">
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6" /></svg>
+    </button>
+  </div>
+
+  <button
+    class="pa-launcher"
+    type="button"
+    data-launcher
+    aria-expanded="false"
+    aria-controls="pa-panel"
+  >
+    <span class="pa-launcher__label">Ask about Carl</span>
+    <svg class="pa-rotor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle class="pa-rotor__cage" cx="12" cy="12" r="9.25" />
+      <g class="pa-rotor__blades">
+        <path d="M11.8 11.3C11.2 8.9 11.6 6.3 13.3 4.3C13.6 6.9 13 9.4 12.4 11.3Z" />
+        <path d="M11.8 11.3C11.2 8.9 11.6 6.3 13.3 4.3C13.6 6.9 13 9.4 12.4 11.3Z" transform="rotate(120 12 12)" />
+        <path d="M11.8 11.3C11.2 8.9 11.6 6.3 13.3 4.3C13.6 6.9 13 9.4 12.4 11.3Z" transform="rotate(240 12 12)" />
+      </g>
+      <circle class="pa-rotor__hub" cx="12" cy="12" r="1.3" />
+    </svg>
+  </button>
+
+  <section
+    class="pa-panel"
+    id="pa-panel"
+    data-panel
+    role="dialog"
+    aria-labelledby="pa-title"
+    hidden
+  >
+    <header class="pa-panel__header">
+      <div>
+        <h2 class="pa-panel__title" id="pa-title">Ask about Carl</h2>
+        <p class="pa-panel__subtitle">Grounded in this site &middot; runs on your device</p>
+      </div>
+      <button class="pa-panel__close" type="button" data-close aria-label="Close assistant">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+      </button>
+    </header>
+
+    <div class="pa-log" data-log role="log" aria-live="polite" aria-relevant="additions text">
+      <div class="pa-intro">
+        <p class="pa-intro__text">
+          Ask about Carl's projects, writing, tools, or background. Answers are
+          built from this site's own pages — if something isn't covered here,
+          this will say so rather than guess.
+        </p>
+        <ul class="pa-suggestions" data-suggestions>
+          {suggestions.map((item) => (
+            <li>
+              <button class="pa-chip" type="button" data-suggestion={item.question}>
+                {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <p class="pa-status" data-status aria-live="polite"></p>
+
+    <form class="pa-form" data-form>
+      <label class="pa-visually-hidden" for="pa-input">Ask a question about Carl</label>
+      <textarea
+        class="pa-input"
+        id="pa-input"
+        data-input
+        rows="1"
+        placeholder="Ask a question…"
+        autocomplete="off"
+        maxlength="300"
+      ></textarea>
+      <button class="pa-send" type="submit" data-send aria-label="Send question">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" /></svg>
+      </button>
+    </form>
+  </section>
+</div>
+
+<style is:global>
+  /* ==========================================================
+     Ask about Carl — assistant widget
+     Global (not scoped) because message nodes are created at
+     runtime; every selector is namespaced under `.pa`.
+     ========================================================== */
+
+  .pa {
+    --pa-radius: 14px;
+    --pa-shadow: 0 6px 28px rgba(10, 10, 10, 0.14), 0 1px 3px rgba(10, 10, 10, 0.08);
+    position: fixed;
+    right: var(--space-6);
+    bottom: var(--space-6);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-3);
+    font-family: var(--font-sans);
+  }
+
+  .pa[hidden] { display: none; }
+
+  /* ---------- Launcher ---------- */
+
+  .pa-launcher {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    box-shadow: var(--pa-shadow);
+    color: var(--color-text-on-light);
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      box-shadow var(--duration-normal) var(--ease-out),
+      color var(--duration-normal) var(--ease-out);
+  }
+
+  .pa-launcher:hover,
+  .pa-launcher:focus-visible {
+    border-color: var(--color-accent);
+    color: var(--color-accent-dark);
+    box-shadow: 0 8px 30px rgba(10, 10, 10, 0.18);
+  }
+
+  .pa-launcher__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .pa-rotor {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+
+  .pa-rotor__cage { opacity: 0.35; }
+  .pa-rotor__hub { fill: currentColor; stroke: none; }
+  .pa-rotor__blades path { fill: currentColor; stroke: none; }
+
+  .pa-rotor__blades {
+    transform-origin: 12px 12px;
+    animation: pa-spin 2.6s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .pa-launcher:hover .pa-rotor__blades,
+  .pa-launcher:focus-visible .pa-rotor__blades {
+    animation-play-state: running;
+  }
+
+  /* One gentle turn when the invitation appears — never repeated. */
+  .pa[data-attention] .pa-rotor__blades {
+    animation: pa-spin 1.6s var(--ease-out-expo) 1;
+    animation-play-state: running;
+  }
+
+  @keyframes pa-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ---------- Invitation ---------- */
+
+  .pa-invite {
+    display: flex;
+    align-items: stretch;
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: 999px;
+    box-shadow: var(--pa-shadow);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity var(--duration-slow) var(--ease-out-expo),
+      transform var(--duration-slow) var(--ease-out-expo);
+  }
+
+  .pa-invite[hidden] { display: none; }
+  .pa-invite.is-visible { opacity: 1; transform: translateY(0); }
+
+  .pa-invite__body {
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-on-light);
+    white-space: nowrap;
+  }
+
+  .pa-invite__dismiss {
+    display: grid;
+    place-items: center;
+    padding-inline: var(--space-3) var(--space-4);
+    color: var(--color-text-muted-light);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-invite__dismiss:hover { color: var(--color-text-on-light); }
+
+  .pa-invite__dismiss svg {
+    width: 10px;
+    height: 10px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    fill: none;
+  }
+
+  /* ---------- Panel ---------- */
+
+  .pa-panel {
+    position: fixed;
+    right: var(--space-6);
+    bottom: calc(var(--space-6) + 52px + var(--space-3));
+    display: flex;
+    flex-direction: column;
+    width: min(390px, calc(100vw - var(--space-8)));
+    height: min(560px, calc(100dvh - 160px));
+    background-color: var(--color-bg-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--pa-radius);
+    box-shadow: var(--pa-shadow);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+    transition:
+      opacity var(--duration-normal) var(--ease-out-expo),
+      transform var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .pa-panel[hidden] { display: none; }
+  .pa-panel.is-open { opacity: 1; transform: none; }
+
+  .pa-panel__header {
+    flex: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-4) var(--space-4) var(--space-6);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-on-dark);
+  }
+
+  .pa-panel__title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .pa-panel__subtitle {
+    margin-top: 2px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-muted-dark);
+    letter-spacing: 0.02em;
+  }
+
+  .pa-panel__close {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin: -2px -4px 0 0;
+    border-radius: 6px;
+    color: var(--color-text-muted-dark);
+    transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-panel__close:hover {
+    color: var(--color-text-on-dark);
+    background-color: var(--color-surface-dark);
+  }
+
+  .pa-panel__close svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    fill: none;
+  }
+
+  /* ---------- Log ---------- */
+
+  .pa-log {
+    flex: 1;
+    min-height: 0; /* Without this a flex child refuses to scroll and grows instead. */
+    overflow-y: auto;
+    /* Softens the cut where scrolled text meets the header and the input row. */
+    -webkit-mask-image: linear-gradient(
+      to bottom, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%
+    );
+    overscroll-behavior: contain;
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    scrollbar-width: thin;
+  }
+
+  .pa-intro__text {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-light);
+  }
+
+  .pa-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .pa-chip {
+    padding: var(--space-2) var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: left;
+    color: var(--color-text-muted-light);
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: 999px;
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-chip:hover {
+    border-color: var(--color-accent);
+    color: var(--color-text-on-light);
+  }
+
+  .pa-turn { display: flex; flex-direction: column; gap: var(--space-3); }
+
+  .pa-turn__question {
+    align-self: flex-end;
+    max-width: 88%;
+    padding: var(--space-2) var(--space-4);
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-on-dark);
+    border-radius: 12px 12px 2px 12px;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .pa-turn__answer {
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text-on-light);
+  }
+
+  .pa-turn__answer p + p { margin-top: var(--space-3); }
+
+  .pa-turn__answer ul {
+    margin-top: var(--space-2);
+    padding-left: var(--space-4);
+    list-style: disc;
+  }
+
+  .pa-turn__answer li { margin-bottom: var(--space-1); }
+
+  .pa-turn__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted-light);
+    margin-bottom: var(--space-2);
+  }
+
+  .pa-turn__quote {
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--color-accent);
+    color: var(--color-text-on-light);
+  }
+
+  .pa-turn__note {
+    margin-top: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: var(--leading-normal);
+    color: var(--color-text-muted-light);
+  }
+
+  .pa-sources {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .pa-sources__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted-light);
+    margin-bottom: var(--space-2);
+  }
+
+  .pa-source { margin-bottom: var(--space-2); }
+
+  .pa-source__title {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted-light);
+    line-height: var(--leading-snug);
+  }
+
+  .pa-source__links { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: 2px; }
+
+  .pa-source__link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-accent-dark);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-source__link:hover { border-bottom-color: var(--color-accent-dark); }
+
+  .pa-typing {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-left: 2px;
+    border-radius: 50%;
+    background-color: var(--color-accent-dark);
+    animation: pa-blink 1.1s var(--ease-out) infinite;
+    vertical-align: baseline;
+  }
+
+  /* Shown between submitting and the first word of the answer. */
+  .pa-thinking {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted-light);
+  }
+
+  .pa-thinking__dots {
+    display: inline-flex;
+    gap: 3px;
+  }
+
+  .pa-thinking__dots span {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-accent-dark);
+    animation: pa-blink 1.2s var(--ease-out) infinite;
+  }
+
+  .pa-thinking__dots span:nth-child(2) { animation-delay: 0.16s; }
+  .pa-thinking__dots span:nth-child(3) { animation-delay: 0.32s; }
+
+  /* Answers that arrive all at once fade in, so nothing snaps into place. */
+  .pa-turn__answer--enter {
+    animation: pa-rise var(--duration-normal) var(--ease-out-expo) both;
+  }
+
+  @keyframes pa-rise {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes pa-blink {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
+
+  /* ---------- Status + form ---------- */
+
+  .pa-status {
+    flex: none;
+    padding: 0 var(--space-6);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-muted-light);
+    min-height: 0;
+    transition: min-height var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-status:not(:empty) {
+    min-height: 18px;
+    padding-bottom: var(--space-2);
+  }
+
+  .pa-form {
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-3) var(--space-3) var(--space-6);
+    background-color: var(--color-surface-light);
+    border-top: 1px solid var(--color-border-light);
+  }
+
+  .pa-input {
+    flex: 1;
+    min-width: 0;
+    max-height: 96px;
+    padding: var(--space-2) 0;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    /* A fractional line-height rounds `scrollHeight` down, and since the box is
+       border-box the textarea ends up a fraction of a pixel short of its own
+       single line — enough to make the placeholder scroll. Integral wins. */
+    line-height: 22px;
+    color: var(--color-text-on-light);
+    background: none;
+    border: none;
+    resize: none;
+    /* Switched to `auto` by the resize handler only once the field is clamped. */
+    overflow-y: hidden;
+  }
+
+  .pa-input:focus { outline: none; }
+  .pa-input::placeholder { color: var(--color-text-muted-light); }
+
+  .pa-send {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-on-dark);
+    transition: background-color var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+  }
+
+  .pa-send:disabled { opacity: 0.35; cursor: default; }
+  .pa-send:not(:disabled):hover { background-color: var(--color-accent-dark); }
+
+  .pa-send svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .pa-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 640px) {
+    .pa { right: var(--space-4); bottom: var(--space-4); }
+
+    .pa-panel {
+      right: var(--space-3);
+      left: var(--space-3);
+      bottom: var(--space-3);
+      width: auto;
+      height: min(78dvh, 560px);
+    }
+
+    /* The panel owns the screen on small viewports; its own close button suffices. */
+    .pa.is-open .pa-launcher,
+    .pa.is-open .pa-invite { display: none; }
+  }
+
+  /* ---------- Motion + print ---------- */
+
+  @media (prefers-reduced-motion: reduce) {
+    .pa-rotor__blades,
+    .pa[data-attention] .pa-rotor__blades,
+    .pa-turn__answer--enter {
+      animation: none;
+    }
+
+    /* The dots stay — they are the only signal that work is happening — but
+       they hold still rather than pulsing. */
+    .pa-typing,
+    .pa-thinking__dots span {
+      animation: none;
+      opacity: 0.6;
+    }
+
+    .pa-panel,
+    .pa-invite {
+      transition: none;
+    }
+  }
+
+  @media print {
+    .pa { display: none; }
+  }
+</style>
+
+<script>
+  import { mountAssistant } from '../../lib/assistant/ui.ts';
+  mountAssistant();
+</script>

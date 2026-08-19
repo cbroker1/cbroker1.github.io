@@ -1,6 +1,7 @@
 ---
 import SiteHeader from '../components/global/SiteHeader.astro';
 import SiteFooter from '../components/global/SiteFooter.astro';
+import AssistantWidget from '../components/assistant/AssistantWidget.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -62,6 +63,7 @@ const ogImage = Astro.site ? new URL(`${base}og-image.png`, Astro.site).href : `
       <slot />
     </main>
     <SiteFooter />
+    <AssistantWidget />
     <noscript>
       <style>
         .reveal {
