@@ -120,6 +120,7 @@ export function mountAssistant(): void {
     panel.hidden = false;
     launcher.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('is-open')));
+    resizeInput(); // First real measurement: the field now has layout.
     if (window.matchMedia('(pointer: fine)').matches) input.focus({ preventScroll: true });
 
     void getAssistant().then((instance) => {
@@ -413,15 +414,25 @@ export function mountAssistant(): void {
   });
 
   function resizeInput() {
+    send.disabled = busy || !input.value.trim();
+
     input.style.height = 'auto';
     const natural = input.scrollHeight;
+
+    // A hidden panel has no layout, so `scrollHeight` is 0. Writing that back as
+    // a height collapses the field and pushes the placeholder out of view — the
+    // CSS `min-height` handles this case, so leave the height alone.
+    if (!natural) {
+      input.style.height = '';
+      return;
+    }
+
     const overflowing = natural > INPUT_MAX_HEIGHT;
     // `scrollHeight` comes back as a whole pixel. With border-box sizing that
     // rounding can leave the field a hair shorter than its own line, which makes
     // the placeholder scroll instead of sitting still — hence the extra pixel.
     input.style.height = `${overflowing ? INPUT_MAX_HEIGHT : natural + 1}px`;
     input.style.overflowY = overflowing ? 'auto' : 'hidden';
-    send.disabled = busy || !input.value.trim();
   }
 
   input.addEventListener('input', resizeInput);
