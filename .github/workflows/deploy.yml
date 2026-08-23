@@ -30,6 +30,10 @@ jobs:
         run: npm ci
 
       - name: Build Astro
+        env:
+          VITE_ASSISTANT_FUNNEL_URL: ${{ secrets.ASSISTANT_FUNNEL_URL }}
+          VITE_ASSISTANT_MODEL: ${{ secrets.ASSISTANT_MODEL }}
+          VITE_ASSISTANT_API_KEY: ${{ secrets.ASSISTANT_API_KEY }}
         run: npm run build
 
       - name: Upload artifact

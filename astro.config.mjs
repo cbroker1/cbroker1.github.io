@@ -8,4 +8,17 @@ export default defineConfig({
   base: '/',
   output: 'static',
   integrations: [sitemap()],
+  vite: {
+    define: {
+      'import.meta.env.VITE_ASSISTANT_FUNNEL_URL': JSON.stringify(
+        process.env.VITE_ASSISTANT_FUNNEL_URL ?? ''
+      ),
+      'import.meta.env.VITE_ASSISTANT_MODEL': JSON.stringify(
+        process.env.VITE_ASSISTANT_MODEL ?? 'qwen3.6-35b-a3b-mtp-q8-accurate'
+      ),
+      'import.meta.env.VITE_ASSISTANT_API_KEY': JSON.stringify(
+        process.env.VITE_ASSISTANT_API_KEY ?? ''
+      ),
+    },
+  },
 });

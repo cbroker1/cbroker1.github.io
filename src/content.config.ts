@@ -56,4 +56,12 @@ const experience = defineCollection({
   }),
 });
 
-export const collections = { projects, writing, about, experience };
+const knowledge = defineCollection({
+  loader: glob({ pattern: 'curated-profile.md', base: './src/knowledge' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+  }),
+});
+
+export const collections = { projects, writing, about, experience, knowledge };
