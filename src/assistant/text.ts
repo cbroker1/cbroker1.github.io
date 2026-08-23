@@ -9,10 +9,10 @@
 /** Words that carry no retrieval signal on a single-person portfolio corpus. */
 const STOPWORDS = new Set([
   'a', 'about', 'above', 'after', 'again', 'all', 'also', 'am', 'an', 'and', 'any', 'are',
-  'as', 'at', 'be', 'been', 'being', 'both', 'but', 'by', 'can', 'could', 'did', 'do',
+  'as', 'at', 'be', 'been', 'being', 'both', 'but', 'by', 'can', 'could', 'did',
   'does', 'doing', 'done', 'each', 'few', 'for', 'from', 'further', 'get', 'gets', 'had',
   'has', 'have', 'having', 'he', 'her', 'here', 'hers', 'him', 'his', 'how', 'i', 'if',
-  'in', 'into', 'is', 'it', 'its', 'just', 'kind', 'kinds', 'like', 'may', 'me', 'might',
+  'in', 'into', 'is', 'it', 'its', 'just', 'kind', 'kinds', 'may', 'me', 'might',
   'more', 'most', 'much', 'must', 'my', 'no', 'nor', 'not', 'of', 'off', 'on', 'once',
   'one', 'only', 'or', 'other', 'our', 'out', 'over', 'own', 'same', 'she', 'should',
   'so', 'some', 'such', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these',
@@ -20,7 +20,7 @@ const STOPWORDS = new Set([
   'used', 'uses', 'very', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'while',
   'who', 'whom', 'why', 'will', 'with', 'would', 'you', 'your',
   // The subject of every question on this site — present in queries, absent from prose.
-  'carl', 'broker', 'carls',
+  'broker', 'carls',
 ]);
 
 /** Irregular forms worth normalising for recruiter-style phrasing. */
@@ -45,6 +45,15 @@ export function normalize(input: string): string {
   return input
     .toLowerCase()
     .replace(/[‘’“”]/g, "'")
+    // Expand common contractions so "what's" → "what is" (both are stopwords)
+    .replace(/\b(\w+)('s)\b/g, '$1 is')
+    .replace(/\b(\w+)('re)\b/g, '$1 are')
+    .replace(/\b(\w+)('ve)\b/g, '$1 have')
+    .replace(/\b(\w+)('ll)\b/g, '$1 will')
+    .replace(/\b(\w+)('d)\b/g, '$1 would')
+    .replace(/\b(\w+)('m)\b/g, '$1 am')
+    .replace(/\b(\w+)('t)\b/g, '$1 not')
+    .replace(/\b(\w+)('cause)\b/g, '$1 because')
     .replace(/[^a-z0-9+#.\- ]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -76,7 +85,7 @@ export function stem(word: string): string {
 export function tokenize(input: string): string[] {
   const tokens: string[] = [];
   for (const raw of normalize(input).split(' ')) {
-    const word = raw.replace(/^[.\-+#]+|[.\-+]+$/g, '');
+    const word = raw.replace(/^[.\-+#?]+|[.\-+#?]+$/g, '');
     if (!word || word.length < 2) continue;
     if (STOPWORDS.has(word)) continue;
     tokens.push(stem(word));
@@ -147,11 +156,14 @@ const QUESTION_SHELL = new Set([
   'strength', 'strong', 'suit', 'suited', 'summarise', 'summarize', 'talk',
   'technic', 'technique', 'tell', 'thing', 'think', 'time', 'top', 'topic',
   'various', 'want', 'way', 'year',
+  // Filler nouns that shape a question but carry no retrieval signal.
+  'fella', 'fellow', 'guy', 'individual', 'person', 'type',
 ]);
 
-/**
- * The topic-bearing words in a question, paired with how the visitor typed
+/** The topic-bearing words in a question, paired with how the visitor typed
  * them so a decline can quote the question back accurately.
+ *
+ * Kept for future use if we add a soft-confidence gate based on unknown terms.
  */
 export function subjectTerms(query: string): { term: string; word: string }[] {
   const subjects: { term: string; word: string }[] = [];

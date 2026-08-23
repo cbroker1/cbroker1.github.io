@@ -142,6 +142,8 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
   let modelState: ModelState = { kind: 'idle' };
   /** One automatic rebuild after a generation failure, then stop trying. */
   let recoveriesLeft = 1;
+  /** Conversation turns passed to the model for context. */
+  const conversation: ConversationTurn[] = [];
 
   const setState = (state: ModelState) => {
     modelState = state;
@@ -168,8 +170,14 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
         if (!response.ok) throw new Error(`Corpus request failed (${response.status})`);
         return response.json() as Promise<Corpus>;
       })
-      .then((corpus) => ({ corpus, index: buildIndex(corpus) }))
+      .then((corpus) => {
+        console.log('[assistant] corpus loaded:', corpus.docs.length, 'docs,', corpus.chunks.length, 'chunks, version', corpus.version);
+        console.log('[assistant] doc ids:', corpus.docs.map(d => d.id).join(', '));
+        console.log('[assistant] corpus URL:', corpusUrl);
+        return { corpus, index: buildIndex(corpus) };
+      })
       .catch((error) => {
+        console.error('[assistant] corpus load failed:', error);
         corpusPromise = null; // Retry on the next question rather than failing forever.
         throw error;
       });
@@ -245,6 +253,9 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
     /** Begin the expensive download. Called when the panel is first opened. */
     warmModel: startModel,
 
+    /** Clear conversation history. Called when the user resets. */
+    clearConversation: () => { conversation.length = 0; },
+
     async ask(
       question: string,
       { onToken, signal }: { onToken?: (text: string) => void; signal?: AbortSignal } = {}
@@ -271,7 +282,7 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
         };
       }
 
-      const userMessage = buildUserMessage(question, evidence, result.unknownTerms);
+      const userMessage = buildUserMessage(question, evidence, conversation);
       const evidenceText = evidence.map((hit) => hit.text).join('\n');
       const clean = (raw: string) => dropUnsupportedAddresses(sanitizeAnswer(raw), evidenceText);
 
@@ -299,6 +310,8 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
         // A previous failure was not necessarily permanent; clear it on success
         // so the panel stops apologising for something that now works.
         if (modelState.kind === 'failed') setState({ kind: 'ready' });
+        // Record this turn for conversation context
+        conversation.push({ question, answer: answer });
         return { text: answer, sources, mode: 'generated' };
       } catch (error) {
         if (signal?.aborted) throw error;

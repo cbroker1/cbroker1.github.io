@@ -15,7 +15,7 @@ import type { Assistant, AssistantAnswer, ModelState } from './controller.ts';
  * happened at all. A brief, visible beat makes a fast answer feel considered
  * instead of canned — and it is the same beat the model path takes anyway.
  */
-const MIN_THINKING_MS = 750;
+const MIN_THINKING_MS = 2000;
 
 const INPUT_MAX_HEIGHT = 96;
 
@@ -48,6 +48,8 @@ export function mountAssistant(): void {
   const statusLine = q<HTMLElement>('[data-status]');
   const invite = q<HTMLElement>('[data-invite]');
   const resetButton = q<HTMLButtonElement>('[data-reset]');
+  const battery = q<HTMLElement>('[data-battery]');
+  const banner = q<HTMLElement>('[data-banner]');
 
   /**
    * The empty-state block, captured before anything is appended to the log.
@@ -76,25 +78,85 @@ export function mountAssistant(): void {
     if (busy) {
       if (modelState.kind === 'loading') {
         statusLine.textContent = `Preparing local AI… ${Math.round(modelState.percent)}%`;
+        showBattery(modelState.percent);
+        hideBanner();
       } else if (modelState.kind === 'unsupported' || modelState.kind === 'failed') {
         statusLine.textContent = STATUS.excerpting;
+        hideBattery();
+        showBanner(false);
       } else {
         statusLine.textContent = STATUS.writing;
+        hideBattery();
+        hideBanner();
       }
       return;
     }
     if (modelState.kind === 'loading') {
-      statusLine.textContent = `Preparing local AI… ${Math.round(modelState.percent)}% (${modelState.approxMB} MB, one time)`;
+      statusLine.textContent = `Loading LLM in your browser… ${Math.round(modelState.percent)}% — the wait is worth it`;
+      showBattery(modelState.percent);
+      hideBanner();
       return;
     }
     if (modelState.kind === 'unsupported') {
       statusLine.textContent = `${modelState.reason} ${STATUS.fallbackSuffix}`;
+      hideBattery();
+      showBanner(false);
     } else if (modelState.kind === 'failed') {
       const reason = modelState.scope === 'generate' ? STATUS.failedGenerate : STATUS.failedLoad;
       statusLine.textContent = `${reason} ${STATUS.fallbackSuffix}`;
+      hideBattery();
+      showBanner(false);
+    } else if (modelState.kind === 'ready') {
+      statusLine.textContent = '';
+      hideBattery();
+      showBanner(true);
     } else {
       statusLine.textContent = '';
+      hideBattery();
+      hideBanner();
     }
+  };
+
+  /** Fill battery segments based on percent (0-100). */
+  const showBattery = (percent: number) => {
+    if (!battery) return;
+    battery.hidden = false;
+    battery.classList.add('is-loading');
+    const segs = battery.querySelectorAll('.pa-battery__seg');
+    const filled = Math.ceil((percent / 100) * segs.length);
+    segs.forEach((seg, i) => {
+      seg.classList.toggle('is-full', i < filled);
+      seg.classList.toggle('is-half', i === filled && filled < segs.length);
+    });
+  };
+
+  const hideBattery = () => {
+    if (!battery) return;
+    battery.hidden = true;
+    battery.classList.remove('is-loading');
+    battery.querySelectorAll('.pa-battery__seg').forEach((seg) => {
+      seg.classList.remove('is-full', 'is-half');
+    });
+  };
+
+  /** Show/hide the post-load status banner. */
+  const showBanner = (ready: boolean) => {
+    if (!banner) return;
+    banner.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => banner.classList.add('is-visible')));
+    if (!ready) {
+      banner.querySelector('.pa-banner__meta')!.textContent = 'Model unavailable — Showing passages from the site instead.';
+      banner.querySelector('.pa-banner__icon')!.style.backgroundColor = 'var(--color-text-muted-light)';
+    } else {
+      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-1.7B · Transformers.js';
+      banner.querySelector('.pa-banner__icon')!.style.backgroundColor = '';
+    }
+  };
+
+  const hideBanner = () => {
+    if (!banner) return;
+    banner.classList.remove('is-visible');
+    window.setTimeout(() => { banner.hidden = true; }, 300);
   };
 
   /* ------------------------------------------------------------ lazy loads */
@@ -243,6 +305,57 @@ export function mountAssistant(): void {
     }
   };
 
+  /**
+   * ChatGPT-style typewriter: renders text character by character at ~30 chars/sec.
+   * Buffers all tokens in `typewriterBuffer`, then animates from the last displayed
+   * index to the current buffer length. The RAF runs continuously until generation
+   * finishes, so rapid token bursts never cancel the animation.
+   */
+  let typewriterRAF: number | null = null;
+  let typewriterBuffer = '';
+  let typewriterIndex = 0;
+  let typewriterTargetEl: HTMLElement | null = null;
+  const TYPEWRITER_MS_PER_CHAR = 33; // ~30 chars/sec
+
+  const renderTypewriter = (target: HTMLElement, cursor: HTMLElement, newText: string) => {
+    // Just update the buffer — don't cancel the RAF.
+    // If the RAF is already running, it will pick up the new buffer length on the next tick.
+    // If it's not running (e.g. it finished a previous answer), start it now.
+    typewriterBuffer = newText;
+    typewriterTargetEl = target;
+
+    if (typewriterRAF !== null) return;
+
+    const startTime = performance.now();
+    const startIdx = typewriterIndex;
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const charsToShow = Math.min(
+        typewriterBuffer.length,
+        startIdx + Math.floor(elapsed / TYPEWRITER_MS_PER_CHAR)
+      );
+
+      const visible = typewriterBuffer.slice(0, charsToShow);
+      renderText(typewriterTargetEl!, visible);
+      typewriterTargetEl!.append(cursor);
+
+      typewriterIndex = charsToShow;
+      typewriterRAF = requestAnimationFrame(tick);
+    };
+
+    typewriterRAF = requestAnimationFrame(tick);
+  };
+
+  /** Stop any running typewriter and render the full text immediately. */
+  const stopTypewriter = () => {
+    if (typewriterRAF !== null) {
+      cancelAnimationFrame(typewriterRAF);
+      typewriterRAF = null;
+    }
+    typewriterIndex = typewriterBuffer.length;
+  };
+
   const renderSources = (target: HTMLElement, answer: AssistantAnswer) => {
     if (!answer.sources.length) return;
 
@@ -326,6 +439,7 @@ export function mountAssistant(): void {
   const resetConversation = () => {
     inFlight?.abort();
     inFlight = null;
+    assistant?.clearConversation();
 
     log.textContent = '';
     log.append(introTemplate.cloneNode(true));
@@ -375,40 +489,70 @@ export function mountAssistant(): void {
         onToken: (text) => {
           if (!text) return;
           streamed = true;
+          // Start typewriter on first token; keep thinking indicator visible
+          renderTypewriter(answer, cursor, text);
           const pinned = isPinned();
-          renderText(answer, text); // Replaces the thinking indicator.
-          answer.append(cursor);
           if (pinned) scrollToEnd();
         },
       });
 
+      // Generation done — stop typewriter mid-animation and render full text
+      stopTypewriter();
+
+      // Settle first so every answer (declined, extractive, or generated) gets
+      // the same thinking beat before the answer is revealed.
       await settle(startedAt);
-      cursor.remove();
-      thinking.remove();
-      answer.removeAttribute('aria-hidden');
-      // Streamed text is already on screen; only a one-shot answer needs easing in.
-      if (!streamed) answer.classList.add('pa-turn__answer--enter');
 
-      if (result.mode === 'extractive') {
-        // Excerpts keep the site's first-person voice, so they are presented as
-        // a quotation rather than as the assistant speaking.
-        const label = document.createElement('span');
-        label.className = 'pa-turn__label';
-        label.textContent = "From Carl's site";
-
-        const quote = document.createElement('blockquote');
-        quote.className = 'pa-turn__quote';
-        renderText(quote, result.text);
-
-        const note = document.createElement('p');
-        note.className = 'pa-turn__note';
-        note.textContent = result.modelPending
-          ? 'The local answer model is still downloading, so this shows the closest passage. Ask again once it is ready.'
-          : 'This is the closest passage from the site, quoted directly.';
-
-        answer.append(label, quote, note);
+      if (result.mode === 'declined') {
+        // No model was available or it declined — show the fallback with typewriter.
+        // Use a fresh clock for the fallback beat since retrieval has already
+        // consumed time from the original startedAt.
+        const fallbackText = "I don't have enough information in Carl's public portfolio to answer that confidently. This site covers 3 project write-ups, 2 technical articles, his career history and background.";
+        // Reset typewriter state so it starts from zero (not from the end of the
+        // previous answer's text where typewriterIndex was left).
+        typewriterIndex = 0;
+        typewriterBuffer = '';
+        const fallbackStart = performance.now();
+        // Wait long enough for the typewriter to finish typing + extra thinking time,
+        // so the dots stay visible for the entire animation instead of vanishing mid-stream.
+        const typewriterDuration = fallbackText.length * TYPEWRITER_MS_PER_CHAR;
+        const fallbackSettle = () => {
+          const remaining = typewriterDuration + 1000 - (performance.now() - fallbackStart);
+          if (remaining <= 0) return Promise.resolve();
+          return new Promise<void>((resolve) => window.setTimeout(resolve, remaining));
+        };
+        renderTypewriter(answer, cursor, fallbackText);
+        await fallbackSettle();
+        thinking.remove();
+        stopTypewriter();
+        renderText(answer, typewriterBuffer);
       } else {
-        renderText(answer, result.text);
+        // Generated or extractive — render text, clean up thinking/cursor.
+        renderText(answer, typewriterBuffer);
+        cursor.remove();
+        thinking.remove();
+        answer.removeAttribute('aria-hidden');
+        if (!streamed) answer.classList.add('pa-turn__answer--enter');
+
+        if (result.mode === 'extractive') {
+          const label = document.createElement('span');
+          label.className = 'pa-turn__label';
+          label.textContent = "From Carl's site";
+
+          const quote = document.createElement('blockquote');
+          quote.className = 'pa-turn__quote';
+          renderText(quote, result.text);
+
+          const note = document.createElement('p');
+          note.className = 'pa-turn__note';
+          note.textContent = result.modelPending
+            ? 'The local answer model is still downloading, so this shows the closest passage. Ask again once it is ready.'
+            : 'This is the closest passage from the site, quoted directly.';
+
+          answer.append(label, quote, note);
+        } else {
+          renderText(answer, result.text);
+        }
       }
 
       renderSources(answer, result);
