@@ -21,6 +21,8 @@ import { splitSentences } from './text.ts';
 import { detectGpu, isMeteredConnection, loadEngine, MODEL } from './engine.ts';
 import type { LoadProgress, LocalEngine } from './engine.ts';
 import type { Corpus } from './types.ts';
+import { createServerEngine } from './server-engine.ts';
+import type { ServerEngine } from './server-engine.ts';
 
 export type ModelState =
   | { kind: 'idle' }
@@ -50,6 +52,8 @@ const MODEL_WAIT_MS = 20_000;
 export interface AssistantOptions {
   corpusUrl: string;
   onModelState?: (state: ModelState) => void;
+  /** Optional server engine config. When provided, uses the funnel API instead of local ONNX. */
+  serverConfig?: { funnelUrl: string; model: string };
 }
 
 /**
@@ -135,10 +139,11 @@ export function limitSentences(text: string, max = MAX_ANSWER_SENTENCES): string
   return parts.slice(0, max).join(' ').trim();
 }
 
-export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
+export function createAssistant({ corpusUrl, onModelState, serverConfig }: AssistantOptions) {
   let corpusPromise: Promise<{ corpus: Corpus; index: RetrievalIndex }> | null = null;
   let engine: LocalEngine | null = null;
   let enginePending: Promise<LocalEngine | null> | null = null;
+  let serverEngine: ServerEngine | null = serverConfig ? createServerEngine(serverConfig) : null;
   let modelState: ModelState = { kind: 'idle' };
   /** One automatic rebuild after a generation failure, then stop trying. */
   let recoveriesLeft = 1;
@@ -271,7 +276,8 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
       // links under an answer always correspond to what the answer was built on.
       const evidence = result.hits.slice(0, MAX_EVIDENCE);
       const sources = sourcesFor(evidence);
-      const activeEngine = engine ?? (await waitForModel());
+      // Use server engine if configured, otherwise fall back to local ONNX
+      const activeEngine = serverEngine ?? engine ?? (await waitForModel());
 
       if (!activeEngine) {
         return {
@@ -292,12 +298,12 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
         const text = await activeEngine.generate(SYSTEM_PROMPT, userMessage, {
           signal,
           onToken: (delta) => {
-            buffer += delta;
+            buffer = delta; // Server streams full text, not deltas
             // Stop at the sentence budget rather than truncating afterwards, so
             // the visitor never watches text appear and then get taken away.
             if (!stopped && countSentences(buffer) >= MAX_ANSWER_SENTENCES) {
               stopped = true;
-              activeEngine.interrupt();
+              if (activeEngine.interrupt) activeEngine.interrupt();
             }
             onToken?.(clean(buffer));
           },
@@ -317,10 +323,37 @@ export function createAssistant({ corpusUrl, onModelState }: AssistantOptions) {
         if (signal?.aborted) throw error;
         reportFailure('generate', error);
 
+        // If server engine failed, fall back to local engine
+        if (activeEngine === serverEngine && engine) {
+          try {
+            let buffer = '';
+            let stopped = false;
+            const text = await engine.generate(SYSTEM_PROMPT, userMessage, {
+              signal,
+              onToken: (delta) => {
+                buffer += delta;
+                if (!stopped && countSentences(buffer) >= MAX_ANSWER_SENTENCES) {
+                  stopped = true;
+                  engine.interrupt();
+                }
+                onToken?.(clean(buffer));
+              },
+            });
+            const answer = limitSentences(clean(text || buffer));
+            if (answer.length >= 15) {
+              setState({ kind: 'ready' });
+              conversation.push({ question, answer });
+              return { text: answer, sources, mode: 'generated' };
+            }
+          } catch (fallbackError) {
+            console.warn('[assistant] server and local engine both failed, using extractive fallback');
+          }
+        }
+
         // A GPU session that has failed once tends to keep failing. Drop it so
         // the next question builds a fresh one — the weights are already in the
         // browser cache, so this costs session setup, not a re-download.
-        if (recoveriesLeft > 0) {
+        if (recoveriesLeft > 0 && engine) {
           recoveriesLeft -= 1;
           const dead = engine;
           engine = null;

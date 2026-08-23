@@ -11,6 +11,13 @@
 const base = import.meta.env.BASE_URL;
 const corpusUrl = `${base}assistant/corpus.json`.replace(/\/{2,}/g, '/');
 
+/**
+ * Funnel URL for the server-side model. Read from env so dev and prod can
+ * differ without code changes. Empty string means "use local ONNX model."
+ */
+const FUNNEL_URL = import.meta.env.VITE_ASSISTANT_FUNNEL_URL ?? '';
+const FUNNEL_MODEL = import.meta.env.VITE_ASSISTANT_MODEL ?? 'qwen3.6-35b-a3b-mtp-q8-accurate';
+
 const suggestions = [
   { label: 'AI systems', question: 'What kind of AI systems has Carl built?' },
   { label: 'RAG work', question: 'Has Carl built RAG systems?' },
@@ -20,7 +27,7 @@ const suggestions = [
 ];
 ---
 
-<div class="pa" data-assistant data-corpus={corpusUrl} hidden>
+<div class="pa" data-assistant data-corpus={corpusUrl} data-funnel={FUNNEL_URL} data-funnel-model={FUNNEL_MODEL} hidden>
   <div class="pa-invite" data-invite hidden>
     <button class="pa-invite__body" type="button" data-invite-open>Have a question?</button>
     <button class="pa-invite__dismiss" type="button" data-invite-dismiss aria-label="Dismiss">
@@ -113,7 +120,7 @@ const suggestions = [
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.5l2 2 5-6" /></svg>
       </span>
       <span class="pa-banner__text">
-        <span class="pa-banner__meta">Powered by: Qwen3-0.6B · Transformers.js</span>
+        <span class="pa-banner__meta">Powered by: Qwen3.6-35B-A3B-MTP · llama.cpp</span>
       </span>
     </div>
 

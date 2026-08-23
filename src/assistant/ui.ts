@@ -58,6 +58,8 @@ export function mountAssistant(): void {
    */
   const introTemplate = q<HTMLElement>('.pa-intro').cloneNode(true) as HTMLElement;
   const corpusUrl = root.dataset.corpus ?? '/assistant/corpus.json';
+  const funnelUrl = root.dataset.funnel ?? '';
+  const funnelModel = root.dataset.funnelModel ?? '';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -148,7 +150,7 @@ export function mountAssistant(): void {
       banner.querySelector('.pa-banner__meta')!.textContent = 'Model unavailable — Showing passages from the site instead.';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = 'var(--color-text-muted-light)';
     } else {
-      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-0.6B · Transformers.js';
+      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3.6-35B-A3B-MTP · llama.cpp';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = '';
     }
   };
@@ -163,12 +165,14 @@ export function mountAssistant(): void {
 
   const getAssistant = (): Promise<Assistant> => {
     assistantLoading ??= import('./controller.ts').then(({ createAssistant }) => {
+      const serverConfig = funnelUrl ? { funnelUrl, model: funnelModel } : undefined;
       assistant = createAssistant({
         corpusUrl,
         onModelState: (state) => {
           modelState = state;
           renderStatus();
         },
+        serverConfig,
       });
       return assistant;
     });
