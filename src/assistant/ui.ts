@@ -92,7 +92,7 @@ export function mountAssistant(): void {
       return;
     }
     if (modelState.kind === 'loading') {
-      statusLine.textContent = `Loading LLM in your browser… ${Math.round(modelState.percent)}% — the wait is worth it`;
+      statusLine.textContent = `Preparing local AI… ${Math.round(modelState.percent)}% (${modelState.approxMB} MB, one time)`;
       showBattery(modelState.percent);
       hideBanner();
       return;
@@ -148,7 +148,7 @@ export function mountAssistant(): void {
       banner.querySelector('.pa-banner__meta')!.textContent = 'Model unavailable — Showing passages from the site instead.';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = 'var(--color-text-muted-light)';
     } else {
-      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-1.7B · Transformers.js';
+      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-0.6B · Transformers.js';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = '';
     }
   };

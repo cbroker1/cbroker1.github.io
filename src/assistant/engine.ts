@@ -11,15 +11,10 @@
  */
 
 /**
- * Qwen3-1.7B, 4-bit weights with fp16 activations, thinking mode off.
+ * Qwen3-0.6B, 4-bit weights with fp16 activations, thinking mode off.
  *
- * Upgraded from Qwen3-0.6B to fix poor multi-turn context retention. The 0.6B
- * model could barely track 2-3 turns of conversation despite having plenty of
- * context budget — 1.7B has the parameter capacity to actually use the context
- * window it's given.
- *
- * Smaller candidates were measured against the real corpus and prompts before
- * settling on 0.6B initially (2025):
+ * Two smaller candidates were measured against the real corpus and prompts
+ * before settling here:
  *
  *   SmolLM2-360M-Instruct (273 MB) — answered "No, Carl has not built RAG
  *     systems" against evidence that plainly said otherwise, and echoed the
@@ -29,19 +24,18 @@
  *     that appears nowhere on the site. Fabrication is worse than clumsiness on
  *     a page a recruiter is reading.
  *
- * Qwen3-0.6B was the smallest model that stopped inventing things. The 1.7B
- * upgrade (~1.4 GB) preserves that correctness while adding real reasoning
- * capacity for multi-turn dialogue.
+ * Qwen3-0.6B was the smallest model that stopped inventing things. The extra
+ * ~90 MB over Qwen2.5 buys correctness, which the brief ranks first.
  */
 export const MODEL = {
-  id: 'onnx-community/Qwen3-1.7B-ONNX',
+  id: 'onnx-community/Qwen3-0.6B-ONNX',
   /**
-   * 4-bit weights with fp16 activations. The plain `q4` build is ~2.1 GB, the
-   * `q4f16` build is ~1.4 GB — still too large for silent download on metered
-   * connections, so Save-Data / slow-connection detection is enforced.
+   * 4-bit weights with fp16 activations. The plain `q4` build is 920 MB, which
+   * is not a download to hand someone silently, so a GPU without `shader-f16`
+   * is treated as unsupported and gets the retrieval-only experience instead.
    */
   dtype: 'q4f16' as const,
-  approxMB: 1430,
+  approxMB: 580,
   /**
    * Qwen3 emits a <think> block by default. For "turn these passages into three
    * sentences" it adds latency and nothing else, so the chat template is applied
