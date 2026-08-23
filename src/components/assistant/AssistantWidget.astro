@@ -61,6 +61,14 @@ const suggestions = [
         <p class="pa-panel__subtitle">Grounded in this site &middot; runs on your device</p>
       </div>
       <div class="pa-panel__actions">
+        <!-- Battery indicator — shows during model download -->
+        <div class="pa-battery" data-battery hidden>
+          <span class="pa-battery__seg"></span>
+          <span class="pa-battery__seg"></span>
+          <span class="pa-battery__seg"></span>
+          <span class="pa-battery__seg"></span>
+          <span class="pa-battery__seg"></span>
+        </div>
         <button
           class="pa-panel__action"
           type="button"
@@ -97,6 +105,16 @@ const suggestions = [
           ))}
         </ul>
       </div>
+    </div>
+
+    <!-- Status banner — appears after model loads -->
+    <div class="pa-banner" data-banner hidden>
+      <span class="pa-banner__icon">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.5l2 2 5-6" /></svg>
+      </span>
+      <span class="pa-banner__text">
+        <span class="pa-banner__meta">Powered by: Qwen3-1.7B · Transformers.js</span>
+      </span>
     </div>
 
     <p class="pa-status" data-status aria-live="polite"></p>
@@ -313,6 +331,107 @@ const suggestions = [
     align-items: center;
     gap: var(--space-1);
     margin: -2px -4px 0 0;
+  }
+
+  /* ---------- Battery indicator ---------- */
+
+  .pa-battery {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px 6px;
+    background-color: var(--color-surface-dark);
+    border-radius: 4px;
+    margin-right: 2px;
+  }
+
+  .pa-battery[hidden] { display: none; }
+
+  .pa-battery__seg {
+    width: 4px;
+    height: 10px;
+    border-radius: 1px;
+    background-color: var(--color-text-muted-dark);
+    transition: background-color var(--duration-normal) var(--ease-out);
+  }
+
+  .pa-battery__seg.is-full { background-color: var(--color-accent); }
+  .pa-battery__seg.is-half { background-color: var(--color-accent); opacity: 0.5; }
+
+  /* Pulse animation while downloading */
+  .pa-battery.is-loading .pa-battery__seg {
+    animation: pa-battery-pulse 1.2s var(--ease-out) infinite;
+  }
+
+  .pa-battery.is-loading .pa-battery__seg:nth-child(1) { animation-delay: 0s; }
+  .pa-battery.is-loading .pa-battery__seg:nth-child(2) { animation-delay: 0.08s; }
+  .pa-battery.is-loading .pa-battery__seg:nth-child(3) { animation-delay: 0.16s; }
+  .pa-battery.is-loading .pa-battery__seg:nth-child(4) { animation-delay: 0.24s; }
+  .pa-battery.is-loading .pa-battery__seg:nth-child(5) { animation-delay: 0.32s; }
+
+  @keyframes pa-battery-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* ---------- Status banner ---------- */
+
+  .pa-banner {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    margin: 0 var(--space-4) var(--space-2);
+    background-color: var(--color-surface-light);
+    border: 1px solid var(--color-border-light);
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-on-light);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity var(--duration-normal) var(--ease-out-expo),
+      transform var(--duration-normal) var(--ease-out-expo);
+  }
+
+  .pa-banner.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .pa-banner__icon {
+    display: grid;
+    place-items: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: var(--color-text-on-dark);
+    flex: none;
+  }
+
+  .pa-banner__icon svg {
+    width: 10px;
+    height: 10px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+  .pa-banner__text {
+    line-height: 1.3;
+  }
+
+  .pa-banner__model {
+    font-weight: 600;
+  }
+
+  .pa-banner__meta {
+    color: var(--color-text-muted-light);
   }
 
   .pa-panel__action {
@@ -673,6 +792,6 @@ const suggestions = [
 </style>
 
 <script>
-  import { mountAssistant } from '../../lib/assistant/ui.ts';
+  import { mountAssistant } from '../../assistant/ui.ts';
   mountAssistant();
 </script>
