@@ -20,8 +20,8 @@
 
 import type { APIRoute } from 'astro';
 import { getCollection, getEntry } from 'astro:content';
-import { buildCorpus, experienceMarkdown, parseCuratedProfile } from '../corpus.ts';
-import type { SourceDoc } from '../corpus.ts';
+import { buildCorpus, experienceMarkdown, parseCuratedProfile } from '../../assistant/corpus.ts';
+import type { SourceDoc } from '../../assistant/corpus.ts';
 import { SITE_LINKS } from '../../lib/site-links.ts';
 
 export const prerender = true;
