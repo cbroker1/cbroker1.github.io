@@ -60,6 +60,7 @@ export function mountAssistant(): void {
   const corpusUrl = root.dataset.corpus ?? '/assistant/corpus.json';
   const funnelUrl = root.dataset.funnel ?? '';
   const funnelModel = root.dataset.funnelModel ?? '';
+  const funnelApiKey = root.dataset.funnelApiKey ?? '';
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -165,7 +166,9 @@ export function mountAssistant(): void {
 
   const getAssistant = (): Promise<Assistant> => {
     assistantLoading ??= import('./controller.ts').then(({ createAssistant }) => {
-      const serverConfig = funnelUrl ? { funnelUrl, model: funnelModel } : undefined;
+      const serverConfig = funnelUrl && funnelApiKey
+        ? { funnelUrl, model: funnelModel, apiKey: funnelApiKey }
+        : undefined;
       assistant = createAssistant({
         corpusUrl,
         onModelState: (state) => {

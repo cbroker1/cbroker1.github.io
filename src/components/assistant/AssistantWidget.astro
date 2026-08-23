@@ -17,6 +17,7 @@ const corpusUrl = `${base}assistant/corpus.json`.replace(/\/{2,}/g, '/');
  */
 const FUNNEL_URL = import.meta.env.VITE_ASSISTANT_FUNNEL_URL ?? '';
 const FUNNEL_MODEL = import.meta.env.VITE_ASSISTANT_MODEL ?? 'qwen3.6-35b-a3b-mtp-q8-accurate';
+const FUNNEL_API_KEY = import.meta.env.VITE_ASSISTANT_API_KEY ?? '';
 
 const suggestions = [
   { label: 'AI systems', question: 'What kind of AI systems has Carl built?' },
@@ -27,7 +28,7 @@ const suggestions = [
 ];
 ---
 
-<div class="pa" data-assistant data-corpus={corpusUrl} data-funnel={FUNNEL_URL} data-funnel-model={FUNNEL_MODEL} hidden>
+<div class="pa" data-assistant data-corpus={corpusUrl} data-funnel={FUNNEL_URL} data-funnel-model={FUNNEL_MODEL} data-funnel-api-key={FUNNEL_API_KEY} hidden>
   <div class="pa-invite" data-invite hidden>
     <button class="pa-invite__body" type="button" data-invite-open>Have a question?</button>
     <button class="pa-invite__dismiss" type="button" data-invite-dismiss aria-label="Dismiss">

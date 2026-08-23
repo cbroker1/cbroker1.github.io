@@ -36,6 +36,8 @@ export interface ServerEngineOptions {
   funnelUrl: string;
   /** Model alias registered with the llama.cpp server. */
   model: string;
+  /** API key for authentication. */
+  apiKey: string;
 }
 
 export interface ServerEngine {
@@ -55,7 +57,7 @@ export interface ServerEngine {
  * (SSE with `data: {...}` lines). We parse the SSE stream to feed tokens
  * to the UI typewriter.
  */
-export function createServerEngine({ funnelUrl, model }: ServerEngineOptions): ServerEngine {
+export function createServerEngine({ funnelUrl, model, apiKey }: ServerEngineOptions): ServerEngine {
   let aborted = false;
 
   return {
@@ -82,6 +84,7 @@ export function createServerEngine({ funnelUrl, model }: ServerEngineOptions): S
           headers: {
             'Content-Type': 'application/json',
             'Origin': 'https://cbroker1.github.io',
+            'Authorization': `Bearer ${apiKey}`,
           },
           body,
           signal: options.signal,

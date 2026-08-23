@@ -53,7 +53,7 @@ export interface AssistantOptions {
   corpusUrl: string;
   onModelState?: (state: ModelState) => void;
   /** Optional server engine config. When provided, uses the funnel API instead of local ONNX. */
-  serverConfig?: { funnelUrl: string; model: string };
+  serverConfig?: { funnelUrl: string; model: string; apiKey: string };
 }
 
 /**
