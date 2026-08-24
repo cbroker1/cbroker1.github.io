@@ -148,7 +148,7 @@ export function mountAssistant(): void {
       banner.querySelector('.pa-banner__meta')!.textContent = 'Model unavailable — Showing passages from the site instead.';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = 'var(--color-text-muted-light)';
     } else {
-      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-0.6B · Transformers.js';
+      banner.querySelector('.pa-banner__meta')!.textContent = 'Powered by: Qwen3-0.6B · runs in your browser';
       banner.querySelector('.pa-banner__icon')!.style.backgroundColor = '';
     }
   };
