@@ -5,7 +5,7 @@ description: "About Carl Broker"
 
 I build AI systems that are meant to be used, not just demoed.
 
-My work sits at the intersection of agentic AI, retrieval systems, LLM platforms, and production engineering. I design systems where models, tools, and data work together to solve real problems — multi-agent orchestration, vector retrieval, OCR pipelines, enterprise AI deployment.
+My work sits at the intersection of agentic AI, retrieval systems, LLM platforms, and production engineering. I like designing systems where models, tools, and data work together to solve real problems, whether that means multi-agent orchestration, vector retrieval, OCR pipelines, or enterprise AI deployment.
 
 Over the course of my career, I've moved through neuroscience research, healthcare analytics, government research, data science, and enterprise AI engineering. That path gave me a strong bias toward systems that are grounded, testable, and useful in the real world.
 
