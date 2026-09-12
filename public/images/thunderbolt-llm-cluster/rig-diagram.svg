@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img"
+     aria-label="An RTX A6000 workstation connected by a USB4 Thunderbolt cable to a ROG Flow Z13 tablet, pooling 48 GB and 96 GB of GPU memory into 144 GB.">
+  <defs>
+    <linearGradient id="cable" gradientUnits="userSpaceOnUse" x1="316" y1="220" x2="884" y2="220">
+      <stop offset="0%" stop-color="#a3b86c" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#a3b86c" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#a3b86c" stop-opacity="0.35"/>
+    </linearGradient>
+    <linearGradient id="poolA" gradientUnits="userSpaceOnUse" x1="96" y1="0" x2="432" y2="0">
+      <stop offset="0%" stop-color="#2a78d6"/><stop offset="100%" stop-color="#3987e5"/>
+    </linearGradient>
+    <linearGradient id="poolB" gradientUnits="userSpaceOnUse" x1="436" y1="0" x2="1104" y2="0">
+      <stop offset="0%" stop-color="#a3b86c"/><stop offset="100%" stop-color="#b5ca7e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="600" fill="#0a0a0a"/>
+
+  <!-- ================= workstation ================= -->
+  <g transform="translate(96,96)">
+    <rect x="0" y="0" width="200" height="248" rx="10" fill="#141414" stroke="#252525" stroke-width="2"/>
+    <!-- vents -->
+    <g fill="#252525">
+      <rect x="24" y="24" width="152" height="5" rx="2.5"/>
+      <rect x="24" y="38" width="152" height="5" rx="2.5"/>
+      <rect x="24" y="52" width="152" height="5" rx="2.5"/>
+    </g>
+    <!-- gpu card -->
+    <rect x="24" y="112" width="152" height="52" rx="5" fill="#1b1b1b" stroke="#a3b86c" stroke-width="1.5"/>
+    <text x="100" y="143" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+          font-size="14" fill="#a3b86c">A6000</text>
+    <!-- fans -->
+    <circle cx="62" cy="206" r="20" fill="none" stroke="#252525" stroke-width="2"/>
+    <circle cx="138" cy="206" r="20" fill="none" stroke="#252525" stroke-width="2"/>
+    <circle cx="62" cy="206" r="4" fill="#252525"/>
+    <circle cx="138" cy="206" r="4" fill="#252525"/>
+  </g>
+  <text x="196" y="386" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+        font-size="21" font-weight="600" fill="#e5e5e5">Workstation</text>
+  <text x="196" y="414" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">RTX A6000 · 48 GB VRAM</text>
+  <text x="196" y="436" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">Ryzen 9 7950X · 124 GB DDR5</text>
+  <text x="196" y="458" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">~768 GB/s · CUDA</text>
+
+  <!-- ================= cable ================= -->
+  <path d="M 316 220 C 460 220, 460 220, 600 220 C 740 220, 740 220, 884 220"
+        fill="none" stroke="url(#cable)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="316" cy="220" r="7" fill="#a3b86c"/>
+  <circle cx="884" cy="220" r="7" fill="#a3b86c"/>
+
+  <text x="600" y="186" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+        font-size="17" font-weight="600" fill="#a3b86c">USB4 / Thunderbolt</text>
+  <text x="600" y="256" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">9.45 Gbps measured</text>
+  <text x="600" y="278" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#6b6b6b">4% utilised in practice</text>
+
+  <!-- ================= tablet ================= -->
+  <g transform="translate(904,120)">
+    <rect x="0" y="0" width="200" height="136" rx="9" fill="#141414" stroke="#252525" stroke-width="2"/>
+    <rect x="11" y="11" width="178" height="114" rx="4" fill="#111111" stroke="#1e1e1e"/>
+    <rect x="30" y="34" width="140" height="46" rx="5" fill="#1b1b1b" stroke="#a3b86c" stroke-width="1.5"/>
+    <text x="100" y="63" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+          font-size="13" fill="#a3b86c">8060S</text>
+    <!-- kickstand -->
+    <path d="M 26 136 L 6 186 M 174 136 L 194 186" stroke="#252525" stroke-width="3" stroke-linecap="round"/>
+    <!-- detached keyboard -->
+    <rect x="14" y="192" width="172" height="12" rx="3" fill="#141414" stroke="#252525" stroke-width="2"/>
+  </g>
+  <text x="1004" y="386" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+        font-size="21" font-weight="600" fill="#e5e5e5">ROG Flow Z13</text>
+  <text x="1004" y="414" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">Radeon 8060S · 96 GB dedicated</text>
+  <text x="1004" y="436" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">Ryzen AI Max+ 395 · 128 GB unified</text>
+  <text x="1004" y="458" text-anchor="middle" font-family="ui-monospace,Menlo,monospace"
+        font-size="13" fill="#888888">~256 GB/s · Vulkan</text>
+
+  <!-- ================= pooled memory bar ================= -->
+  <g transform="translate(96,498)">
+    <rect x="0" y="0" width="336" height="14" rx="7" fill="url(#poolA)"/>
+    <rect x="340" y="0" width="668" height="14" rx="7" fill="url(#poolB)"/>
+    <text x="0" y="38" font-family="ui-monospace,Menlo,monospace" font-size="12.5" fill="#888888">48 GB</text>
+    <text x="340" y="38" font-family="ui-monospace,Menlo,monospace" font-size="12.5" fill="#888888">96 GB</text>
+    <text x="1008" y="38" text-anchor="end" font-family="ui-monospace,Menlo,monospace"
+          font-size="12.5" fill="#e5e5e5">144 GB pooled</text>
+  </g>
+</svg>
