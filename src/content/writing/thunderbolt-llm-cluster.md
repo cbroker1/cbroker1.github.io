@@ -14,6 +14,8 @@ featured: false
 draft: false
 ---
 
+![An RTX A6000 workstation linked to a ROG Flow Z13 tablet over USB4, pooling 48 GB and 96 GB of GPU memory](/images/thunderbolt-llm-cluster/rig-diagram.svg)
+
 I have an RTX A6000 with 48 GB of VRAM and a ROG Flow Z13 tablet whose Ryzen AI Max+ 395 can dedicate 96 GB of unified memory to its integrated GPU. Neither machine can hold Qwen3.8-Flash-Next, a 177B mixture-of-experts model, at a usable quantization. Together they have 144 GB, which is plenty.
 
 So I connected them with a Thunderbolt cable and split the model across both.
