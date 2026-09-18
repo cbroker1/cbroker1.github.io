@@ -19,12 +19,20 @@ image: "/images/document-intelligence-pipeline/card-cover.svg"
 github: "https://github.com/cbroker1/document-intelligence-pipeline"
 featured: true
 status: "complete"
-sourceNote: "Case study only. The original source is not public due to confidentiality. Sanitized demo code may be published later if recoverable from old archives."
+sourceNote: "Sanitized case study. The original notebooks are published with outputs stripped and category names, systems, and paths generalized."
 ---
+
+> **TL;DR**
+>
+> - **Problem:** 250,000+ scanned records spanning decades of scan quality, in about 20 document classes. Administrators had to verify and extract key values from each one by hand, and switching between document classes all day made slow work slower.
+> - **Approach:** Classify first, so admins could work one class at a time, in confidence order. Local Tesseract OCR with a per-document quality score, weak labels mined from filename conventions, and paired n-gram Logistic Regression + fine-tuned RoBERTa classifiers for the 10 classes with enough training data.
+> - **Constraints:** Fully local with no cloud, one 8 GB GTX 1080 Ti, and no hand-labeled training data.
+> - **Result:** 98–100% held-out accuracy across the 10 modeled classes and a ranked review queue the team worked from monthly. The ~10 low-data classes ran through the same pipeline with baseline models, so the admins' daily decisions could become their training data.
+> - **My role:** Designed and built it end to end as a contractor to a U.S. federal agency. Presented it to agency stakeholders for approval and buy-in, and documented the whole system so the team could run it and hand it off.
 
 ## Overview
 
-In a previous federal data science role, I built an end-to-end document intelligence pipeline for a repository of 250,000+ scanned unclassified records. The system combined local OCR, OCR quality measurement, classical NLP with Logistic Regression, RoBERTa transfer learning, full-corpus batch inference, and a ranked human-in-the-loop review workflow. Everything ran on local hardware, with no cloud services involved.
+As a contractor to a U.S. federal agency, I built an end-to-end document intelligence pipeline for a repository of 250,000+ scanned unclassified records. The system combined local OCR, OCR quality measurement, classical NLP with Logistic Regression, RoBERTa transfer learning, full-corpus batch inference, and a ranked human-in-the-loop review workflow. Everything ran on local hardware, with no cloud services involved.
 
 Every document was scored by 20 classifiers: 10 scikit-learn n-gram Logistic Regression models and 10 fine-tuned RoBERTa models, one of each per business-defined category. The output was a scored, sortable review queue that let administrators start with the documents most likely to matter, instead of reading through a quarter-million records front to back. The workflow then ran on a monthly cadence as new documents kept arriving.
 
@@ -36,9 +44,9 @@ This page is a sanitized case study. Category names, internal systems, and docum
 
 The repository held 250,000+ scanned records accumulated over decades, ranging from typewritten pages digitized long ago to modern computer-generated PDFs. Scan quality, layout, and text legibility varied wildly. Many files carried semi-structured type codes in their filenames; a large share had nothing but an opaque record number.
 
-The business needed each record classified into one of 10 business-defined document categories. A fully manual pass would have consumed an enormous amount of administrator time. It was the kind of project that quietly never finishes. The actual requirement wasn't "classify everything perfectly." It was: **help the reviewers find the documents that belong in each category, in priority order, without reading everything.**
+The business needed each record sorted into one of roughly 20 business-defined document classes. Classification wasn't the end goal: administrators had to open each document to verify and extract key values by hand, and every class had its own fields and rules. Working from an unsorted pile meant switching between classes from one document to the next, and that switching cost was a large share of the effort. A fully manual pass would have consumed an enormous amount of administrator time. It was the kind of project that quietly never finishes. The actual requirement wasn't "classify everything perfectly." It was: **help the reviewers find the documents that belong in each category, in priority order, so they could work one class at a time without reading everything.**
 
-That reframing, from automation to ranked triage, shaped every technical decision that followed.
+That reframing, from automation to ranked triage, shaped every technical decision that followed. About half of the classes had enough filename-derived labels to train reliable models; those ten became the core of the system described below. The rest were handled differently (see Phase 5).
 
 ---
 
@@ -244,11 +252,13 @@ The system never made final determinations. Administrators did.
 
 The review process also created a practical production feedback loop. Administrators worked from the ranked batches, moved misclassified records into a designated location, and returned those cases for inspection, re-ingestion, and reprocessing. I reviewed false positives and missed documents, adjusted thresholds and routing logic where useful, and continued supplying new batches as the queue evolved. The error volume was low enough that this remained a manageable review process rather than a second manual classification project.
 
+The roughly ten classes without enough training data went through the same pipeline anyway. They were OCR'd, quality-scored, and run through baseline models with structured outputs, but their predictions weren't confident enough to act on, so those documents landed in the queue as *unknown*. That was deliberate. The expensive OCR work was already done, and as admins worked through the ten modeled classes, documents from the other classes inevitably turned up in their day-to-day review. Every one they identified was a new label. The plan was to use that accumulating set to train proper models for the remaining classes; I moved on to IBM before that second round happened.
+
 What the models changed was the shape of the work. Instead of an undifferentiated pile of 250,000 records, reviewers got a queue sorted by confidence: start at the top, where nearly everything is a hit; stop when the hit rate falls off; treat low-OCR-confidence rows with extra care. The models reduced the search space; the humans supplied the judgment. Confidence-based triage also gave the review effort a natural budget control through a probability threshold instead of an all-or-nothing automation decision.
 
 I'd argue this was the single most important design decision in the project. A fully automated classifier at 99% accuracy still silently misfiles thousands of documents in a corpus this size, and nobody finds out until it matters. A ranking system at the same accuracy just puts a few oddballs slightly down-queue, where a human catches them. For decision support on messy real-world data, ranked review beat black-box automation on every axis that mattered here.
 
-I presented the findings and modeling rationale to the broader team, documented the category-specific decisions in notebooks, and created walkthrough videos explaining how the labeling rules, models, and review workflow fit together. That review mattered: the system continued because the administrators found the ranked batches useful in practice, not merely because the offline metrics looked good.
+I presented the approach, findings, and modeling rationale to agency stakeholders to secure approval and buy-in, and to the broader team, documented the category-specific decisions in notebooks, and created walkthrough videos explaining how the labeling rules, models, and review workflow fit together. That review mattered: the system continued because the administrators found the ranked batches useful in practice, not merely because the offline metrics looked good.
 
 ---
 
