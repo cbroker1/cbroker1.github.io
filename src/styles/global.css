@@ -337,6 +337,13 @@ small, .text-sm {
   font-style: italic;
 }
 
+/* A blockquote that opens an article is a summary block, not a quote. */
+.prose > blockquote:first-child {
+  font-style: normal;
+  color: var(--color-text-on-light);
+  margin-top: 0;
+}
+
 .prose pre {
   background-color: var(--color-bg-dark);
   color: var(--color-text-on-dark);
