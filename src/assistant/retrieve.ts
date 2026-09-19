@@ -10,7 +10,7 @@
  * so a dense or hybrid implementation can replace it without touching the UI.
  */
 
-import { contentTerms, expandQuery, normalize, tokenize } from './text.ts';
+import { contentTerms, expandQuery, normalize, subjectTerms, tokenize } from './text.ts';
 import type { Corpus, CorpusDoc, SourceType } from './types.ts';
 
 const K1 = 1.2;
@@ -114,6 +114,13 @@ export interface RetrievalResult {
   hits: Hit[];
   /** Best hit score normalised to roughly 0..1. Zero means "do not answer". */
   confidence: number;
+  /** Literal query terms that appear nowhere in the corpus. */
+  unknownTerms: string[];
+  /**
+   * Subject words absent from the corpus. Any one of these is enough to
+   * decline: it is the part of the question nothing on the site speaks to.
+   */
+  missingSubjects: string[];
 }
 
 function addTerms(tf: Map<string, number>, terms: string[], weight: number): void {
@@ -163,6 +170,21 @@ export function buildIndex(corpus: Corpus): RetrievalIndex {
   return { corpus, chunks, idf, avgLength, vocabulary: new Set(df.keys()) };
 }
 
+/**
+ * Subject words the corpus has never seen.
+ *
+ * A question's subject is the thing it is actually about — the technology,
+ * employer, place or activity. If the corpus contains no trace of it, no amount
+ * of lexical overlap on the surrounding framing words makes the question
+ * answerable, so the assistant declines and names what is missing rather than
+ * answering from loosely related passages.
+ */
+function findMissingSubjects(query: string, vocabulary: Set<string>): string[] {
+  const subjects = subjectTerms(query);
+  if (!subjects.length) return [];
+  return subjects.filter((s) => !vocabulary.has(s.term)).map((s) => s.word);
+}
+
 export interface RetrieveOptions {
   /** Chunks handed to the model. */
   topK?: number;
@@ -186,13 +208,14 @@ export function retrieve(
   const terms = expandQuery(query);
   const normalizedQuery = normalize(query);
   const unknownTerms = contentTerms(query).filter((term) => !index.vocabulary.has(term));
+  const missingSubjects = findMissingSubjects(query, index.vocabulary);
   const bigrams = normalizedQuery
     .split(' ')
     .filter((w) => w.length > 2)
     .map((word, i, all) => (i < all.length - 1 ? `${word} ${all[i + 1]}` : ''))
     .filter(Boolean);
 
-  if (!terms.length) return { hits: [], confidence: 0 };
+  if (!terms.length) return { hits: [], confidence: 0, unknownTerms, missingSubjects };
 
   const affinities = TYPE_AFFINITY.filter((rule) => rule.pattern.test(query));
 
@@ -269,10 +292,12 @@ export function retrieve(
   // Soft penalty: unknown query terms reduce confidence proportionally.
   // This is better than a hard zero — subjective words like "cool" slip through
   // QUESTION_SHELL and would previously be treated as factual subjects.
+  // A missing subject is a hard decline: the model never sees a question about
+  // something the site doesn't cover. Other unknown terms only soften the score.
   const unknownRatio = terms.length > 0 ? unknownTerms.length / terms.length : 0;
-  const confidence = rawConfidence * (1 - unknownRatio * 0.5);
+  const confidence = missingSubjects.length ? 0 : rawConfidence * (1 - unknownRatio * 0.5);
 
-  return { hits, confidence };
+  return { hits, confidence, unknownTerms, missingSubjects };
 }
 
 /** Deterministic source list for an answer: one entry per document, best first. */
