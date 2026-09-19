@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const load = (mod) => import(resolve(here, '../src/lib/assistant/', mod));
+const load = (mod) => import(resolve(here, '../src/assistant/', mod));
 
 const { buildIndex, retrieve, sourcesFor, RELEVANCE_FLOOR } = await load('retrieve.ts');
 const { extractiveAnswer } = await load('extractive.ts');
@@ -58,7 +58,7 @@ for (const question of QUESTIONS) {
 
   if (process.env.SHOW_PROMPT) {
     console.log('  --- prompt ---');
-    console.log(buildUserMessage(question, result.hits, result.unknownTerms).replace(/^/gm, '  | '));
+    console.log(buildUserMessage(question, result.hits, []).replace(/^/gm, '  | '));
   }
 }
 

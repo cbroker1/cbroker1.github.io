@@ -15,7 +15,7 @@ import { dirname, resolve } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const { buildIndex, retrieve, sourcesFor, RELEVANCE_FLOOR } = await import(
-  resolve(here, '../src/lib/assistant/retrieve.ts')
+  resolve(here, '../src/assistant/retrieve.ts')
 );
 
 const corpusPath = resolve(here, '../dist/assistant/corpus.json');

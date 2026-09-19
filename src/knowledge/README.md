@@ -10,7 +10,7 @@ It supplements the site's real content; it does not replace it.
 ## The corpus boundary
 
 The assistant's corpus is assembled at build time from exactly four sources,
-listed in `src/lib/assistant/corpus.ts`:
+listed in `src/assistant/corpus.ts`:
 
 1. `src/content/projects/**` — published project pages
 2. `src/content/writing/**` — published articles (drafts excluded)

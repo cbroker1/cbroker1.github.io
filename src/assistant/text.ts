@@ -158,12 +158,17 @@ const QUESTION_SHELL = new Set([
   'various', 'want', 'way', 'year',
   // Filler nouns that shape a question but carry no retrieval signal.
   'fella', 'fellow', 'guy', 'individual', 'person', 'type',
+  // Subjective words: they describe the answer wanted, not a topic to look up,
+  // so their absence from the corpus must not trigger a decline.
+  'awesome', 'challeng', 'cool', 'coolest', 'excit', 'fun', 'hardest',
+  'impressive', 'interest', 'neat', 'proud', 'unique',
+  // The subject of every question on the site, not a topic.
+  'carl',
 ]);
 
-/** The topic-bearing words in a question, paired with how the visitor typed
+/**
+ * The topic-bearing words in a question, paired with how the visitor typed
  * them so a decline can quote the question back accurately.
- *
- * Kept for future use if we add a soft-confidence gate based on unknown terms.
  */
 export function subjectTerms(query: string): { term: string; word: string }[] {
   const subjects: { term: string; word: string }[] = [];

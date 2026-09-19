@@ -76,6 +76,12 @@ Consider the conversation above when answering. If the question builds on prior 
 }
 
 /** One sentence describing what the corpus actually holds, built from the corpus. */
+function formatList(items: string[]): string {
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} or ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')} or ${items[items.length - 1]}`;
+}
+
 function coverageSummary(corpus: Corpus): string {
   const count = (type: string) => corpus.docs.filter((doc) => doc.type === type).length;
   const parts: string[] = [];
@@ -93,5 +99,11 @@ function coverageSummary(corpus: Corpus): string {
  */
 export function declineAnswer(result: RetrievalResult, corpus: Corpus): string {
   const coverage = coverageSummary(corpus);
+
+  if (result.missingSubjects.length) {
+    const subjects = formatList(result.missingSubjects.slice(0, 3));
+    return `Carl's site doesn't mention ${subjects}, so I can't answer that from his public work. ${coverage}`;
+  }
+
   return `I don't have enough information in Carl's public portfolio to answer that confidently. ${coverage}`;
 }

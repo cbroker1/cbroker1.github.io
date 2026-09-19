@@ -25,7 +25,7 @@ globalThis.fetch = async (url) => {
 };
 
 const { createAssistant, sanitizeAnswer, dropUnsupportedAddresses, limitSentences } = await import(
-  resolve(here, '../src/lib/assistant/controller.ts')
+  resolve(here, '../src/assistant/controller.ts')
 );
 
 let failed = 0;
@@ -146,7 +146,7 @@ const APPROVED_SOURCES = [
   '../src/content/about.md',
   '../src/content/experience.md',
   '../src/knowledge/curated-profile.md',
-  '../src/lib/assistant/corpus.ts',
+  '../src/assistant/corpus.ts',
   '../src/lib/site-links.ts',
   '../src/pages/assistant/corpus.json.ts',
 ];
@@ -181,6 +181,7 @@ const EXPECTED_DOC_IDS = [
   'project:optuna-xgboost',
   'article:nvidia-tensorrt-llm-a6000',
   'article:tensorrt-llm-under-load',
+  'article:thunderbolt-llm-cluster',
   'about',
   'experience',
   'links',
