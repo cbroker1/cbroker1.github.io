@@ -90,11 +90,11 @@ entries:
 
   - years: "2012 – 2015"
     role: "Research"
-    company: "Johns Hopkins Medical Institute · NIH (NIDA)"
+    company: "Johns Hopkins Medical Institute · National Institutes of Health (National Institute on Drug Abuse)"
     description: "Neuroscience, psychology, and clinical research grounded in data, signals, and behavior."
     highlights:
       - "Investigated neural mechanisms of motivation and learning using PCA on electrophysiological data and bivariate time-series analysis"
-      - "Led startup of a multi-year NIH-funded clinical research study and managed two research interns"
+      - "Led startup of a multi-year National Institutes of Health-funded clinical research study and managed two research interns"
       - "Co-authored 3 peer-reviewed papers, published on PubMed"
     technologies:
       - "statistics"
