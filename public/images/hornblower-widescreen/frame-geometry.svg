@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 446" width="680" height="446" role="img" aria-label="Diagram: a 720 by 480 4:3 source frame becomes a 1920 by 1080 16:9 frame whose middle 1420 pixels are the original picture pasted back exactly and whose outer 250 pixels on each side are generated; 26 percent of every frame is generated">
+<rect x="0.50" y="0.50" width="679.00" height="445.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">What is real and what is generated</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">Every one of the 167,473 frames: the original picture in the middle, generated sides</text>
+<defs><pattern id="gen" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#7b9440" stroke-width="1.2" stroke-opacity="0.55"/></pattern></defs>
+<rect x="40.00" y="132.00" width="128.00" height="96.00" fill="#f1f1ee" rx="4" stroke="#e0e0dc" stroke-width="1.2"/>
+<line x1="46.00" y1="140.00" x2="162.00" y2="140.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="148.00" x2="162.00" y2="148.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="156.00" x2="162.00" y2="156.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="164.00" x2="162.00" y2="164.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="172.00" x2="162.00" y2="172.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="180.00" x2="162.00" y2="180.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="188.00" x2="162.00" y2="188.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="196.00" x2="162.00" y2="196.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="204.00" x2="162.00" y2="204.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="212.00" x2="162.00" y2="212.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<line x1="46.00" y1="220.00" x2="162.00" y2="220.00" stroke="#d9d8d2" stroke-width="0.8"/>
+<text x="104.00" y="184.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">4:3</text>
+<text x="40.00" y="120.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="start" font-weight="600">Source</text>
+<text x="40.00" y="248.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">720 × 480 stored</text>
+<text x="40.00" y="263.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">SAR 8:9 · 29.97 fps</text>
+<text x="40.00" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">blanking trimmed</text>
+<line x1="180.00" y1="180.00" x2="208.00" y2="180.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<path d="M 207 175.50 L 214 180.00 L 207 184.50" fill="#b9b8b2"/>
+<text x="222.00" y="82.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="start" font-weight="600">Output, 1920 × 1080</text>
+<rect x="222.00" y="112.00" width="54.69" height="236.25" fill="rgba(163,184,108,0.16)" rx="0"/>
+<rect x="222.00" y="112.00" width="54.69" height="236.25" fill="url(#gen)" rx="0"/>
+<rect x="587.31" y="112.00" width="54.69" height="236.25" fill="rgba(163,184,108,0.16)" rx="0"/>
+<rect x="587.31" y="112.00" width="54.69" height="236.25" fill="url(#gen)" rx="0"/>
+<rect x="276.69" y="112.00" width="310.62" height="236.25" fill="#f1f1ee" rx="0"/>
+<line x1="284.69" y1="126.77" x2="579.31" y2="126.77" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="141.53" x2="579.31" y2="141.53" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="156.30" x2="579.31" y2="156.30" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="171.06" x2="579.31" y2="171.06" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="185.83" x2="579.31" y2="185.83" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="200.59" x2="579.31" y2="200.59" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="215.36" x2="579.31" y2="215.36" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="230.12" x2="579.31" y2="230.12" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="244.89" x2="579.31" y2="244.89" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="259.66" x2="579.31" y2="259.66" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="274.42" x2="579.31" y2="274.42" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="289.19" x2="579.31" y2="289.19" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="303.95" x2="579.31" y2="303.95" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="318.72" x2="579.31" y2="318.72" stroke="#dddcd6" stroke-width="0.8"/>
+<line x1="284.69" y1="333.48" x2="579.31" y2="333.48" stroke="#dddcd6" stroke-width="0.8"/>
+<rect x="222.00" y="112.00" width="420.00" height="236.25" fill="none" rx="0" stroke="#c9c8c2" stroke-width="1.2"/>
+<line x1="276.69" y1="112.00" x2="276.69" y2="348.25" stroke="#7b9440" stroke-width="1.4"/>
+<line x1="587.31" y1="112.00" x2="587.31" y2="348.25" stroke="#7b9440" stroke-width="1.4"/>
+<rect x="328.00" y="204.12" width="208.00" height="48.00" fill="#ffffff" rx="6" stroke="#e0e0dc" stroke-width="1"/>
+<text x="432.00" y="224.12" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Original picture</text>
+<text x="432.00" y="241.12" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">pasted back pixel-exact</text>
+<text x="249.34" y="100.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">generated</text>
+<text x="614.66" y="100.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">generated</text>
+<line x1="222.00" y1="365.25" x2="222.00" y2="375.25" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="276.69" y1="365.25" x2="276.69" y2="375.25" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="587.31" y1="365.25" x2="587.31" y2="375.25" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="642.00" y1="365.25" x2="642.00" y2="375.25" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="222.00" y1="370.25" x2="642.00" y2="370.25" stroke="#6b6b6b" stroke-width="1"/>
+<rect x="231.34" y="362.25" width="36.00" height="16.00" fill="#ffffff" rx="0"/>
+<text x="249.34" y="374.25" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">250</text>
+<rect x="414.00" y="362.25" width="36.00" height="16.00" fill="#ffffff" rx="0"/>
+<text x="432.00" y="374.25" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">1420</text>
+<rect x="596.66" y="362.25" width="36.00" height="16.00" fill="#ffffff" rx="0"/>
+<text x="614.66" y="374.25" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">250</text>
+<text x="40.00" y="330.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="30" fill="#1a1a1a" text-anchor="start" font-weight="600">26%</text>
+<text x="40.00" y="350.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">of every frame</text>
+<text x="40.00" y="366.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">is generated</text>
+<line x1="28.00" y1="392.00" x2="652.00" y2="392.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="412.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The generator works at 960 × 544: picture 710 × 540, bands 125 px, 4 padded rows.</text>
+<text x="28.00" y="428.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The picture is pasted back exactly, with an 8 px feather inside its edges.</text>
+</svg>

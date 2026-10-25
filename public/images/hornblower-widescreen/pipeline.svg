@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 862" width="680" height="862" role="img" aria-label="Flow diagram: the source episode is inspected and prepared into a shared queue of shots; an RTX 4090 in a Windows gaming PC and an RTX A6000 workstation both widen windows from that queue; the generated sides are composited with the original picture, restored to 1920 by 1080 with SeedVR2 on the A6000, encoded on both machines' CPUs, and validated">
+<rect x="0.50" y="0.50" width="679.00" height="861.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">One episode, two machines</text>
+<rect x="150.00" y="76.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="100.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Source episode</text>
+<text x="340.00" y="118.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">720 × 480 H.264 · 29.97 fps · 93 min · 167,473 frames</text>
+<line x1="340.00" y1="132.00" x2="340.00" y2="160.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 159.00 L 340.00 166.00 L 344.50 159.00" fill="#b9b8b2"/>
+<rect x="150.00" y="166.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="190.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Inspect and prepare</text>
+<text x="340.00" y="208.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">blanking crop · 1,169 shots · lossless frames</text>
+<line x1="340.00" y1="222.00" x2="340.00" y2="250.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 249.00 L 340.00 256.00 L 344.50 249.00" fill="#b9b8b2"/>
+<rect x="150.00" y="256.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="280.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Shared queue of shots</text>
+<text x="340.00" y="298.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">2,919 windows · a shot's windows run in order</text>
+<line x1="340.00" y1="312.00" x2="340.00" y2="332.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="332.00" x2="500.00" y2="332.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="332.00" x2="180.00" y2="346.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 175.50 345.00 L 180.00 352.00 L 184.50 345.00" fill="#b9b8b2"/>
+<line x1="500.00" y1="332.00" x2="500.00" y2="346.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 495.50 345.00 L 500.00 352.00 L 504.50 345.00" fill="#b9b8b2"/>
+<rect x="32.00" y="352.00" width="296.00" height="72.00" fill="rgba(163,184,108,0.14)" rx="8" stroke="#7b9440" stroke-width="1.2"/>
+<text x="180.00" y="377.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">RTX 4090 · gaming PC</text>
+<text x="180.00" y="395.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">Windows, WSL2 over SSH · widens only</text>
+<text x="180.00" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">2,244 windows · 300 s per full window</text>
+<rect x="352.00" y="352.00" width="296.00" height="72.00" fill="rgba(163,184,108,0.14)" rx="8" stroke="#7b9440" stroke-width="1.2"/>
+<text x="500.00" y="377.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">RTX A6000 · workstation</text>
+<text x="500.00" y="395.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">restores first, widens when idle</text>
+<text x="500.00" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">675 windows · 438 s per full window</text>
+<line x1="180.00" y1="424.00" x2="180.00" y2="444.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="500.00" y1="424.00" x2="500.00" y2="444.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="180.00" y1="444.00" x2="500.00" y2="444.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="340.00" y1="444.00" x2="340.00" y2="458.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 457.00 L 340.00 464.00 L 344.50 457.00" fill="#b9b8b2"/>
+<rect x="150.00" y="464.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="488.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Composite</text>
+<text x="340.00" y="506.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">original picture pasted back · checked on every frame</text>
+<line x1="340.00" y1="520.00" x2="340.00" y2="548.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 547.00 L 340.00 554.00 L 344.50 547.00" fill="#b9b8b2"/>
+<rect x="150.00" y="554.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="578.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Restore to 1920 × 1080</text>
+<text x="340.00" y="596.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">SeedVR2 7B on the A6000 · 279 units · 101 GPU-hours</text>
+<line x1="340.00" y1="610.00" x2="340.00" y2="638.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 637.00 L 340.00 644.00 L 344.50 637.00" fill="#b9b8b2"/>
+<rect x="150.00" y="644.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="668.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Encode on both CPUs</text>
+<text x="340.00" y="686.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">x265 CRF 18 · x265 CRF 10 veryslow · lossless master</text>
+<line x1="340.00" y1="700.00" x2="340.00" y2="728.00" stroke="#b9b8b2" stroke-width="1.5"/><path d="M 335.50 727.00 L 340.00 734.00 L 344.50 727.00" fill="#b9b8b2"/>
+<rect x="150.00" y="734.00" width="380.00" height="56.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="758.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Validate</text>
+<text x="340.00" y="776.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">18 checks: frames, timing, audio sync, chapters</text>
+</svg>
