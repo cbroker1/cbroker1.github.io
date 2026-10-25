@@ -367,6 +367,11 @@ small, .text-sm {
   margin-block: var(--space-8);
 }
 
+/* Citation targets ([n](#ref-n)): land below the sticky header */
+.prose [id^='ref-'] {
+  scroll-margin-top: 6rem;
+}
+
 .prose table {
   width: 100%;
   border-collapse: collapse;

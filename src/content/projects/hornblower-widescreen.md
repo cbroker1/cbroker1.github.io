@@ -33,7 +33,7 @@ sourceNote: "Personal project, built and run at home on hardware I own: no cloud
 
 *Hornblower* is the ITV naval drama that ran from 1998 to 2003. In the copies I have, the first six episodes are 4:3 standard definition: 720×480 at 29.97 frames per second, soft on a modern TV and boxed in by black bars. This project takes one of them, Episode 6, "Retribution," and turns it into a 16:9 episode at 1080p.
 
-Two very different AI models do the work. **Wan2.1 VACE**, a video generation model used here for outpainting, invents what lies beyond the left and right edges of each frame, one shot at a time, conditioned on the real picture in the middle so the sides can follow the camera, the light, and the sea. Then **SeedVR2**, a diffusion-based video restoration model, upscales the whole widened frame to 1920×1080. The real picture is never generated. After widening, the original pixels are pasted back exactly, and every frame is checked.
+Two very different AI models do the work. **Wan2.1 VACE** [[1](#ref-1), [2](#ref-2)], a video generation model used here for outpainting, invents what lies beyond the left and right edges of each frame, one shot at a time, conditioned on the real picture in the middle so the sides can follow the camera, the light, and the sea. Then **SeedVR2** [[3](#ref-3)], a diffusion-based video restoration model, upscales the whole widened frame to 1920×1080. The real picture is never generated. After widening, the original pixels are pasted back exactly, and every frame is checked.
 
 ![Diagram of the output frame: a 720 by 480, 4:3 source frame becomes a 1920 by 1080 frame. The middle 1420 pixels are the original picture, pasted back pixel-exact; the 250 pixels on each side are generated, hatched in olive. 26 percent of every frame is generated. The generator works at 960 by 544, with the picture at 710 by 540 and 125-pixel bands.](/images/hornblower-widescreen/frame-geometry.svg)
 
@@ -72,13 +72,13 @@ Every decision that changes the picture is made up front, with evidence images, 
 
 The job's ID is a hash of its full specification: the source, every decision, and every model setting. A job resumed a week later can't silently change its crop, its models, or its step count, because a different spec is a different job.
 
-Restoration works in units of about 20 seconds (a 599-frame target, cut at hard cuts, with 12 frames of context), **279 units** for the episode, each stored as a lossless FFV1 file with a checksum. Every stage after this one is a resumable state machine over windows and units, recorded in a single JSON state file.
+Restoration works in units of about 20 seconds (a 599-frame target, cut at hard cuts, with 12 frames of context), **279 units** for the episode, each stored as a lossless FFV1 [[4](#ref-4)] file with a checksum. Every stage after this one is a resumable state machine over windows and units, recorded in a single JSON state file.
 
 ---
 
 ## Phase 2: Generating Only What Is Missing
 
-VACE works on a 960 × 544 canvas. The 710 × 540 picture sits in the middle, the 125-pixel bands on each side start as flat grey, and four padding rows round the height up to a size the model accepts. A mask says "generate" over the bands and "keep" over the picture.
+The widening model is Wan2.1-VACE-1.3B [[5](#ref-5)], run with the VACE and Wan2.1 code [[6](#ref-6), [7](#ref-7)] at pinned revisions. It works on a 960 × 544 canvas. The 710 × 540 picture sits in the middle, the 125-pixel bands on each side start as flat grey, and four padding rows round the height up to a size the model accepts. A mask says "generate" over the bands and "keep" over the picture.
 
 The episode is generated in **windows**: clips of up to 81 frames within a shot. Each window after the first starts with the last 17 frames of the previous window's *generated* output, marked as known, so the bands continue from where they left off instead of being reinvented every 2.7 seconds. Shots are independent of each other, which later made them the natural unit to split across machines.
 
@@ -97,7 +97,7 @@ for window in shot.windows:  # up to 81 frames each
 
 Every window gets the same prompt: *"The scene continues naturally beyond the left and right edges of the frame: the same setting, lighting, colour, film grain, perspective and camera motion. Realistic and unobtrusive, no text, no logos, no added people."* Each window's seed is fixed by its index, so any window can be regenerated exactly on the same GPU.
 
-Sampling runs at **25 steps** (UniPC solver, shift 16, guidance 5). Few-step tests on this episode came back with flat, featureless side panels; 25 steps was my call on the quality-versus-time trade, at roughly half the default cost.
+Sampling runs at **25 steps** (UniPC solver [[8](#ref-8)], shift 16, guidance 5). Few-step tests on this episode, using NVIDIA's rCM distillation [[9](#ref-9)] as a 4-step LoRA [[10](#ref-10)], came back with flat, featureless side panels; 25 steps was my call on the quality-versus-time trade, at roughly half the default cost.
 
 After generation, the exact original picture goes back over the middle, with an 8-pixel feather inside its edges to hide the seam. The pipeline then checks every frame of every unit and confirms that the picture outside the feather is unchanged. All 279 units passed.
 
@@ -105,7 +105,7 @@ After generation, the exact original picture goes back over the middle, with an 
 
 ## Phase 3: Restoring the Whole Frame
 
-SeedVR2 restores the widened canvas to 1920×1080: the 7B model, batches of 45 frames with 4 frames of temporal overlap, and LAB color correction. Earlier benchmarks had shown the 7B model only about 15 to 18% slower than the 3B, so the bigger model won easily.
+SeedVR2, ByteDance Seed's one-step successor to SeedVR [[11](#ref-11)], restores the widened canvas to 1920×1080. I used the 7B model [[12](#ref-12)] in NumZ's fp16 packaging [[13](#ref-13)], run through NumZ's standalone CLI [[14](#ref-14)], with batches of 45 frames, 4 frames of temporal overlap, and LAB color correction. Earlier benchmarks had shown the 7B model only about 15 to 18% slower than the 3B, so the bigger model won easily.
 
 The 7B model needed up to **41 GiB of GPU memory** per unit, which settled the division of labor before any scheduling: only the A6000 can restore. Restoring everything on one GPU with one set of settings also keeps the look consistent from the first scene to the last.
 
@@ -129,8 +129,8 @@ The 4090 turned out to be the better widening card: **300 seconds** per full 81-
 
 Getting there took two fixes on the borrowed card:
 
-- **24 GB is not 24 GB on a desktop.** Windows doesn't fail when a CUDA job runs out of GPU memory; it pages. Watching a video on that PC pushed windows from about 300 seconds to 400, and heavier desktop use made them 3 to 9 times slower. The fix was at the source: offload the diffusion model to system RAM while the VAE runs, and keep VACE's control-hint tensors in a list instead of re-stacking them after every block. Peak memory dropped to **16.3 GB** with bit-identical frames.
-- **A Windows-shaped bug.** The SSH login shell on the gaming PC is `cmd.exe`, which caps a command line at 8,191 characters. A batch of 28 or more windows produced a fetch command longer than that, so finished work couldn't come home. Switching to `rsync --files-from` fixed it. About six hours of 4090 output was salvaged rather than regenerated. Because VACE regenerates a window bit-identically on the same GPU, I could verify the salvage instead of trusting it.
+- **24 GB is not 24 GB on a desktop.** On Windows, running out of GPU memory doesn't make a CUDA job fail: the driver falls back to shared system memory, and the job just gets slower [[15](#ref-15)]. Watching a video on that PC pushed windows from about 300 seconds to 400, and heavier desktop use made them 3 to 9 times slower. The fix was at the source: offload the diffusion model to system RAM while the VAE runs, and keep VACE's control-hint tensors in a list instead of re-stacking them after every block. Peak memory dropped to **16.3 GB** with bit-identical frames.
+- **A Windows-shaped bug.** The SSH login shell on the gaming PC is `cmd.exe`, which caps a command line at 8,191 characters [[16](#ref-16)]. A batch of 28 or more windows produced a fetch command longer than that, so finished work couldn't come home. Switching to `rsync --files-from` fixed it. About six hours of 4090 output was salvaged rather than regenerated. Because VACE regenerates a window bit-identically on the same GPU, I could verify the salvage instead of trusting it.
 
 ---
 
@@ -162,8 +162,8 @@ I took the 4090 back five times, for games and other use, and took the A6000 bac
 
 The failures were the educational part:
 
-- **The night the OOM killer took everything (marker A).** At 2:25 a.m. on the third night, systemd-oomd decided my user session was under memory pressure and killed all of it: the render, the desktop, every user service. Two things had piled up. SeedVR2's save step converted every frame of a 745-frame unit to floating point at once, about 23 GB, while a large parallel test and review run was going on the same machine. The cost was one unit and the 4090's in-flight batch; the 4090's finished windows were salvaged. The fixes: a parallel PNG writer that never holds that float copy, and renders resumed from a login-session scope that oomd doesn't police. When my session came back, my LLM server, enabled to start at login, helpfully grabbed 47 GB of the A6000. Shared hardware, in one anecdote.
-- **The driver reset that didn't crash anything (marker B).** A display-driver reset on the 4090 froze the remote worker mid-window: still alive, GPU idle, 16.6 GB held. Nothing failed, so nothing retried, and the job waited 42 minutes. I added a stall watchdog that stops a worker that has been silent for too long (15 minutes at first, later 5) and re-queues its batch. Six more resets followed over the next day and a half, four of them at stock clocks. From then on, a frozen worker could hold up the run for no longer than the timeout.
+- **The night the OOM killer took everything (marker A).** At 2:25 a.m. on the third night, systemd-oomd [[17](#ref-17)] decided my user session was under memory pressure and killed all of it: the render, the desktop, every user service. Two things had piled up. SeedVR2's save step converted every frame of a 745-frame unit to floating point at once, about 23 GB, while a large parallel test and review run was going on the same machine. The cost was one unit and the 4090's in-flight batch; the 4090's finished windows were salvaged. The fixes: a parallel PNG writer that never holds that float copy, and renders resumed from a login-session scope that oomd doesn't police. When my session came back, my LLM server, enabled to start at login, helpfully grabbed 47 GB of the A6000. Shared hardware, in one anecdote.
+- **The driver reset that didn't crash anything (marker B).** A display-driver reset on the 4090 (Windows resets a GPU that stops responding [[18](#ref-18)]) froze the remote worker mid-window: still alive, GPU idle, 16.6 GB held. Nothing failed, so nothing retried, and the job waited 42 minutes. I added a stall watchdog that stops a worker that has been silent for too long (15 minutes at first, later 5) and re-queues its batch. Six more resets followed over the next day and a half, four of them at stock clocks. From then on, a frozen worker could hold up the run for no longer than the timeout.
 - **A Windows reboot mid-batch.** The batch's download timed out, the scheduler re-queued it with backoff, and a fresh worker picked it up. Cost: about 45 minutes of 4090 time, and the run recovered on its own.
 - **The last shot.** The final shot was 21 windows long, and because windows within a shot are sequential, the A6000 held it while the 4090 sat idle. A boundary pause right after the A6000's 12th window handed the remaining nine to the 4090 while the A6000 restored the last units.
 
@@ -191,11 +191,11 @@ Three things I tried didn't help:
 
 ## Phase 7: Three Encodes and a Validator
 
-The job's own final encode is x265 at CRF 18 (preset medium, 10-bit): a **6.0 GB** file, encoded in 72 minutes. Even that taught me something. It first crawled along at 13 frames per second, because the max-quality encodes I had started on the same machine were competing for the CPU, even at the lowest scheduling priority. x265 runs many threads that wake constantly, and on a CPU saturated with low-priority threads that loses badly. Pausing them brought the encode to 47 frames per second, **3.6 times faster**. `nice` is not isolation.
+The job's own final encode is x265 [[19](#ref-19)] at CRF 18 (preset medium, 10-bit): a **6.0 GB** file, encoded in 72 minutes. Even that taught me something. It first crawled along at 13 frames per second, because the max-quality encodes I had started on the same machine were competing for the CPU, even at the lowest scheduling priority. x265 runs many threads that wake constantly, and on a CPU saturated with low-priority threads that loses badly. Pausing them brought the encode to 47 frames per second, **3.6 times faster**. `nice` is not isolation.
 
 Since I care about quality over file size, two more versions came from the same restored frames:
 
-- **Max quality:** x265 at CRF 10, preset veryslow, tuned for film grain. On one machine that is about 30 hours of CPU. Split into 279 chunks, one per unit, and spread over both machines' CPUs (two encodes on each, same FFmpeg and x265 build on both), it started overnight while restoration was still running and finished the afternoon the render did. Every chunk was checked before it counted: decoded frame count, timestamps on the frame grid, a keyframe first, and the same encoder parameter sets and x265 options as a reference chunk. A self-test beforehand had confirmed the two machines produce identical decoded pictures. The chunks were joined with exact per-chunk durations, without re-encoding, into a **42.8 GiB** file at about 66 Mb/s.
+- **Max quality:** x265 at CRF 10, preset veryslow, tuned for film grain. On one machine that is about 30 hours of CPU. Split into 279 chunks, one per unit, and spread over both machines' CPUs (two encodes on each, same FFmpeg [[20](#ref-20)] and x265 build on both), it started overnight while restoration was still running and finished the afternoon the render did. Every chunk was checked before it counted: decoded frame count, timestamps on the frame grid, a keyframe first, and the same encoder parameter sets and x265 options as a reference chunk. A self-test beforehand had confirmed the two machines produce identical decoded pictures. The chunks were joined with exact per-chunk durations, without re-encoding, into a **42.8 GiB** file at about 66 Mb/s.
 - **A lossless master:** every restored unit joined without re-encoding into a **286 GiB** FFV1 RGB file, the reference for anything I make later.
 
 When I wanted to watch streams on the gaming PC during the encode, its chunks were capped to 24 of its 32 threads:
@@ -204,7 +204,7 @@ When I wanted to watch streams on the gaming PC during the encode, its chunks we
 taskset -a -p -c 0-23 "$pid"   # all its threads on 24 of 32 logical CPUs
 ```
 
-This doesn't change the encode settings, because x265 sizes its thread pool from the system's CPU count, not the process affinity. It chose the same thread layout and options as for every other chunk, and the first capped chunk passed the same checks.
+This doesn't change the encode settings, because x265 sizes its thread pool from the system's CPU count [[19](#ref-19)], not the process affinity. It chose the same thread layout and options as for every other chunk, and the first capped chunk passed the same checks.
 
 Both encodes then go through the job's **18-check validation**: one video stream at 1920×1080, 10-bit 4:2:0, BT.709; 167,473 decoded frames at 30000/1001; start at zero and audio offset 0.0 ms; duration within a millisecond of the source; at most 1.03 ms of deviation from the ideal frame grid; the AC-3 audio stream, its language, and its duration matching the source; all 20 chapters at matching start times; and a content-alignment check against the source. Both passed. The lossless master got a full decode check of its own (frame count, audio, chapters) and passed too.
 
@@ -231,7 +231,7 @@ The number I keep coming back to is the first estimate: roughly 25 days of widen
 
 - **Design for interruption first.** Boundary pauses, checksummed resumes, and lendable lanes are why 35 interruptions cost almost nothing. On shared hardware, the scheduler is the product.
 - **Split work where the dependencies are.** Windows within a shot depend on each other; shots don't. Distributing whole shots made a two-GPU, two-OS setup simple and kept every generated band continuous.
-- **A consumer GPU on a desktop isn't its spec sheet.** Windows pages GPU memory instead of failing, so a "24 GB" card behaves like a much slower one once the desktop wants some. Headroom mattered more than TFLOPS, and the fix was reducing peak memory, not buying any.
+- **A consumer GPU on a desktop isn't its spec sheet.** The driver falls back to system memory instead of failing, so a "24 GB" card behaves like a much slower one once the desktop wants some. Headroom mattered more than TFLOPS, and the fix was reducing peak memory, not buying any.
 - **Measure before you optimize.** SeedVR2 is VAE-bound: three quarters of restoration time, versus under a fifth in the transformer.
 - **Determinism stops at the GPU model.** The same window regenerates bit-identically on the same GPU, which made salvage verifiable. A different GPU produces a different sample, as the man in the blue coat demonstrated.
 - **Silent failures need watchdogs.** A frozen worker never errors. A stall timeout caps what was a 42-minute hang at 5 minutes.
@@ -244,9 +244,34 @@ The number I keep coming back to is the first estimate: roughly 25 days of widen
 
 ## Technical Stack
 
-- **Wan2.1 VACE 1.3B**: video outpainting at 960 × 544, 81-frame windows chained with 17 frames of generated context, 25 UniPC steps, T5 text encoder on CPU
-- **SeedVR2 7B** through the pinned NumZ standalone CLI: restoration to 1920×1080, batches of 45 frames, LAB color correction
+- **Wan2.1 VACE 1.3B** [[5](#ref-5)]: video outpainting at 960 × 544, 81-frame windows chained with 17 frames of generated context, 25 UniPC steps [[8](#ref-8)], T5 text encoder on CPU
+- **SeedVR2 7B** [[12](#ref-12), [13](#ref-13)] through the pinned NumZ standalone CLI [[14](#ref-14)]: restoration to 1920×1080, batches of 45 frames, LAB color correction
 - **Python orchestration**: hash-identified jobs, a JSON state machine over windows and units, a two-lane shot scheduler, boundary pause and resume, lendable lanes, stall watchdog, worker SHA-256 pinning
 - **Remote execution**: SSH into Windows, WSL2, rsync with `--files-from`, a persistent worker per run
-- **FFmpeg, x265, FFV1, Matroska**: lossless units, three encodes (one chunked across two machines), and an 18-check validator
+- **FFmpeg** [[20](#ref-20)], **x265** [[19](#ref-19)], **FFV1** [[4](#ref-4)], **Matroska**: lossless units, three encodes (one chunked across two machines), and an 18-check validator
 - **Hardware**: RTX A6000 48 GB with a Ryzen 9 7950X (Linux workstation); RTX 4090 24 GB with a Ryzen 9 9950X3D (Windows gaming PC, WSL2)
+
+---
+
+## References
+
+1. <span id="ref-1"></span>Zeyinzi Jiang, Zhen Han, Chaojie Mao, Jingfeng Zhang, Yulin Pan, Yu Liu. "VACE: All-in-One Video Creation and Editing." arXiv:2503.07598, 2025. [arxiv.org/abs/2503.07598](https://arxiv.org/abs/2503.07598)
+2. <span id="ref-2"></span>Team Wan (Ang Wang, Baole Ai, Bin Wen, Chaojie Mao, et al.). "Wan: Open and Advanced Large-Scale Video Generative Models." arXiv:2503.20314, 2025. [arxiv.org/abs/2503.20314](https://arxiv.org/abs/2503.20314)
+3. <span id="ref-3"></span>Jianyi Wang, Shanchuan Lin, Zhijie Lin, Yuxi Ren, Meng Wei, Zongsheng Yue, Shangchen Zhou, Hao Chen, Yang Zhao, Ceyuan Yang, Xuefeng Xiao, Chen Change Loy, Lu Jiang. "SeedVR2: One-Step Video Restoration via Diffusion Adversarial Post-Training." ICLR 2026. arXiv:2506.05301. [arxiv.org/abs/2506.05301](https://arxiv.org/abs/2506.05301)
+4. <span id="ref-4"></span>M. Niedermayer, D. Rice, J. Martinez. "FFV1 Video Coding Format Versions 0, 1, and 3." RFC 9043, IETF, 2021. [rfc-editor.org/rfc/rfc9043](https://www.rfc-editor.org/rfc/rfc9043)
+5. <span id="ref-5"></span>Wan-AI. *Wan2.1-VACE-1.3B*. Hugging Face model (Apache 2.0); revision `574e6a7` used here. [huggingface.co/Wan-AI/Wan2.1-VACE-1.3B](https://huggingface.co/Wan-AI/Wan2.1-VACE-1.3B)
+6. <span id="ref-6"></span>ali-vilab. *VACE* source code; commit `48eb44f` used here. [github.com/ali-vilab/VACE](https://github.com/ali-vilab/VACE)
+7. <span id="ref-7"></span>Wan-Video. *Wan2.1* source code; commit `9737cba` used here. [github.com/Wan-Video/Wan2.1](https://github.com/Wan-Video/Wan2.1)
+8. <span id="ref-8"></span>Wenliang Zhao, Lujia Bai, Yongming Rao, Jie Zhou, Jiwen Lu. "UniPC: A Unified Predictor-Corrector Framework for Fast Sampling of Diffusion Models." NeurIPS 2023. arXiv:2302.04867. [arxiv.org/abs/2302.04867](https://arxiv.org/abs/2302.04867)
+9. <span id="ref-9"></span>Kaiwen Zheng, Yuji Wang, Qianli Ma, Huayu Chen, Jintao Zhang, Yogesh Balaji, Jianfei Chen, Ming-Yu Liu, Jun Zhu, Qinsheng Zhang. "Large Scale Diffusion Distillation via Score-Regularized Continuous-Time Consistency" (rCM). ICLR 2026. arXiv:2510.08431. [arxiv.org/abs/2510.08431](https://arxiv.org/abs/2510.08431)
+10. <span id="ref-10"></span>Kijai. *WanVideo_comfy*. Hugging Face repository; its rCM LoRA for Wan2.1-T2V-1.3B (`Wan_2_1_T2V_1_3B_480p_rCM_lora_average_rank_64_bf16.safetensors`, revision `8260d42`) was used only in the few-step test. [huggingface.co/Kijai/WanVideo_comfy](https://huggingface.co/Kijai/WanVideo_comfy)
+11. <span id="ref-11"></span>Jianyi Wang, Zhijie Lin, Meng Wei, Yang Zhao, Ceyuan Yang, Fei Xiao, Chen Change Loy, Lu Jiang. "SeedVR: Seeding Infinity in Diffusion Transformer Towards Generic Video Restoration." CVPR 2025. arXiv:2501.01320. [arxiv.org/abs/2501.01320](https://arxiv.org/abs/2501.01320)
+12. <span id="ref-12"></span>ByteDance Seed. *SeedVR2-7B* and *SeedVR2-3B*. Hugging Face models, the official weights (Apache 2.0). [huggingface.co/ByteDance-Seed/SeedVR2-7B](https://huggingface.co/ByteDance-Seed/SeedVR2-7B), [huggingface.co/ByteDance-Seed/SeedVR2-3B](https://huggingface.co/ByteDance-Seed/SeedVR2-3B)
+13. <span id="ref-13"></span>numz. *SeedVR2_comfyUI*. Hugging Face repository of fp16 SeedVR2 weights; `seedvr2_ema_7b_fp16.safetensors` and `ema_vae_fp16.safetensors` (revision `09ced71`) were used here. [huggingface.co/numz/SeedVR2_comfyUI](https://huggingface.co/numz/SeedVR2_comfyUI)
+14. <span id="ref-14"></span>numz. *ComfyUI-SeedVR2_VideoUpscaler*: SeedVR2 for ComfyUI, with a standalone CLI; commit `4490bd1` used here. [github.com/numz/ComfyUI-SeedVR2_VideoUpscaler](https://github.com/numz/ComfyUI-SeedVR2_VideoUpscaler)
+15. <span id="ref-15"></span>NVIDIA. "System Memory Fallback for Stable Diffusion." NVIDIA support article on the CUDA system memory fallback added in driver 536.40. [nvidia.custhelp.com](https://nvidia.custhelp.com/app/answers/detail/a_id/5490/~/system-memory-fallback-for-stable-diffusion)
+16. <span id="ref-16"></span>Microsoft. "Command prompt line string limitation." Microsoft Learn. [learn.microsoft.com](https://learn.microsoft.com/en-us/troubleshoot/windows-client/shell-experience/command-line-string-limitation)
+17. <span id="ref-17"></span>systemd. *systemd-oomd.service*(8) manual page. [freedesktop.org](https://www.freedesktop.org/software/systemd/man/latest/systemd-oomd.service.html)
+18. <span id="ref-18"></span>Microsoft. "WDDM Support for Timeout Detection and Recovery (TDR)." Microsoft Learn. [learn.microsoft.com](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/timeout-detection-and-recovery)
+19. <span id="ref-19"></span>x265. "Threading." x265 documentation. [x265.readthedocs.io](https://x265.readthedocs.io/en/master/threading.html)
+20. <span id="ref-20"></span>FFmpeg project. *FFmpeg*. [ffmpeg.org](https://ffmpeg.org/)
