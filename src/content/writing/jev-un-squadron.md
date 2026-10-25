@@ -14,7 +14,7 @@ featured: false
 draft: false
 ---
 
-![Pixel title card reading "JEV plays U.N. SQUADRON", then gameplay from run R99 with the model's decision shown under each frame, ending on a GAME OVER card: 82 of 108 units, 1,015 decisions, 0 boss parts destroyed](/images/jev-un-squadron/hero.gif)
+![A live stretch of run R141. Left: the game. Right: the dashboard's radar of the decoded object table, the jet's box and gun line tracking the real jet. Below: Jev's three parallel answers for attack, pickup and position, each with probability bars and a confidence, and the move that was applied](/images/jev-un-squadron/what-jev-sees.gif)
 
 U.N. Squadron is a 1991 Capcom shooter for the Super Nintendo. You fly a jet left to right across a scrolling level, shooting helicopters, tanks and turrets, and at the end you fight a boss. I wanted to find out whether a language model could play it. I didn't want to use screen pixels or a trained policy. The model would read the game's working memory and make each move as a plain-language decision.
 
@@ -130,7 +130,7 @@ My legacy request broke all four rules. It asked one question per call that mixe
 
 The redesign, `categorical-v1`, moves every comparison into Python: eligibility, objective selection, gap comparisons, fallbacks. Jev gets three short questions in one call, for **attack**, **pickup** and **position**, and each option comes with a categorical verdict instead of a number. The code works out "this move improves your aim" and says that. It doesn't send "aim error 14 px".
 
-![A live stretch of run R141. Left: the game. Right: the dashboard's radar of the decoded object table, the jet's box and gun line tracking the real jet. Below: Jev's three parallel answers for attack, pickup and position, each with probability bars and a confidence, and the move that was applied](/images/jev-un-squadron/what-jev-sees.gif)
+![Pixel title card reading "JEV plays U.N. SQUADRON", then gameplay from run R99 with the model's decision shown under each frame, ending on a GAME OVER card: 82 of 108 units, 1,015 decisions, 0 boss parts destroyed](/images/jev-un-squadron/hero.gif)
 
 I ran each design three times, interleaved, on the same 900-frame opening:
 
