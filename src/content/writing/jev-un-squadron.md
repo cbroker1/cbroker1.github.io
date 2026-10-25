@@ -1,5 +1,5 @@
 ---
-title: "Teaching a Decision Model to Fly U.N. Squadron from Raw SNES Memory"
+title: "Teaching Jev, a Decision Model, to Fly U.N. Squadron from Raw SNES Memory"
 description: "Using TypeSafe's Jev decision model to play a 1991 shooter: decoding the game's object table, freezing the emulator while the model thinks, and the request redesign that took median decision confidence from 0.27 to 0.85."
 date: 2026-09-21
 tags:
