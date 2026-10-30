@@ -30,3 +30,6 @@ pnpm-debug.log*
 
 # design references (kept locally, not published)
 references/
+
+# agent instructions (kept locally, not published)
+AGENTS.md
