@@ -165,7 +165,7 @@ Once you introduce concurrency, input-token pressure, TTFT variance, decode leng
 
 * **Prefill and decode compete for GPU compute.** Large prompts slow down the first token for everyone else.
 * **KV cache is finite.** Under concurrency with varied prompt sizes, the GPU runs out of space for cached key-value pairs.
-* **Latency is non-deterministic.** The P95 TTFT at high concurrency was 2.8x the P95 TTFT at low concurrency for the largest prompts. That's not a small difference.
+* **Latency is non-deterministic.** For the largest prompts, P95 TTFT at concurrency 64 was 4.9x the P95 TTFT at concurrency 1 (227.9 ms vs. 46.4 ms). That's not a small difference.
 * **Output length is unpredictable.** The same input can produce very different output lengths, making total latency hard to bound.
 
 These are exactly the problems that disaggregated serving frameworks like Dynamo are designed to address. By separating prefill and decode onto different GPUs, you prevent large prompts from starving the decode phase. By introducing a request router, you can balance load across workers. By managing KV cache across the cluster, you avoid the per-GPU headroom problem.
