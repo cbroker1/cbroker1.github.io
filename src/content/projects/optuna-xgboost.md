@@ -13,6 +13,7 @@ tags:
   - Multi-Model Training
 image: "/images/optuna-xgboost/card-cover.png"
 featured: true
+order: 2
 status: "complete"
 sourceNote: "This article depicts the general process and approach. Specific system names, alert types, and proprietary data structures are generalized; the methodology, architecture, and technical decisions are real."
 ---

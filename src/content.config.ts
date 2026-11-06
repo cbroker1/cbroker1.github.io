@@ -13,6 +13,8 @@ const projects = defineCollection({
     github: z.string().url().optional(),
     demo: z.string().url().optional(),
     featured: z.boolean().default(false),
+    // Manual display order (lower first). Unordered projects follow, newest first.
+    order: z.number().default(100),
     status: z.enum(['complete', 'in-progress', 'archived']).default('complete'),
     // Shown in the project header when there are no demo/source links,
     // e.g. confidentiality notes for work that cannot be published.

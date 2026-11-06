@@ -18,6 +18,7 @@ tags:
 image: "/images/document-intelligence-pipeline/card-cover.svg"
 github: "https://github.com/cbroker1/document-intelligence-pipeline"
 featured: true
+order: 1
 status: "complete"
 sourceNote: "Sanitized case study. The original notebooks are published with outputs stripped and category names, systems, and paths generalized."
 ---
