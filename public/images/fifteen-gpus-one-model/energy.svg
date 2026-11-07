@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 766" width="680" height="766" role="img" aria-label="Paired horizontal bars per GPU in plain run 883b7a: percent of the weights held, then of GPU energy. Z13 Radeon 8060S, GPU rail only: 41.0 and 1.6. The rig's seven 8 GB NVIDIA cards hold 2.3 each and draw 3070 FE 6.8, 3060 Ti ZOTAC 7.2, GTX 1080 7.8, GTX 1070 6.8, 3060 Ti EVGA 9.0, RTX 2080 7.1 and 3070 ASUS 7.8; together 16.4 and 52.6. Rig AMD: RX 5700 XT 3.1 and 3.6; RX 6600s at blocks 25 to 26, 28 and 29: 3.3 and 1.3; 3.1 and 1.5; 2.3 and 1.1. On gamingrig, at high clocks: 2080 Ti 3.1 and 10.8; 4090 8.7 and 10.3. GPURIG's A6000: 19.3 and 17.2. Below, 565 W while generating: deep-idle floor 260 W, 46 percent; awake premium 261 W, 46 percent; work 44 W, 8 percent. Awake with nothing to do: 521 W, 92 percent. Power samples read 2.5 percent above the meters' 551 W.">
+<rect x="0.50" y="0.50" width="679.00" height="765.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">Who holds the model, and who spends the energy</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">Per GPU in the plain baseline run 883b7a, with gamingrig at high clocks</text>
+<rect x="28.00" y="77.00" width="12.00" height="12.00" fill="#5977b8" rx="2"/>
+<text x="46.00" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Share of the weights it holds</text>
+<rect x="230.80" y="77.00" width="12.00" height="12.00" fill="#b0803c" rx="2"/>
+<text x="248.80" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Share of the fleet's GPU energy</text>
+<text x="28.00" y="117.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#1a1a1a" text-anchor="start" font-weight="600">Z13</text>
+<text x="28.00" y="131.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">GPU rail only</text>
+<text x="186.00" y="117.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">Radeon 8060S</text>
+<path d="M 196.00 104.00 L 610.70 104.00 Q 613.70 104.00 613.70 107.00 L 613.70 109.00 Q 613.70 112.00 610.70 112.00 L 196.00 112.00 Z" fill="#5977b8"/>
+<text x="618.70" y="111.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">41.0%</text>
+<path d="M 196.00 116.00 L 209.07 116.00 Q 212.07 116.00 212.07 119.00 L 212.07 121.00 Q 212.07 124.00 209.07 124.00 L 196.00 124.00 Z" fill="#b0803c"/>
+<text x="217.07" y="123.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">1.6%</text>
+<text x="28.00" y="155.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#1a1a1a" text-anchor="start" font-weight="600">rig</text>
+<text x="186.00" y="155.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 3070 FE</text>
+<path d="M 196.00 142.00 L 216.89 142.00 Q 219.89 142.00 219.89 145.00 L 219.89 147.00 Q 219.89 150.00 216.89 150.00 L 196.00 150.00 Z" fill="#5977b8"/>
+<text x="224.89" y="149.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 154.00 L 262.60 154.00 Q 265.60 154.00 265.60 157.00 L 265.60 159.00 Q 265.60 162.00 262.60 162.00 L 196.00 162.00 Z" fill="#b0803c"/>
+<text x="270.60" y="161.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">6.8%</text>
+<text x="186.00" y="181.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 3060 Ti ZOTAC</text>
+<path d="M 196.00 168.00 L 216.89 168.00 Q 219.89 168.00 219.89 171.00 L 219.89 173.00 Q 219.89 176.00 216.89 176.00 L 196.00 176.00 Z" fill="#5977b8"/>
+<text x="224.89" y="175.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 180.00 L 266.57 180.00 Q 269.57 180.00 269.57 183.00 L 269.57 185.00 Q 269.57 188.00 266.57 188.00 L 196.00 188.00 Z" fill="#b0803c"/>
+<text x="274.57" y="187.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">7.2%</text>
+<text x="186.00" y="207.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">GTX 1080</text>
+<path d="M 196.00 194.00 L 216.89 194.00 Q 219.89 194.00 219.89 197.00 L 219.89 199.00 Q 219.89 202.00 216.89 202.00 L 196.00 202.00 Z" fill="#5977b8"/>
+<text x="224.89" y="201.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 206.00 L 272.54 206.00 Q 275.54 206.00 275.54 209.00 L 275.54 211.00 Q 275.54 214.00 272.54 214.00 L 196.00 214.00 Z" fill="#b0803c"/>
+<text x="280.54" y="213.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">7.8%</text>
+<text x="186.00" y="233.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">GTX 1070</text>
+<path d="M 196.00 220.00 L 216.83 220.00 Q 219.83 220.00 219.83 223.00 L 219.83 225.00 Q 219.83 228.00 216.83 228.00 L 196.00 228.00 Z" fill="#5977b8"/>
+<text x="224.83" y="227.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 232.00 L 262.74 232.00 Q 265.74 232.00 265.74 235.00 L 265.74 237.00 Q 265.74 240.00 262.74 240.00 L 196.00 240.00 Z" fill="#b0803c"/>
+<text x="270.74" y="239.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">6.8%</text>
+<text x="186.00" y="259.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 3060 Ti EVGA</text>
+<path d="M 196.00 246.00 L 216.83 246.00 Q 219.83 246.00 219.83 249.00 L 219.83 251.00 Q 219.83 254.00 216.83 254.00 L 196.00 254.00 Z" fill="#5977b8"/>
+<text x="224.83" y="253.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 258.00 L 285.06 258.00 Q 288.06 258.00 288.06 261.00 L 288.06 263.00 Q 288.06 266.00 285.06 266.00 L 196.00 266.00 Z" fill="#b0803c"/>
+<text x="293.06" y="265.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">9.0%</text>
+<text x="186.00" y="285.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 2080</text>
+<path d="M 196.00 272.00 L 216.89 272.00 Q 219.89 272.00 219.89 275.00 L 219.89 277.00 Q 219.89 280.00 216.89 280.00 L 196.00 280.00 Z" fill="#5977b8"/>
+<text x="224.89" y="279.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 284.00 L 265.76 284.00 Q 268.76 284.00 268.76 287.00 L 268.76 289.00 Q 268.76 292.00 265.76 292.00 L 196.00 292.00 Z" fill="#b0803c"/>
+<text x="273.76" y="291.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">7.1%</text>
+<text x="186.00" y="311.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 3070 ASUS</text>
+<path d="M 196.00 298.00 L 216.83 298.00 Q 219.83 298.00 219.83 301.00 L 219.83 303.00 Q 219.83 306.00 216.83 306.00 L 196.00 306.00 Z" fill="#5977b8"/>
+<text x="224.83" y="305.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 310.00 L 272.32 310.00 Q 275.32 310.00 275.32 313.00 L 275.32 315.00 Q 275.32 318.00 272.32 318.00 L 196.00 318.00 Z" fill="#b0803c"/>
+<text x="280.32" y="317.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">7.8%</text>
+<text x="186.00" y="345.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RX 5700 XT</text>
+<path d="M 196.00 332.00 L 224.12 332.00 Q 227.12 332.00 227.12 335.00 L 227.12 337.00 Q 227.12 340.00 224.12 340.00 L 196.00 340.00 Z" fill="#5977b8"/>
+<text x="232.12" y="339.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">3.1%</text>
+<path d="M 196.00 344.00 L 230.20 344.00 Q 233.20 344.00 233.20 347.00 L 233.20 349.00 Q 233.20 352.00 230.20 352.00 L 196.00 352.00 Z" fill="#b0803c"/>
+<text x="238.20" y="351.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">3.6%</text>
+<text x="186.00" y="371.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RX 6600 blocks 25–26</text>
+<path d="M 196.00 358.00 L 226.30 358.00 Q 229.30 358.00 229.30 361.00 L 229.30 363.00 Q 229.30 366.00 226.30 366.00 L 196.00 366.00 Z" fill="#5977b8"/>
+<text x="234.30" y="365.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">3.3%</text>
+<path d="M 196.00 370.00 L 206.50 370.00 Q 209.50 370.00 209.50 373.00 L 209.50 375.00 Q 209.50 378.00 206.50 378.00 L 196.00 378.00 Z" fill="#b0803c"/>
+<text x="214.50" y="377.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">1.3%</text>
+<text x="186.00" y="397.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RX 6600 block 28</text>
+<path d="M 196.00 384.00 L 224.12 384.00 Q 227.12 384.00 227.12 387.00 L 227.12 389.00 Q 227.12 392.00 224.12 392.00 L 196.00 392.00 Z" fill="#5977b8"/>
+<text x="232.12" y="391.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">3.1%</text>
+<path d="M 196.00 396.00 L 207.93 396.00 Q 210.93 396.00 210.93 399.00 L 210.93 401.00 Q 210.93 404.00 207.93 404.00 L 196.00 404.00 Z" fill="#b0803c"/>
+<text x="215.93" y="403.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">1.5%</text>
+<text x="186.00" y="423.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RX 6600 block 29</text>
+<path d="M 196.00 410.00 L 216.89 410.00 Q 219.89 410.00 219.89 413.00 L 219.89 415.00 Q 219.89 418.00 216.89 418.00 L 196.00 418.00 Z" fill="#5977b8"/>
+<text x="224.89" y="417.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">2.3%</text>
+<path d="M 196.00 422.00 L 204.37 422.00 Q 207.37 422.00 207.37 425.00 L 207.37 427.00 Q 207.37 430.00 204.37 430.00 L 196.00 430.00 Z" fill="#b0803c"/>
+<text x="212.37" y="429.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">1.1%</text>
+<text x="28.00" y="461.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#1a1a1a" text-anchor="start" font-weight="600">gamingrig</text>
+<text x="28.00" y="475.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">high clocks</text>
+<text x="186.00" y="461.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 2080 Ti</text>
+<path d="M 196.00 448.00 L 224.12 448.00 Q 227.12 448.00 227.12 451.00 L 227.12 453.00 Q 227.12 456.00 224.12 456.00 L 196.00 456.00 Z" fill="#5977b8"/>
+<text x="232.12" y="455.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">3.1%</text>
+<path d="M 196.00 460.00 L 302.74 460.00 Q 305.74 460.00 305.74 463.00 L 305.74 465.00 Q 305.74 468.00 302.74 468.00 L 196.00 468.00 Z" fill="#b0803c"/>
+<text x="310.74" y="467.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">10.8%</text>
+<text x="186.00" y="487.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX 4090</text>
+<path d="M 196.00 474.00 L 281.25 474.00 Q 284.25 474.00 284.25 477.00 L 284.25 479.00 Q 284.25 482.00 281.25 482.00 L 196.00 482.00 Z" fill="#5977b8"/>
+<text x="289.25" y="481.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">8.7%</text>
+<path d="M 196.00 486.00 L 298.08 486.00 Q 301.08 486.00 301.08 489.00 L 301.08 491.00 Q 301.08 494.00 298.08 494.00 L 196.00 494.00 Z" fill="#b0803c"/>
+<text x="306.08" y="493.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">10.3%</text>
+<text x="28.00" y="525.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#1a1a1a" text-anchor="start" font-weight="600">GPURIG</text>
+<text x="186.00" y="525.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">RTX A6000</text>
+<path d="M 196.00 512.00 L 389.46 512.00 Q 392.46 512.00 392.46 515.00 L 392.46 517.00 Q 392.46 520.00 389.46 520.00 L 196.00 520.00 Z" fill="#5977b8"/>
+<text x="397.46" y="519.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">19.3%</text>
+<path d="M 196.00 524.00 L 368.51 524.00 Q 371.51 524.00 371.51 527.00 L 371.51 529.00 Q 371.51 532.00 368.51 532.00 L 196.00 532.00 Z" fill="#b0803c"/>
+<text x="376.51" y="531.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">17.2%</text>
+<line x1="196.00" y1="100.00" x2="196.00" y2="536.00" stroke="#e0e0dc" stroke-width="1"/>
+<line x1="340.00" y1="142.00" x2="340.00" y2="318.00" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="334.00" y1="142.00" x2="340.00" y2="142.00" stroke="#6b6b6b" stroke-width="1"/>
+<line x1="334.00" y1="318.00" x2="340.00" y2="318.00" stroke="#6b6b6b" stroke-width="1"/>
+<text x="350.00" y="219.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" fill="#1a1a1a" text-anchor="start">The rig's seven 8 GB NVIDIA cards</text>
+<text x="350.00" y="234.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" fill="#1a1a1a" text-anchor="start">hold 16.4% of the weights and</text>
+<text x="350.00" y="249.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" fill="#1a1a1a" text-anchor="start">draw 52.6% of the GPU energy.</text>
+<text x="28.00" y="566.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#1a1a1a" text-anchor="start" font-weight="600">Fleet GPU power while generating</text>
+<text x="650.00" y="566.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#6b6b6b" text-anchor="end">awake, nothing to do (floor + premium): 521 W, 92%</text>
+<rect x="28.00" y="600.00" width="257.08" height="28.00" fill="#8a8a84" rx="0"/>
+<rect x="287.08" y="600.00" width="257.25" height="28.00" fill="#c9c8c2" rx="0"/>
+<path d="M 546.33 600.00 L 586.00 600.00 Q 590.00 600.00 590.00 604.00 L 590.00 624.00 Q 590.00 628.00 586.00 628.00 L 546.33 628.00 Z" fill="#7b9440"/>
+<text x="156.54" y="592.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">deep-idle floor</text>
+<text x="156.54" y="644.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">260 W · 46%</text>
+<text x="415.71" y="592.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">awake premium</text>
+<text x="415.71" y="644.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">261 W · 46%</text>
+<text x="568.17" y="592.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">work</text>
+<text x="568.17" y="644.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">44 W · 8%</text>
+<text x="598.00" y="618.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">565 W</text>
+<line x1="28.00" y1="664.00" x2="652.00" y2="664.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="684.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">GPU-only energy: NVML board energy, amdgpu PPT, and the Z13's GPU rail. Idle is not subtracted.</text>
+<text x="28.00" y="701.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Power levels: 0.1 s power samples summed over 15 GPUs, 2.5% above the meters' 551 W.</text>
+<text x="28.00" y="718.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Awake: 5–15 s after the warm-up's last request; deep idle: the last 5 s of that 30 s idle.</text>
+<text x="28.00" y="735.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The 4090's reading can also include Windows desktop work on gamingrig.</text>
+<text x="28.00" y="752.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Source: plain run 883b7a, 3 windows, 6,402 output tokens.</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 366" width="680" height="366" role="img" aria-label="Dot plot of paired tokens-per-joule ratios, candidate over base, on an axis from 1.00 to 1.07 with a dashed promotion bar at 1.03. Round 1 against stock: screening run 1.0539, hollow and not counted; pairs 1.0569, 1.0564, 1.0573, 1.0564 and 1.0587; mean 1.0572, 95 percent interval 1.0560 to 1.0583, promoted. Round 2 against round 1: screening run 1.0235, not counted; pairs 1.0286, 1.0276, 1.0281, 1.0266 and 1.0270; mean 1.0276, interval 1.0266 to 1.0286, under the bar, not promoted.">
+<rect x="0.50" y="0.50" width="679.00" height="365.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">Promotion needed +3% with the 95% interval above 1.0</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">Paired tokens-per-joule ratios, candidate over base, on the A6000 slice</text>
+<circle cx="34.00" cy="83.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<text x="46.00" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Paired run</text>
+<circle cx="133.78" cy="83.00" r="4" fill="#ffffff" stroke="#7b9440" stroke-width="1.5"/>
+<text x="145.78" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Screening run, not counted</text>
+<path d="M 323.40 83.00 L 332.40 78.00 L 341.40 83.00 L 332.40 88.00 Z" fill="#1a1a1a"/>
+<text x="347.40" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Mean of 5 pairs and its 95% interval</text>
+<line x1="160.00" y1="116.00" x2="160.00" y2="262.00" stroke="#e0e0dc" stroke-width="1"/>
+<text x="160.00" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.00</text>
+<line x1="228.57" y1="116.00" x2="228.57" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="228.57" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.01</text>
+<line x1="297.14" y1="116.00" x2="297.14" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="297.14" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.02</text>
+<text x="365.71" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.03</text>
+<line x1="434.29" y1="116.00" x2="434.29" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="434.29" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.04</text>
+<line x1="502.86" y1="116.00" x2="502.86" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="502.86" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.05</text>
+<line x1="571.43" y1="116.00" x2="571.43" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="571.43" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.06</text>
+<line x1="640.00" y1="116.00" x2="640.00" y2="262.00" stroke="#edece8" stroke-width="1"/>
+<text x="640.00" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.07</text>
+<line x1="365.71" y1="104.00" x2="365.71" y2="262.00" stroke="#b9b8b2" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="371.71" y="112.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11.5" fill="#6b6b6b" text-anchor="start">promotion bar, 1.03</text>
+<circle cx="529.60" cy="150.00" r="4" fill="#ffffff" stroke="#7b9440" stroke-width="1.5"/>
+<circle cx="550.17" cy="158.50" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="546.74" cy="150.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="552.91" cy="134.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="546.74" cy="141.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="562.51" cy="150.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<path d="M 544.00 182.00 L 552.23 177.00 L 559.77 182.00 L 552.23 187.00 Z" fill="#1a1a1a"/>
+<text x="150.00" y="153.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">Round 1 vs stock</text>
+<text x="150.00" y="185.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="end">promoted</text>
+<circle cx="321.14" cy="218.00" r="4" fill="#ffffff" stroke="#7b9440" stroke-width="1.5"/>
+<circle cx="356.11" cy="207.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="349.26" cy="224.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="352.69" cy="215.50" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="342.40" cy="218.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<circle cx="345.14" cy="209.00" r="4.5" fill="#7b9440" stroke="#ffffff" stroke-width="2"/>
+<path d="M 342.40 245.00 L 349.26 240.00 L 356.11 245.00 L 349.26 250.00 Z" fill="#1a1a1a"/>
+<text x="150.00" y="221.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">Round 2 vs round 1</text>
+<text x="150.00" y="248.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="end">not promoted</text>
+<line x1="28.00" y1="298.00" x2="652.00" y2="298.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="318.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Round 1: mean 1.0572, 95% interval 1.0560–1.0583: over the bar, promoted.</text>
+<text x="28.00" y="335.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Round 2: mean 1.0276, 95% interval 1.0266–1.0286: a real gain, under the bar.</text>
+<text x="28.00" y="352.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Five pairs each, in a predeclared balanced order. The screening run is not counted.</text>
+</svg>
