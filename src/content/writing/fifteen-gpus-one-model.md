@@ -42,7 +42,7 @@ Every machine reaches GPURIG over 1 GbE, with SSH tunnels into WSL2 for gamingri
 
 Every result below was measured inside limits set before it, and on November 2 I froze the scope:
 
-- **One model.** huihui-ai's abliterated (uncensored) GLM-5.3-Flash at UD-Q5_K_XL. No other model or quantization.
+- **One model.** GLM-5.3-Flash at UD-Q5_K_XL. No other model or quantization.
 - **All fifteen GPUs in every fleet run.** Every card at once was the point, so no run on this model compared subsets of the cards.
 - **One request at a time.** Eight fixed chat prompts, greedy, at low reasoning effort, up to 384 output tokens each. Serving several requests at once was out of scope.
 - **Default clocks and power management.** No clocks were locked or raised, and no power limits changed. I changed gamingrig's Windows power settings, and it stayed on the Balanced plan, with sleep off. The Z13 kept the ASUS Turbo and Windows "Best performance" modes it already ran in.
