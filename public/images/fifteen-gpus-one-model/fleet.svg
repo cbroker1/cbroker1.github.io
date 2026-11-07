@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 656" width="680" height="656" role="img" aria-label="Diagram of four machines and 15 GPUs on 1 GbE. Every hop goes through the hub, GPURIG, which runs the llama.cpp server. A token visits, in order: 1, the Z13 tablet's Radeon 8060S (Strix Halo, 96 GB assigned, ROCm), blocks 0 to 19, 89.3 GiB, 41 percent of 218.0 GiB; 2, the rig's 11 cards of 8 GB on x1 risers, 7 NVIDIA on CUDA and 4 AMD on Vulkan, blocks 20 to 31, 61.2 GiB, 28 percent; 3, gamingrig's RTX 2080 Ti 11 GB and 4090 24 GB (CUDA), blocks 32 to 36, 25.5 GiB, 12 percent; 4, GPURIG's RTX A6000 48 GB (CUDA), blocks 37 to 44 and the output head, 42.0 GiB, 19 percent. The draft head is left out: it adds 3.3 GiB to the A6000 and 1.8 GiB to an RX 6600. The file, 223.8 GiB, also holds the draft head and 0.6 GiB kept in GPURIG's RAM.">
+<rect x="0.50" y="0.50" width="679.00" height="655.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">One model, four machines, one hub</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">GLM-5.3-Flash Q5 split by layer: 45 blocks, 218.0 GiB without the draft head, over 15 GPUs</text>
+<rect x="28.00" y="77.00" width="12.00" height="12.00" fill="rgba(163,184,108,0.16)" rx="2" stroke="#7b9440" stroke-width="1.2"/>
+<text x="46.00" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">CUDA · 10 NVIDIA GPUs</text>
+<rect x="212.40" y="77.00" width="12.00" height="12.00" fill="rgba(176,128,60,0.13)" rx="2" stroke="#b0803c" stroke-width="1.2"/>
+<text x="230.40" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Vulkan · 4 AMD cards</text>
+<rect x="386.48" y="77.00" width="12.00" height="12.00" fill="rgba(89,119,184,0.13)" rx="2" stroke="#5977b8" stroke-width="1.2"/>
+<text x="404.48" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">ROCm · 1 AMD Strix Halo iGPU</text>
+<rect x="28.00" y="112.00" width="172.00" height="163.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="114.00" y="136.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">Z13 tablet</text>
+<text x="114.00" y="154.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">Windows 11 + WSL2</text>
+<text x="114.00" y="170.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1 GbE · SSH tunnel</text>
+<rect x="54.00" y="189.00" width="120.00" height="36.00" fill="rgba(89,119,184,0.13)" rx="5" stroke="#5977b8" stroke-width="1.2"/>
+<text x="114.00" y="204.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">8060S</text>
+<text x="114.00" y="218.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">96 GB assigned</text>
+<text x="114.00" y="243.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">blocks 0–19</text>
+<text x="114.00" y="261.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="600">89.3 GiB · 41%</text>
+<rect x="240.00" y="112.00" width="200.00" height="163.00" fill="#fafaf8" rx="8" stroke="#8a8a84" stroke-width="1.2"/>
+<text x="340.00" y="136.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">GPURIG, the hub</text>
+<text x="340.00" y="154.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">Ubuntu workstation</text>
+<text x="340.00" y="170.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">runs the llama.cpp server</text>
+<rect x="280.00" y="189.00" width="120.00" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="340.00" y="204.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">A6000</text>
+<text x="340.00" y="218.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">48 GB</text>
+<text x="340.00" y="243.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">blocks 37–44 + output head</text>
+<text x="340.00" y="261.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="600">42.0 GiB · 19%</text>
+<rect x="480.00" y="112.00" width="172.00" height="163.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="566.00" y="136.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">gamingrig</text>
+<text x="566.00" y="154.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">Windows 11 + WSL2</text>
+<text x="566.00" y="170.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1 GbE · SSH tunnel</text>
+<rect x="490.00" y="189.00" width="72.00" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="526.00" y="204.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">2080 Ti</text>
+<text x="526.00" y="218.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">11 GB</text>
+<rect x="570.00" y="189.00" width="72.00" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="606.00" y="204.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">4090</text>
+<text x="606.00" y="218.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">24 GB</text>
+<text x="566.00" y="243.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">blocks 32–36</text>
+<text x="566.00" y="261.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="600">25.5 GiB · 12%</text>
+<rect x="28.00" y="319.00" width="624.00" height="181.00" fill="#fafaf8" rx="8" stroke="#e0e0dc" stroke-width="1.2"/>
+<text x="340.00" y="343.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="13" fill="#1a1a1a" text-anchor="middle" font-weight="600">The rig</text>
+<text x="340.00" y="361.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">Ubuntu · a mining board with 11 cards on PCIe x1 risers</text>
+<text x="340.00" y="377.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">one RPC server for all 11 cards · 1 GbE, no tunnel</text>
+<rect x="40.00" y="396.00" width="47.81" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="63.91" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">3070</text>
+<text x="63.91" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="63.91" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">20</text>
+<rect x="92.81" y="396.00" width="55.83" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="120.73" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">3060 Ti</text>
+<text x="120.73" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="120.73" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">21</text>
+<rect x="153.65" y="396.00" width="47.81" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="177.55" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">1080</text>
+<text x="177.55" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="177.55" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">22</text>
+<rect x="206.46" y="396.00" width="47.81" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="230.36" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">1070</text>
+<text x="230.36" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="230.36" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">23</text>
+<rect x="259.27" y="396.00" width="55.83" height="36.00" fill="rgba(176,128,60,0.13)" rx="5" stroke="#b0803c" stroke-width="1.2"/>
+<text x="287.19" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">5700 XT</text>
+<text x="287.19" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="287.19" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">24</text>
+<rect x="320.11" y="396.00" width="47.81" height="36.00" fill="rgba(176,128,60,0.13)" rx="5" stroke="#b0803c" stroke-width="1.2"/>
+<text x="344.01" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">6600</text>
+<text x="344.01" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="344.01" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">25–26</text>
+<rect x="372.92" y="396.00" width="55.83" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="400.83" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">3060 Ti</text>
+<text x="400.83" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="400.83" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">27</text>
+<rect x="433.75" y="396.00" width="47.81" height="36.00" fill="rgba(176,128,60,0.13)" rx="5" stroke="#b0803c" stroke-width="1.2"/>
+<text x="457.66" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">6600</text>
+<text x="457.66" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="457.66" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">28</text>
+<rect x="486.56" y="396.00" width="47.81" height="36.00" fill="rgba(176,128,60,0.13)" rx="5" stroke="#b0803c" stroke-width="1.2"/>
+<text x="510.47" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">6600</text>
+<text x="510.47" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="510.47" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">29</text>
+<rect x="539.38" y="396.00" width="47.81" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="563.28" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">2080</text>
+<text x="563.28" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="563.28" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">30</text>
+<rect x="592.19" y="396.00" width="47.81" height="36.00" fill="rgba(163,184,108,0.16)" rx="5" stroke="#7b9440" stroke-width="1.2"/>
+<text x="616.09" y="411.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">3070</text>
+<text x="616.09" y="425.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">8 GB</text>
+<text x="616.09" y="448.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">31</text>
+<text x="340.00" y="470.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">blocks 20–31</text>
+<text x="340.00" y="488.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="middle" font-weight="600">61.2 GiB · 28%</text>
+<line x1="200.00" y1="207.00" x2="240.00" y2="207.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="440.00" y1="207.00" x2="480.00" y2="207.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<line x1="340.00" y1="275.00" x2="340.00" y2="319.00" stroke="#b9b8b2" stroke-width="1.5"/>
+<circle cx="220.00" cy="207.00" r="8" fill="#ffffff" stroke="#8a8a84" stroke-width="1"/><text x="220.00" y="210.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="600">1</text>
+<circle cx="340.00" cy="297.00" r="8" fill="#ffffff" stroke="#8a8a84" stroke-width="1"/><text x="340.00" y="300.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="600">2</text>
+<circle cx="460.00" cy="207.00" r="8" fill="#ffffff" stroke="#8a8a84" stroke-width="1"/><text x="460.00" y="210.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="600">3</text>
+<circle cx="280.00" cy="189.00" r="8" fill="#ffffff" stroke="#8a8a84" stroke-width="1"/><text x="280.00" y="192.50" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="600">4</text>
+<line x1="28.00" y1="524.00" x2="652.00" y2="524.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="544.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">1–4  a token's order; every hop goes through GPURIG, whose llama.cpp server drives it.</text>
+<text x="28.00" y="560.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The Z13 has 96 GB assigned; ROCm in WSL2 reports a 111.65 GiB pool.</text>
+<text x="28.00" y="576.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Experts placed off their block's card: block 26's gate experts on the 5700 XT and its up experts</text>
+<text x="28.00" y="592.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">on the 6600 at block 28; block 33's gate experts on the 2080 Ti.</text>
+<text x="28.00" y="608.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The draft head adds 3.3 GiB to the A6000 and 1.8 GiB to the RX 6600 that holds block 29.</text>
+<text x="28.00" y="624.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The file, 223.8 GiB, also holds the draft head and 0.6 GiB kept in GPURIG's RAM.</text>
+<text x="28.00" y="640.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Source: profile fleet15v2 without the draft head; weights are llama.cpp's buffers in run 883b7a.</text>
+</svg>

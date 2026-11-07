@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 396" width="680" height="396" role="img" aria-label="Stacked horizontal bars of one decode token on the RTX A6000 running blocks 0 to 7 of the model, the median of 30 tokens in Nsight Systems traces. Stock, about 640 kernels: weight GEMVs 4.79 ms plus everything else 1.28 ms, 6.07 ms in all. Round 1, four fusions, 436 kernels: 4.81 plus 0.93, 5.74 ms, promoted. Round 2, three more, 363 kernels: 4.80 plus 0.75, 5.55 ms, not promoted. Everything else is small kernels, copies and the gaps between them; the GEMVs already read weights at 84 to 92 percent of the 768 GB/s peak.">
+<rect x="0.50" y="0.50" width="679.00" height="395.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">One decode token on the A6000 slice</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">Nsight Systems, median of 30 tokens, blocks 0–7 of the model on the RTX A6000</text>
+<rect x="28.00" y="77.00" width="12.00" height="12.00" fill="#7b9440" rx="2"/>
+<text x="46.00" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Weight GEMVs, 115 per token</text>
+<rect x="243.04" y="77.00" width="12.00" height="12.00" fill="#9a9a94" rx="2"/>
+<text x="261.04" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Everything else: small kernels, copies, gaps</text>
+<line x1="150.00" y1="104.00" x2="150.00" y2="292.00" stroke="#e0e0dc" stroke-width="1"/>
+<text x="150.00" y="308.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">0 ms</text>
+<line x1="290.00" y1="104.00" x2="290.00" y2="292.00" stroke="#edece8" stroke-width="1"/>
+<text x="290.00" y="308.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">2 ms</text>
+<line x1="430.00" y1="104.00" x2="430.00" y2="292.00" stroke="#edece8" stroke-width="1"/>
+<text x="430.00" y="308.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">4 ms</text>
+<text x="140.00" y="124.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">stock</text>
+<text x="140.00" y="137.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="end">about 640 kernels</text>
+<rect x="150.00" y="112.00" width="333.30" height="28.00" fill="#7b9440" rx="0"/>
+<path d="M 485.30 112.00 L 570.97 112.00 Q 574.97 112.00 574.97 116.00 L 574.97 136.00 Q 574.97 140.00 570.97 140.00 L 485.30 140.00 Z" fill="#9a9a94"/>
+<text x="316.65" y="156.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">4.79</text>
+<text x="530.13" y="156.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">1.28</text>
+<text x="582.97" y="130.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">6.07 ms</text>
+<text x="140.00" y="188.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">round 1</text>
+<text x="140.00" y="201.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="end">436 kernels</text>
+<rect x="150.00" y="176.00" width="334.77" height="28.00" fill="#7b9440" rx="0"/>
+<path d="M 486.77 176.00 L 547.94 176.00 Q 551.94 176.00 551.94 180.00 L 551.94 200.00 Q 551.94 204.00 547.94 204.00 L 486.77 204.00 Z" fill="#9a9a94"/>
+<text x="317.38" y="220.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">4.81</text>
+<text x="519.36" y="220.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">0.93</text>
+<text x="559.94" y="194.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">5.74 ms</text>
+<text x="140.00" y="252.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="end">round 2</text>
+<text x="140.00" y="265.50" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="end">363 kernels</text>
+<rect x="150.00" y="240.00" width="334.28" height="28.00" fill="#7b9440" rx="0"/>
+<path d="M 486.28 240.00 L 534.82 240.00 Q 538.82 240.00 538.82 244.00 L 538.82 264.00 Q 538.82 268.00 534.82 268.00 L 486.28 268.00 Z" fill="#9a9a94"/>
+<text x="317.14" y="284.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">4.80</text>
+<text x="512.55" y="284.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">0.75</text>
+<text x="546.82" y="258.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">5.55 ms</text>
+<line x1="28.00" y1="328.00" x2="652.00" y2="328.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="348.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The GEMVs read weights at 84–92% of the A6000's 768 GB/s peak, so the fusions cut the rest.</text>
+<text x="28.00" y="365.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Round 1: four fusions, promoted. Round 2: three more, not promoted.</text>
+<text x="28.00" y="382.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Source: Nsight Systems traces of 32-token llama-bench decodes, one per build.</text>
+</svg>

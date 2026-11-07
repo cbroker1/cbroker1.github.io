@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 360" width="680" height="360" role="img" aria-label="Stacked horizontal bar of one mean decode token, 229.5 ms, in profiling run a78bca with gamingrig's GPUs at idle clocks. Device turns: Z13 44.0 ms; the rig, 14 turns over 11 cards, 45.1 ms; gamingrig, 4 turns on 2 cards, 72.3 ms; A6000 compute and sampling 9.2 ms. Then network 34.8 ms, 15 percent of the token; the RPC servers' extra replies, such as the read after each failed CUDA-to-Vulkan copy, 17.4 ms, 12.3 ms of it on the rig; and GPURIG's client time 6.7 ms. RPC command handling inside the device turns is at most 45.5 ms. Below, a second bar with no breakdown: the plain token in run 883b7a, gamingrig at high clocks, 166.5 ms.">
+<rect x="0.50" y="0.50" width="679.00" height="359.00" fill="#ffffff" rx="10" stroke="#e0e0dc" stroke-width="1"/>
+<text x="28.00" y="40.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="16" fill="#1a1a1a" text-anchor="start" font-weight="600">Where a 230 ms token goes</text>
+<text x="28.00" y="61.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12.5" fill="#6b6b6b" text-anchor="start">Mean decode token in profiling run a78bca, with gamingrig's two GPUs at idle clocks</text>
+<rect x="28.00" y="77.00" width="12.00" height="12.00" fill="#7b9440" rx="2"/>
+<text x="46.00" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Device turns</text>
+<rect x="140.02" y="77.00" width="12.00" height="12.00" fill="#5977b8" rx="2"/>
+<text x="158.02" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Network, 1 GbE</text>
+<rect x="271.49" y="77.00" width="12.00" height="12.00" fill="#9a9a94" rx="2"/>
+<text x="289.49" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">Servers' extra replies</text>
+<rect x="432.80" y="77.00" width="12.00" height="12.00" fill="#c9c8c2" rx="2"/>
+<text x="450.80" y="87.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="12" fill="#1a1a1a" text-anchor="start">GPURIG client time</text>
+<line x1="44.00" y1="108.00" x2="44.00" y2="222.00" stroke="#e0e0dc" stroke-width="1"/>
+<text x="44.00" y="238.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">0 ms</text>
+<line x1="156.50" y1="108.00" x2="156.50" y2="222.00" stroke="#edece8" stroke-width="1"/>
+<text x="156.50" y="238.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">50 ms</text>
+<line x1="269.00" y1="108.00" x2="269.00" y2="222.00" stroke="#edece8" stroke-width="1"/>
+<text x="269.00" y="238.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">100 ms</text>
+<line x1="381.50" y1="108.00" x2="381.50" y2="222.00" stroke="#edece8" stroke-width="1"/>
+<text x="381.50" y="238.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">150 ms</text>
+<line x1="494.00" y1="108.00" x2="494.00" y2="222.00" stroke="#edece8" stroke-width="1"/>
+<text x="494.00" y="238.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">200 ms</text>
+<rect x="44.00" y="116.00" width="96.98" height="28.00" fill="#7b9440" rx="0"/>
+<rect x="142.98" y="116.00" width="99.43" height="28.00" fill="#7b9440" rx="0"/>
+<rect x="244.41" y="116.00" width="160.58" height="28.00" fill="#7b9440" rx="0"/>
+<rect x="406.99" y="116.00" width="18.75" height="28.00" fill="#7b9440" rx="0"/>
+<rect x="427.74" y="116.00" width="76.32" height="28.00" fill="#5977b8" rx="0"/>
+<rect x="506.06" y="116.00" width="37.19" height="28.00" fill="#9a9a94" rx="0"/>
+<path d="M 545.25 116.00 L 556.42 116.00 Q 560.42 116.00 560.42 120.00 L 560.42 140.00 Q 560.42 144.00 556.42 144.00 L 545.25 144.00 Z" fill="#c9c8c2"/>
+<text x="92.49" y="160.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">Z13</text>
+<text x="92.49" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">44.0</text>
+<text x="192.69" y="160.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">rig</text>
+<text x="192.69" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">45.1</text>
+<text x="324.70" y="160.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">gamingrig</text>
+<text x="324.70" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">72.3</text>
+<text x="416.36" y="160.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#1a1a1a" text-anchor="middle">A6000</text>
+<text x="416.36" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">9.2</text>
+<text x="465.90" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">34.8</text>
+<text x="524.66" y="174.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">17.4</text>
+<text x="552.84" y="160.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="middle">6.7</text>
+<text x="568.42" y="134.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">229.5 ms</text>
+<path d="M 44.00 190.00 L 414.62 190.00 Q 418.62 190.00 418.62 194.00 L 418.62 206.00 Q 418.62 210.00 414.62 210.00 L 44.00 210.00 Z" fill="#f4f4f1" stroke="#b9b8b2" stroke-width="1"/>
+<text x="52.00" y="204.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">plain run 883b7a, gamingrig at high clocks</text>
+<text x="426.62" y="204.00" font-family="Inter, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif" font-size="11" fill="#1a1a1a" text-anchor="start" font-weight="600">166.5 ms</text>
+<line x1="28.00" y1="258.00" x2="652.00" y2="258.00" stroke="#edece8" stroke-width="1"/>
+<text x="28.00" y="278.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The wire is 15% of this token. Device turns include RPC command handling, at most 45.5 ms.</text>
+<text x="28.00" y="295.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Servers' extra replies, such as the read after each failed CUDA-to-Vulkan copy, are 17.4 ms more</text>
+<text x="28.00" y="312.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">server handling outside the turns, 12.3 ms of it on the rig.</text>
+<text x="28.00" y="329.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">The rig: 14 turns over 11 cards; gamingrig: 4 turns on 2 cards. Means over 965 tokens, rounded.</text>
+<text x="28.00" y="346.00" font-family="ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace" font-size="10.5" fill="#6b6b6b" text-anchor="start">Source: profiling run a78bca. Its logging costs about 1% against plain runs in the same state.</text>
+</svg>
