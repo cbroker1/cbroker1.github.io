@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Paramotor</title>
+<style>
+  /* The site's own tokens, written out: this page has nothing to import them from. */
+  html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #0a0a0a;
+    color: #e5e5e5;
+    font: 14px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.05em;
+  }
+  #scene {
+    position: fixed;
+    inset: 0;
+    outline: none;
+    touch-action: none;
+  }
+  canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .panel {
+    position: absolute;
+    left: 24px;
+    bottom: 24px;
+    box-sizing: border-box;
+    max-width: calc(100vw - 48px);
+    padding: 12px 16px;
+    border: 1px solid #252525;
+    border-radius: 14px;
+    background: rgba(10, 10, 10, 0.84);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  dl {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    column-gap: 24px;
+    margin: 0;
+  }
+  dt {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #c2c2c2;
+  }
+  dd {
+    width: 7.5ch;
+    margin: 0;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin: 12px 0 0;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 13px;
+    color: #c2c2c2;
+  }
+  .touch {
+    display: none;
+  }
+  button {
+    width: 12.4ch;
+    padding: 0 0 2px;
+    border: 0;
+    border-bottom: 1px solid #a3b86c;
+    background: none;
+    color: #e5e5e5;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  button:hover, button:focus-visible {
+    color: #a3b86c;
+  }
+  #status {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    max-width: 46ch;
+    margin: 0;
+  }
+  @media (hover: none) and (pointer: coarse) {
+    .keys { display: none; }
+    .touch { display: inline; }
+  }
+  @media (max-width: 768px) {
+    .panel { left: 16px; top: 16px; bottom: auto; max-width: calc(100vw - 32px); }
+    dl { column-gap: 8px; }
+    #status { left: 16px; top: auto; bottom: 16px; }
+  }
+</style>
+</head>
+<body>
+<main id="scene" tabindex="-1">
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <canvas id="ink" aria-hidden="true"></canvas>
+  <div class="panel">
+    <dl id="readout" aria-hidden="true">
+      <div><dt>Alt</dt><dd data-readout="altitude"></dd></div>
+      <div><dt>Spd</dt><dd data-readout="speed"></dd></div>
+      <div><dt>Hdg</dt><dd data-readout="heading"></dd></div>
+      <div><dt>Pilot</dt><dd data-readout="pilot"></dd></div>
+    </dl>
+    <p class="legend">
+      <span class="keys" aria-hidden="true">&larr; &rarr; brakes &middot; &uarr; &darr; throttle &middot; c view</span>
+      <span class="touch" aria-hidden="true">Hold to steer</span>
+      <button id="view" type="button">Chase view</button>
+    </p>
+  </div>
+  <p id="status" role="status"></p>
+</main>
+<script type="module">/*BUNDLE*/</script>
+</body>
+</html>
