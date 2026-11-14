@@ -15,6 +15,9 @@ const home = base.endsWith('/') ? base : `${base}/`;
   >
     <source src="/video/hero.webm" type="video/webm" />
   </video>
+  <!-- The flyable scene. Empty and invisible until a visitor takes the controls. -->
+  <canvas class="hero__sky" data-flight-sky aria-hidden="true"></canvas>
+  <canvas class="hero__ink" data-flight-ink aria-hidden="true"></canvas>
   <div class="hero__info">
     <h1 class="hero__name">Carl Broker</h1>
     <p class="hero__detail">Advisory AI Engineer, IBM</p>
@@ -38,17 +41,133 @@ const home = base.endsWith('/') ? base : `${base}/`;
       </li>
     </ul>
   </div>
+  <!-- Shown by script, so there is never a button that does nothing. -->
+  <div class="hero__flight" data-flight hidden>
+    <button class="hero__fly" type="button" data-flight-start>Want to fly? Take the controls.</button>
+    <div class="hero__panel">
+      <dl class="hero__readout" data-flight-readout aria-hidden="true">
+        <div><dt>Alt</dt><dd data-readout="altitude"></dd></div>
+        <div><dt>Spd</dt><dd data-readout="speed"></dd></div>
+        <div><dt>Hdg</dt><dd data-readout="heading"></dd></div>
+        <div><dt>Pilot</dt><dd data-readout="pilot"></dd></div>
+      </dl>
+      <p class="hero__legend">
+        <span class="hero__legend-keys" aria-hidden="true">
+          &larr; &rarr; brakes &middot; &uarr; &darr; throttle &middot; c view
+        </span>
+        <span class="hero__legend-touch" aria-hidden="true">Hold to steer</span>
+        <span class="hero__actions">
+          <button class="hero__land" type="button" data-flight-view>Chase view</button>
+          <button class="hero__land" type="button" data-flight-stop aria-label="Exit flight">
+            Exit <span class="hero__legend-keys">(esc)</span>
+          </button>
+        </span>
+      </p>
+    </div>
+    <p class="hero__status" role="status" data-flight-status></p>
+  </div>
   <a class="hero__scroll" href="#experience" aria-label="Scroll to experience">
     <span class="hero__scroll-arrow" aria-hidden="true">&darr;</span>
   </a>
 </section>
 
 <script>
-  // Respect reduced-motion: hold the video on its first frame.
+  import type { Flight } from '../../flight/flight.ts';
+
+  const hero = document.querySelector<HTMLElement>('.hero');
   const video = document.querySelector<HTMLVideoElement>('.hero__video');
-  if (video && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const stillness = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Respect reduced-motion: hold the video on its first frame.
+  if (video && stillness.matches) {
     video.removeAttribute('autoplay');
     video.pause();
+  }
+
+  /**
+   * The "Take the controls" button swaps the footage for a live scene the
+   * visitor can fly. The scene's code is fetched on the first press, so a
+   * visitor who never presses it downloads nothing beyond this script.
+   */
+  const controls = hero?.querySelector<HTMLElement>('[data-flight]');
+  const startButton = hero?.querySelector<HTMLButtonElement>('[data-flight-start]');
+  const stopButton = hero?.querySelector<HTMLButtonElement>('[data-flight-stop]');
+  const viewButton = hero?.querySelector<HTMLButtonElement>('[data-flight-view]');
+  const status = hero?.querySelector<HTMLElement>('[data-flight-status]');
+  const readout = hero?.querySelector<HTMLElement>('[data-flight-readout]');
+  const sky = hero?.querySelector<HTMLCanvasElement>('[data-flight-sky]');
+  const ink = hero?.querySelector<HTMLCanvasElement>('[data-flight-ink]');
+
+  if (hero && controls && startButton && stopButton && viewButton && status && readout && sky && ink) {
+    const FADE_MS = 700; // matches the canvas transition below
+
+    let flight: Flight | null = null;
+    let flying = false;
+    let loading = false;
+    let pauseVideo: number | undefined;
+
+    const land = () => {
+      if (!flying) return;
+      flying = false;
+      const resumeAt = flight?.stop();
+      window.clearTimeout(pauseVideo);
+      // Hand focus back to where it came from, unless the visitor has moved on.
+      const focusWasHere = hero.contains(document.activeElement);
+      hero.classList.remove('hero--flying');
+      hero.removeAttribute('tabindex');
+      if (focusWasHere) startButton.focus({ preventScroll: true });
+      status.textContent = 'Flight ended.';
+      if (video) {
+        // Pick the footage up from the moment that looks most like where the flight ended.
+        if (resumeAt != null) video.currentTime = resumeAt;
+        if (!stillness.matches) video.play().catch(() => {});
+      }
+    };
+
+    const takeOff = async () => {
+      if (loading || flying) return;
+      if (!flight) {
+        loading = true;
+        try {
+          const [{ createFlight }, { createSky }] = await Promise.all([
+            import('../../flight/flight.ts'),
+            import('../../flight/sky.ts'),
+          ]);
+          flight = await createFlight({ hero, video, sky, ink, readout, view: viewButton }, land, createSky);
+        } catch {
+          // Most likely the network. The button stays live for another try.
+          status.textContent = 'The flight scene could not be loaded.';
+          return;
+        } finally {
+          loading = false;
+        }
+        if (!flight) {
+          // Neither WebGPU nor WebGL, or a GPU that cannot draw the scene properly.
+          startButton.textContent = 'Flight not supported here';
+          startButton.disabled = true;
+          return;
+        }
+      }
+      // The browser can take the GPU away for a while. It comes back on its
+      // own, so the button stays live for another try.
+      if (!flight.start()) {
+        status.textContent = 'The flight scene is not available right now.';
+        return;
+      }
+      flying = true;
+      hero.classList.add('hero--flying');
+      // Focus leaves the button it was on, so that Space cannot end the flight
+      // by accident, and rests on the hero, where the keys are being read.
+      hero.tabIndex = -1;
+      hero.focus({ preventScroll: true });
+      status.textContent = 'Flight controls on. Arrow keys or W, A, S, D to fly, C to change view. Escape to exit.';
+      // The footage keeps playing under the fade, then rests until it is needed again.
+      pauseVideo = window.setTimeout(() => video?.pause(), FADE_MS);
+    };
+
+    startButton.addEventListener('click', takeOff);
+    stopButton.addEventListener('click', land);
+    controls.hidden = false;
   }
 </script>
 
@@ -69,6 +188,64 @@ const home = base.endsWith('/') ? base : `${base}/`;
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* The live scene sits on top of the footage and fades in over it. */
+  .hero__sky,
+  .hero__ink {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 700ms var(--ease-out),
+      visibility 0s linear 700ms;
+  }
+
+  /* On the way out the live paramotor goes first, so it and the filmed one
+     are not both on screen for long. */
+  .hero__ink {
+    transition-duration: 250ms, 0s;
+    transition-delay: 0s, 250ms;
+  }
+
+  .hero--flying .hero__sky,
+  .hero--flying .hero__ink {
+    opacity: 1;
+    visibility: visible;
+    transition-duration: 700ms, 0s;
+    transition-delay: 0s;
+  }
+
+  /* At takeover the live scene is open sky, as the footage is, and the name
+     block reads against it the same way. Once the camera leaves the ground
+     there are dark hills and cloud behind it and no single ink reads against
+     all of that, so from then on the block steps aside, and comes back when
+     the flight ends. The visibility change takes it out of the tab order
+     while it is unseen. */
+  .hero__info {
+    transition:
+      opacity 500ms var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  .hero--aloft .hero__info {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 0s, 500ms;
+  }
+
+  /* A held press steers; a vertical swipe still scrolls the page. */
+  .hero--flying .hero__ink {
+    pointer-events: auto;
+    cursor: crosshair;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
   }
 
   /* Info block: vertically centered, shifted to the right side
@@ -132,6 +309,175 @@ const home = base.endsWith('/') ? base : `${base}/`;
   .hero__link:hover {
     color: var(--color-accent-dark);
     background-size: 100% 2px;
+  }
+
+  /* The hero takes focus during a flight only so the keys have somewhere to
+     land; it is not a control and should not look like one. */
+  .hero:focus {
+    outline: none;
+  }
+
+  /* Flight controls: bottom-left, mirroring the info block's inset. The hero
+     is a full viewport tall but starts under the 41px header, so its last
+     41px are below the fold; the controls sit clear of that. */
+  .hero__flight {
+    position: absolute;
+    left: max(var(--padding-container), calc((100% - var(--width-wide)) / 2 + var(--padding-container)));
+    bottom: calc(var(--space-6) + 41px);
+    z-index: 1;
+    font-family: var(--font-mono);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-on-light);
+    opacity: 0;
+    animation: hero-rise 0.9s var(--ease-out-expo) 0.85s forwards;
+  }
+
+  .hero__flight[hidden] {
+    display: none;
+  }
+
+  /* The sky behind these can be anything from white to storm grey, so they
+     carry their own surface: the dark, blurred glass of the site header,
+     which reads against any of it and is never the brightest thing in view. */
+  .hero__fly,
+  .hero__panel {
+    color: var(--color-text-on-dark);
+    background-color: rgba(10, 10, 10, 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border-dark);
+  }
+
+  .hero__fly {
+    padding: var(--space-2) var(--space-4);
+    border-radius: 999px;
+    font-size: var(--text-sm);
+    letter-spacing: inherit;
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      color var(--duration-normal) var(--ease-out);
+  }
+
+  .hero__fly:hover:not(:disabled),
+  .hero__fly:focus-visible {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .hero__fly:disabled {
+    cursor: default;
+    color: var(--color-text-muted-dark);
+  }
+
+  /* The panel holds the only instructions there are, in small type, and the
+     sky behind it can be white. It is a shade more opaque than the button so
+     that its secondary text still clears 4.5:1 there. */
+  .hero__panel {
+    display: none;
+    max-width: calc(100vw - 2 * var(--padding-container));
+    padding: var(--space-3) var(--space-4);
+    border-radius: 14px;
+    background-color: rgba(10, 10, 10, 0.84);
+  }
+
+  .hero--flying .hero__fly {
+    display: none;
+  }
+
+  .hero--flying .hero__panel {
+    display: block;
+  }
+
+  .hero__readout {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    column-gap: var(--space-6);
+  }
+
+  .hero__readout dt {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    color: #c2c2c2;
+  }
+
+  .hero__readout dd {
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    /* Wider than the longest value with its letter-spacing, so no column
+       moves when a reading gains or loses a digit. */
+    width: 7.5ch;
+  }
+
+  .hero__legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.8125rem;
+    color: #c2c2c2;
+  }
+
+  .hero__legend-touch {
+    display: none;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .hero__legend-keys {
+      display: none;
+    }
+
+    .hero__legend-touch {
+      display: inline;
+    }
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: var(--space-4);
+    white-space: nowrap;
+  }
+
+  .hero__land {
+    font-size: inherit;
+    letter-spacing: inherit;
+    color: var(--color-text-on-dark);
+    padding-bottom: 2px;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
+    transition:
+      background-size var(--duration-normal) var(--ease-out-expo),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__land:hover {
+    color: var(--color-accent);
+    background-size: 100% 2px;
+  }
+
+  /* "Ground view" and "Chase view" differ by a letter. A set width, enough
+     for the longer one with its letter-spacing, keeps the panel from changing
+     size when the label flips. */
+  .hero__land[data-flight-view] {
+    width: 12.4ch;
+    text-align: left;
+  }
+
+  /* Announced to screen readers, never shown. */
+  .hero__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   /* Scroll cue */
@@ -211,6 +557,17 @@ const home = base.endsWith('/') ? base : `${base}/`;
     .hero__scroll {
       transform: translateX(-50%);
     }
+
+    .hero__flight {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+
+    .hero__sky,
+    .hero__ink {
+      transition: none;
+    }
   }
 
   @media (max-width: 768px) {
@@ -235,9 +592,28 @@ const home = base.endsWith('/') ? base : `${base}/`;
       margin-top: var(--space-4);
     }
 
+    /* The info block owns the bottom on mobile, so the controls go up top. */
+    .hero__flight {
+      top: var(--space-4);
+      bottom: auto;
+      left: var(--padding-container);
+    }
+
+    /* Four fixed columns have to fit a 360px phone. */
+    .hero__readout {
+      column-gap: var(--space-2);
+    }
+
     /* The info block sits at the bottom on mobile — the cue would collide. */
     .hero__scroll {
       display: none;
+    }
+  }
+
+  /* Keeps the start button's label on one line on the narrowest phones. */
+  @media (max-width: 359px) {
+    .hero__fly {
+      font-size: var(--text-xs);
     }
   }
 </style>
